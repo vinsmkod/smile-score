@@ -52,7 +52,7 @@
             <div class="lg:col-span-6 flex justify-center lg:justify-end" data-aos="fade-left" data-aos-duration="700">
                 <div class="relative w-full max-w-lg">
                     <div class="relative rounded-3xl overflow-hidden shadow-lg border border-[#D9EAE4]/80 bg-white/40 p-2">
-                        <img src="{{ asset('images/hero_students_tooth.jpg') }}"
+                        <img src="{{ asset('images/gigi.jpg') }}"
                             alt="Siswa SMK dan Maskot Gigi Sehat Smile Score"
                             loading="eager"
                             decoding="async"
@@ -462,7 +462,7 @@
             <div class="flex items-center gap-5 sm:gap-6 text-center lg:text-left flex-col sm:flex-row">
                 <!-- Waving Smiling Tooth Mascot -->
                 <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-white/15 p-1 backdrop-blur-sm border border-white/25 shadow-inner flex-shrink-0 animate-float">
-                    <img src="{{ asset('images/cta_tooth_mascot.jpg') }}"
+                    <img src="{{ asset('images/gigi.jpg') }}"
                         alt="Maskot Gigi Senyum"
                         loading="lazy"
                         decoding="async"
