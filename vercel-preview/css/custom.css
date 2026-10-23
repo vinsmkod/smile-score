@@ -1,0 +1,126 @@
+/* Smile Score Custom Styling */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --primary-teal: #168C83;
+    --primary-dark: #11665F;
+    --primary-light: #E6F7F5;
+    --mint: #DDF5EC;
+    --soft-mint: #F1FAF6;
+    --pale-aqua: #E6F7F5;
+    --border-mint: #D9EAE4;
+    --text-dark: #183B38;
+    --text-muted: #607773;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--text-dark);
+    background-color: var(--soft-mint);
+    overflow-x: hidden;
+}
+
+/* Custom curved smile underline */
+.smile-underline {
+    position: relative;
+    display: inline-block;
+}
+
+.smile-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 10%;
+    width: 80%;
+    height: 6px;
+    border-bottom: 4px solid var(--primary-teal);
+    border-radius: 50%;
+}
+
+/* Subtle Floating Animations */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+@keyframes float-delay {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(8px);
+    }
+}
+
+@keyframes pulse-subtle {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.04);
+        opacity: 0.9;
+    }
+}
+
+.animate-float { animation: float 4s ease-in-out infinite; will-change: transform; }
+
+.animate-float-delay { animation: float-delay 5s ease-in-out infinite; will-change: transform; }
+
+.animate-pulse-subtle {
+    animation: pulse-subtle 3s ease-in-out infinite;
+}
+
+/* Premium Soft Card Shadows */
+.card-soft-shadow {
+    box-shadow: 0 10px 30px -5px rgba(22, 140, 131, 0.07), 0 4px 15px -3px rgba(24, 59, 56, 0.04);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1); will-change: transform;
+}
+
+.card-soft-shadow:hover {
+    box-shadow: 0 20px 35px -5px rgba(22, 140, 131, 0.13), 0 8px 20px -3px rgba(24, 59, 56, 0.06);
+    transform: translateY(-4px);
+}
+
+/* Step connector arrow on desktop */
+.step-arrow::after {
+    content: '';
+    position: absolute;
+    right: -24px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 2px;
+    background-color: var(--border-mint);
+}
+
+/* Modal overlay & transition */
+.modal-open {
+    overflow: hidden;
+}
+
+/* Active Nav Underline */
+.nav-link.active {
+    color: var(--primary-teal);
+    position: relative;
+    font-weight: 600;
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--primary-teal);
+    border-radius: 9999px;
+}

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Smile Score - Segera Dimulai</title>
+    <meta name="description" content="Halaman persiapan Smile Score untuk siswa SMK.">
+    <meta name="keywords" content="Smile Score, kesehatan gigi, edukasi gigi siswa SMK, gigi sehat, periksa gigi online">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23168C83'><path d='M12 2C9.5 2 7.5 3.5 7.5 5.5c0 .7.2 1.4.6 2C6.8 8.1 6 9.4 6 11c0 2.5 1.5 6 3 9.5 1 2.3 2 2.5 3 2.5s2-.2 3-2.5c1.5-3.5 3-7 3-9.5 0-1.6-.8-2.9-2.1-3.5.4-.6.6-1.3.6-2C16.5 3.5 14.5 2 12 2z'/></svg>">
+
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f1faf6',
+                            100: '#ddf5ec',
+                            200: '#a8e6d7',
+                            300: '#5ecdb7',
+                            400: '#2aab9a',
+                            500: '#168C83',
+                            600: '#11665F',
+                            700: '#0d4f49',
+                            800: '#0a3b36',
+                            900: '#183B38',
+                        },
+                        navy: {
+                            800: '#183B38',
+                            900: '#0d2622',
+                        },
+                        pastel: {
+                            blue: '#E6F7F5',
+                            teal: '#DDF5EC',
+                            purple: '#f3e8ff',
+                            amber: '#fef3c7',
+                            pink: '#ffe4e6'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        '3xl': '1.5rem',
+                        '4xl': '2rem',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Animate On Scroll (AOS) -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./css/custom.css">
+</head>
+<body class="bg-[#F1FAF6] text-[#183B38] font-sans antialiased selection:bg-[#168C83] selection:text-white flex flex-col min-h-screen">
+
+    <!-- Sticky Navbar -->
+    <!-- Header / Sticky Navbar -->
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
+            
+            <!-- Left: Logo & Tagline -->
+            <a href="index.html" class="flex items-center gap-3 group">
+                <div class="w-11 h-11 rounded-2xl bg-[#E6F7F5] flex items-center justify-center border border-[#D9EAE4] shadow-sm group-hover:scale-105 transition-transform">
+                    <!-- Friendly Tooth SVG Icon -->
+                    <svg class="w-7 h-7 text-brand-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 3C4.5 3 3 5 3 7.5C3 11 4.5 14 6 18C7 20.5 8 21.5 9.5 21.5C11 21.5 11.5 19.5 12 17C12.5 19.5 13 21.5 14.5 21.5C16 21.5 17 20.5 18 18C19.5 14 21 11 21 7.5C21 5 19.5 3 17 3C14.5 3 13.5 4.5 12 4.5C10.5 4.5 9.5 3 7 3Z" fill="#2AAB9A" stroke="#168C83" stroke-width="1.5" stroke-linejoin="round"/>
+                        <!-- Cute Face details -->
+                        <circle cx="9.5" cy="9.5" r="1" fill="#183B38"/>
+                        <circle cx="14.5" cy="9.5" r="1" fill="#183B38"/>
+                        <path d="M10 13C10.8 14.2 13.2 14.2 14 13" stroke="#183B38" stroke-width="1.5" stroke-linecap="round"/>
+                        <!-- Rosy Cheeks -->
+                        <circle cx="8" cy="11.5" r="1" fill="#F472B6" opacity="0.6"/>
+                        <circle cx="16" cy="11.5" r="1" fill="#F472B6" opacity="0.6"/>
+                    </svg>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-extrabold tracking-tight text-navy-900 leading-tight">
+                        Smile <span class="text-brand-600">Score</span>
+                    </span>
+                    <span class="text-[11px] font-medium text-slate-500 tracking-wide">
+                        Sehat Gigi, Senyum Percaya Diri
+                    </span>
+                </div>
+            </a>
+
+            <!-- Center: Nav Links (Desktop) -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+                <a href="index.html" class="nav-link  hover:text-brand-600 transition-colors py-1">Beranda</a>
+                <a href="index.html#tentang" class="nav-link hover:text-brand-600 transition-colors py-1">Tentang</a>
+                <a href="index.html#cara-kerja" class="nav-link hover:text-brand-600 transition-colors py-1">Cara Kerja</a>
+                <a href="index.html#edukasi" class="nav-link hover:text-brand-600 transition-colors py-1">Edukasi</a>
+                <a href="#tentang-penelitian" onclick="openResearchModal(); return false;" class="nav-link hover:text-brand-600 transition-colors py-1 cursor-pointer">Tentang Penelitian</a>
+            </nav>
+
+            <!-- Right: CTA Button (Desktop) -->
+            <div class="hidden md:flex items-center">
+                <a href="smile-score.html" class="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-brand-500 hover:bg-brand-600 text-white font-semibold text-sm shadow-md hover:shadow-lg hover:shadow-[#168C83]/25 active:scale-95 transition-all duration-200">
+                    <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C9.5 2 7.5 3.5 7.5 5.5c0 .7.2 1.4.6 2C6.8 8.1 6 9.4 6 11c0 2.5 1.5 6 3 9.5 1 2.3 2 2.5 3 2.5s2-.2 3-2.5c1.5-3.5 3-7 3-9.5 0-1.6-.8-2.9-2.1-3.5.4-.6.6-1.3.6-2C16.5 3.5 14.5 2 12 2z"/>
+                    </svg>
+                    <span>Mulai Smile Score</span>
+                </a>
+            </div>
+
+            <!-- Mobile Hamburger Button -->
+            <div class="flex md:hidden items-center">
+                <button type="button" id="mobile-menu-btn" class="p-2 rounded-xl text-slate-600 hover:text-brand-600 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500" aria-label="Buka Menu" aria-expanded="false">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-white/98 px-4 pt-3 pb-6 space-y-3 shadow-xl animate-in slide-in-from-top duration-200">
+        <a href="index.html" class="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-[#E6F7F5] transition-colors">Beranda</a>
+        <a href="index.html#tentang" class="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-[#E6F7F5] transition-colors">Tentang</a>
+        <a href="index.html#cara-kerja" class="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-[#E6F7F5] transition-colors">Cara Kerja</a>
+        <a href="index.html#edukasi" class="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-[#E6F7F5] transition-colors">Edukasi</a>
+        <a href="#tentang-penelitian" onclick="openResearchModal(); return false;" class="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-[#E6F7F5] transition-colors">Tentang Penelitian</a>
+        <div class="pt-2">
+            <a href="smile-score.html" class="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-brand-500 text-white font-semibold text-sm shadow-md hover:bg-brand-600 transition-colors">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C9.5 2 7.5 3.5 7.5 5.5c0 .7.2 1.4.6 2C6.8 8.1 6 9.4 6 11c0 2.5 1.5 6 3 9.5 1 2.3 2 2.5 3 2.5s2-.2 3-2.5c1.5-3.5 3-7 3-9.5 0-1.6-.8-2.9-2.1-3.5.4-.6.6-1.3.6-2C16.5 3.5 14.5 2 12 2z"/>
+                </svg>
+                <span>Mulai Smile Score</span>
+            </a>
+        </div>
+    </div>
+</header>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        <section class="min-h-[75vh] flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-lg w-full text-center">
+        <!-- Mascot Tooth Badge -->
+        <div class="relative inline-block mb-6">
+            <div class="w-32 h-32 mx-auto rounded-3xl bg-[#E6F7F5] border-2 border-[#D9EAE4] flex items-center justify-center shadow-lg p-2 animate-float">
+                <img src="./images/cta_tooth_mascot.jpg" alt="Maskot Gigi Ceria" class="w-full h-full object-cover rounded-2xl">
+            </div>
+            <div class="absolute -top-2 -right-2 bg-amber-400 text-slate-900 text-xs font-extrabold px-2.5 py-1 rounded-full shadow">
+                Coming Soon ✨
+            </div>
+        </div>
+
+        <!-- Heading -->
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-navy-900 tracking-tight mb-3">
+            Smile Score akan Segera Dimulai!
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="text-slate-600 text-base leading-relaxed mb-8">
+            Modul kuesioner dan penilaian mandiri kesehatan gigi &amp; mulut untuk siswa SMK sedang dipersiapkan. Senyum sehat dan percaya diri segera menantimu!
+        </p>
+
+        <!-- Information Card -->
+        <div class="bg-white rounded-2xl border border-[#D9EAE4] p-6 shadow-sm mb-8 text-left space-y-3">
+            <div class="flex items-start gap-3">
+                <div class="w-7 h-7 rounded-full bg-[#DDF5EC] text-brand-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-sm font-bold text-slate-800">Pertanyaan Mudah &amp; Cepat</h2>
+                    <p class="text-xs text-slate-500">Hanya butuh 3-5 menit untuk mengetahui skor kesehatan gigimu.</p>
+                </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+                <div class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-sm font-bold text-slate-800">Edukasi &amp; Rekomendasi Terarah</h2>
+                    <p class="text-xs text-slate-500">Rekomendasi disesuaikan khusus untuk kebiasaan siswa sekolah menengah kejuruan.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back to Home CTA -->
+        <div>
+            <a href="index.html" class="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-brand-500 hover:bg-brand-600 text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-200">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                <span>Kembali ke Beranda</span>
+            </a>
+        </div>
+    </div>
+</section>
+    </main>
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer class="bg-white border-t border-slate-100 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm text-slate-500 text-center font-medium">
+            <span class="font-semibold text-slate-700">Smile Score &copy; 2026</span>
+            <span class="hidden sm:inline text-slate-300">&bull;</span>
+            <span>Media Edukasi Kesehatan Gigi &amp; Mulut</span>
+            <span class="hidden sm:inline text-slate-300">&bull;</span>
+            <span class="inline-flex items-center gap-1 text-slate-600 font-medium">
+                Untuk Siswa SMK
+                <svg class="w-3.5 h-3.5 text-rose-500 fill-current inline" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            </span>
+        </div>
+    </div>
+</footer>
+
+    <!-- Research Modal (Global on all pages) -->
+    <!-- Modal: Tentang Penelitian -->
+<div id="researchModal" onclick="if(event.target === this) closeResearchModal()" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300">
+    <div class="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-6 sm:p-8 overflow-hidden border border-slate-100 max-h-[90vh] flex flex-col animate-in fade-in zoom-in-95 duration-200">
+        
+        <!-- Header -->
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-[#E6F7F5] text-[#168C83] flex items-center justify-center font-bold text-lg">
+                    🔬
+                </div>
+                <div>
+                    <h3 class="text-lg font-extrabold text-navy-900">Tentang Penelitian Smile Score</h3>
+                    <p class="text-xs text-slate-500">Pengembangan Media Edukasi Kesehatan Gigi Remaja</p>
+                </div>
+            </div>
+            <button type="button" onclick="closeResearchModal()" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 flex items-center justify-center transition-colors" aria-label="Tutup Modal">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Body Content -->
+        <div class="py-5 overflow-y-auto space-y-4 text-sm text-slate-600 leading-relaxed">
+            <p>
+                <strong>Smile Score</strong> dikembangkan sebagai bagian dari inisiatif riset dan edukasi kesehatan gigi dan mulut yang dikhususkan bagi siswa <strong>Sekolah Menengah Kejuruan (SMK)</strong>.
+            </p>
+
+            <div class="bg-[#E6F7F5]/70 rounded-2xl p-4 border border-[#D9EAE4] space-y-2">
+                <h4 class="font-bold text-[#183B38] text-xs uppercase tracking-wider text-[#168C83]">Tujuan Penelitian:</h4>
+                <ul class="list-disc list-inside space-y-1 text-xs text-slate-700">
+                    <li>Mengidentifikasi tingkat pengetahuan &amp; kebiasaan merawat gigi pada kalangan remaja SMK.</li>
+                    <li>Menyediakan sarana skrining mandiri yang ramah dan tidak menghakimi.</li>
+                    <li>Meningkatkan kesadaran preventif terhadap karies gigi dan kesehatan gusi sejak dini.</li>
+                </ul>
+            </div>
+
+            <p class="text-xs text-slate-500">
+                Setiap data respon yang diinput dalam program Smile Score dijamin kerahasiaannya dan hanya digunakan semata-mata untuk tujuan pengembangan modul edukasi dan ilmiah.
+            </p>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="pt-4 border-t border-slate-100 flex justify-end">
+            <button type="button" onclick="closeResearchModal()" class="px-6 py-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition-colors">
+                Tutup
+            </button>
+        </div>
+
+    </div>
+</div>
+
+    <!-- Global Scripts -->
+    <script>
+        // Mobile menu toggle
+        const menuToggleBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (menuToggleBtn && mobileMenu) {
+            menuToggleBtn.addEventListener('click', () => {
+                const isExpanded = menuToggleBtn.getAttribute('aria-expanded') === 'true';
+                menuToggleBtn.setAttribute('aria-expanded', !isExpanded);
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // Close mobile menu on link click
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                    if (menuToggleBtn) menuToggleBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        });
+
+        // Highlight active nav item on scroll (Throttled with rAF and passive listener for silky 60/120fps)
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+        let scrollTicking = false;
+
+        window.addEventListener('scroll', () => {
+            if (!scrollTicking) {
+                window.requestAnimationFrame(() => {
+                    let current = '';
+                    const scrollY = window.scrollY;
+                    sections.forEach(section => {
+                        const sectionTop = section.offsetTop - 120;
+                        const sectionHeight = section.offsetHeight;
+                        if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                            current = section.getAttribute('id');
+                        }
+                    });
+
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${current}` || (current === '' && link.getAttribute('href') === '#beranda')) {
+                            link.classList.add('active');
+                        }
+                    });
+                    scrollTicking = false;
+                });
+                scrollTicking = true;
+            }
+        }, { passive: true });
+
+        // Research Modal Toggle
+        function openResearchModal() {
+            const modal = document.getElementById('researchModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                document.body.classList.add('modal-open');
+            }
+        }
+
+        function closeResearchModal() {
+            const modal = document.getElementById('researchModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.body.classList.remove('modal-open');
+            }
+        }
+
+        // Auto open research modal if redirected with #tentang-penelitian hash
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.location.hash === '#tentang-penelitian') {
+                setTimeout(() => {
+                    openResearchModal();
+                }, 300);
+            }
+        });
+    </script>
+
+    <!-- Animate On Scroll (AOS) Script -->
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            AOS.init({
+                once: true,
+                duration: 500,
+                easing: 'ease-out',
+                offset: 30,
+            });
+        });
+    </script>
+</body>
+</html>
