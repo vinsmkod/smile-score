@@ -38,8 +38,10 @@
                 <a href="{{ $isHome ? '#beranda' : $homeUrl }}" class="nav-link {{ $isHome ? 'active' : '' }} hover:text-brand-600 transition-colors py-1">Beranda</a>
                 <a href="{{ $isHome ? '#tentang' : $homeUrl . '#tentang' }}" class="nav-link hover:text-brand-600 transition-colors py-1">Tentang</a>
                 <a href="{{ $isHome ? '#cara-kerja' : $homeUrl . '#cara-kerja' }}" class="nav-link hover:text-brand-600 transition-colors py-1">Cara Kerja</a>
-                <a href="{{ $isHome ? '#edukasi' : $homeUrl . '#edukasi' }}" class="nav-link hover:text-brand-600 transition-colors py-1">Edukasi</a>
                 <a href="#tentang-penelitian" onclick="openResearchModal(); return false;" class="nav-link hover:text-brand-600 transition-colors py-1 cursor-pointer">Tentang Penelitian</a>
+                @auth
+                    <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.*') ? 'active' : '' }} text-[#168C83] font-bold hover:text-brand-600 transition-colors py-1">Data Responden</a>
+                @endauth
             </nav>
 
             <!-- Right: CTA Button (Desktop) -->
@@ -70,6 +72,9 @@
         <a href="{{ $isHome ? '#cara-kerja' : $homeUrl . '#cara-kerja' }}" class="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-[#E6F7F5] transition-colors">Cara Kerja</a>
         <a href="{{ $isHome ? '#edukasi' : $homeUrl . '#edukasi' }}" class="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-[#E6F7F5] transition-colors">Edukasi</a>
         <a href="#tentang-penelitian" onclick="openResearchModal(); return false;" class="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-[#E6F7F5] transition-colors">Tentang Penelitian</a>
+        @auth
+            <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2.5 rounded-lg text-base font-bold text-[#168C83] bg-[#E6F7F5] transition-colors">Data Responden</a>
+        @endauth
         <div class="pt-2">
             <a href="{{ route('smile-score.start') }}" class="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-brand-500 text-white font-semibold text-sm shadow-md hover:bg-brand-600 transition-colors">
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">

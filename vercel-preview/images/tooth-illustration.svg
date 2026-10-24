@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+    <defs>
+        <!-- Soft bottom shadow gradient -->
+        <radialGradient id="toothShadowGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#64748B" stop-opacity="0.32" />
+            <stop offset="60%" stop-color="#94A3B8" stop-opacity="0.15" />
+            <stop offset="100%" stop-color="#CBD5E1" stop-opacity="0" />
+        </radialGradient>
+    </defs>
+
+    <!-- Bottom Soft Shadow -->
+    <ellipse cx="100" cy="168" rx="36" ry="6" fill="url(#toothShadowGrad)" />
+
+    <!-- Tooth Solid White Body -->
+    <path d="M100 52 C91 43 78 41 68 46 C56 52 54 68 56 86 C58 104 63 124 71 138 C75 145 84 146 88 140 C94 131 96 116 100 116 C104 116 106 131 112 140 C116 146 125 145 129 138 C137 124 142 104 144 86 C146 68 144 52 132 46 C122 41 109 43 100 52 Z" 
+          fill="#FFFFFF" />
+
+    <!-- Light Blue Inner Accent/Shading on left side and inner roots -->
+    <!-- Left lobe & outer root accent -->
+    <path d="M72 50 C62 55 60 70 62 88 C64 105 68 122 75 133 C77 137 81 138 83 134 C80 122 73 105 71 88 C69 73 72 59 79 53 C77 52 74 51 72 50 Z" 
+          fill="#BAE6FD" />
+    <!-- Inner right root accent -->
+    <path d="M106 124 C109 132 113 137 115 134 C117 131 114 125 111 121 C109 120 107 121 106 124 Z" 
+          fill="#BAE6FD" />
+    <!-- Top cleft dip accent -->
+    <path d="M104 53 C108 55 116 57 122 53 C120 50 115 48 111 48 C108 48 105 50 104 53 Z" 
+          fill="#BAE6FD" />
+
+    <!-- Tooth Main Charcoal Outline -->
+    <!-- Left cusp down to left root, up through valley, down right root, and up to right cusp -->
+    <path d="M100 52 C91 43 78 41 68 46 C56 52 54 68 56 86 C58 104 63 124 71 138 C75 145 84 146 88 140 C94 131 96 116 100 116 C104 116 106 131 112 140 C116 146 125 145 129 138 C137 124 142 104 144 86 C146 68 144 52 132 46 C122 41 109 43 100 52" 
+          stroke="#2D3238" 
+          stroke-width="7" 
+          stroke-linecap="round" 
+          stroke-linejoin="round" />
+
+    <!-- Top Cleft Overlap Stroke (Signature feature of client's reference) -->
+    <path d="M100 52 C104 56 110 57 113 55" 
+          stroke="#2D3238" 
+          stroke-width="6.5" 
+          stroke-linecap="round" />
+
+    <!-- Radiating Accent Lines on Left Side -->
+    <line x1="31" y1="67" x2="43" y2="74" stroke="#2D3238" stroke-width="6" stroke-linecap="round" />
+    <line x1="26" y1="94" x2="39" y2="94" stroke="#2D3238" stroke-width="6" stroke-linecap="round" />
+    <line x1="33" y1="121" x2="45" y2="113" stroke="#2D3238" stroke-width="6" stroke-linecap="round" />
+
+    <!-- Radiating Accent Lines on Right Side -->
+    <line x1="169" y1="67" x2="157" y2="74" stroke="#2D3238" stroke-width="6" stroke-linecap="round" />
+    <line x1="174" y1="94" x2="161" y2="94" stroke="#2D3238" stroke-width="6" stroke-linecap="round" />
+    <line x1="167" y1="121" x2="155" y2="113" stroke="#2D3238" stroke-width="6" stroke-linecap="round" />
+</svg>

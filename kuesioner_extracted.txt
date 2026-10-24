@@ -1,0 +1,194 @@
+﻿
+
+BAB III
+METODE PENELITIAN
+3.1 Kerangka Konsep
+[Media Animasi Storytelling Berbasis Situs Web] -------&gt; [Pengetahuan Kesehatan Gigi dan Mulut]
+(Variabel Independen)                                                 (Variabel Dependen)
+Gambar 3.1. Kerangka Konsep
+3.2 Jenis dan Desain Penelitian
+Jenis penelitian yang dilakukan adalah kuantitatif dengan menggunakan metode pre-experiment untuk mengetahui pengaruh media animasi storytelling berbasis situs web terhadap peningkatan kesehatan gigi dan mulut. Jenis penelitian ini dipilih karena peneliti tidak menggunakan kelompok kontrol, tetapi tetap memberikan intervensi kepada satu kelompok subjek yang telah ditentukan. Desain penelitian yang digunakan adalah One Group Pre-test – Post-test, yaitu desain yang melibatkan satu kelompok subjek yang diberi tes sebelum (pre-test) dan sesudah (post-test) perlakuan.
+Secara skematis desain penelitian ini dapat dirumuskan sebagai berikut:
+[O1] -------&gt; [X] -------&gt; [O2]
+Gambar 3.2. One Group Pre-test – Post-test Design
+Keterangan:
+O1 = Pengukuran tingkat pengetahuan sebelum diberikan perlakuan (pre-test)
+X = Perlakuan berupa akses media animasi storytelling berbasis situs web
+O2 = Pengukuran tingkat pengetahuan setelah diberikan perlakuan (post-test)
+
+Lampiran 2
+Kuesioner Penelitian
+KUESIONER PENGETAHUAN KESEHATAN GIGI DAN MULUT
+A. Identitas
+Nama Lengkap : ___________________________
+Usia : ___________________________
+Jenis Kelamin : ___________________________
+Kelas : ___________________________
+B. Petunjuk Pengisian Kuesioner
+Jawablah soal di bawah ini dengan benar, beri tanda (x) pada jawaban yang menurut Anda benar!
+C. Soal
+1. Gigi berlubang adalah kerusakan jaringan keras gigi yang terutama disebabkan oleh ...
+   a. Gigi dan mulut yang jarang dibersihkan dalam kehidupan sehari-hari
+   b. Sisa makanan yang diubah bakteri menjadi asam melalui proses demineralisasi
+   c. Kebiasaan menggertakan gigi secara terus-menerus
+   d. Kebiasaan mengunyah makanan keras yang memicu keretakan struktur gigi
+2. Tanda-tanda gigi berlubang adalah ...
+   a. Gigi tertutup lapisan keras seperti kerak
+   b. Gusi menebal dan menutupi bagian gigi
+   c. Gigi berlubang dan berwarna cokelat atau hitam
+   d. Luka kecil berwarna putih kekuningan di mulut
+3. Bagaimana cara mencegah terjadinya gigi berlubang?
+   a. Mengompres pipi dengan air hangat
+   b. Meminum obat pereda nyeri saat gigi sakit
+   c. Menyikat gigi dua kali sehari secara teratur
+   d. Beristirahat cukup agar tubuh tetap sehat
+4. Bagaimana cara penanganan yang tepat mengatasi gigi berlubang?
+   a. Dibiarkan agar lubang gigi tertutup sendiri
+   b. Diperiksa dan ditambal oleh dokter gigi
+   c. Diberi pasta gigi lebih banyak saat sikat gigi
+   d. Dioleskan obat tradisional tanpa pemeriksaan
+5. Apa itu tambal gigi?
+   a. Lapisan yang digunakan untuk mencegah gusi berdarah
+   b. Alat yang digunakan untuk mencabut gigi berlubang
+   c. Cairan yang digunakan untuk membersihkan gigi
+   d. Bahan pengisi gigi untuk melindunginya dari kerusakan
+6. Kapan gigi perlu ditambal akibat gigi berlubang?
+   a. Saat gigi terasa bersih setelah disikat
+   b. Saat gigi terlihat berlubang dan terasa nyeri
+   c. Saat gusi terlihat merah muda dan sehat
+   d. Saat gigi terasa kuat saat digunakan makan
+7. Apa yang dapat terjadi jika gigi berlubang tidak segera ditangani?
+   a. Gigi menjadi rapuh dan mudah patah
+   b. Gigi terkikis lebih tipis dan menjadi sensitif
+   c. Gigi maju ke depan sehingga menjadi tonggos
+   d. Gigi menjadi sakit dan lubang semakin besar
+8. Radang gusi umumnya disebabkan oleh ...
+   a. Kebiasaan mengunyah di satu sisi rahang
+   b. Kebiasaan sering menggigit-gigit bibir
+   c. Penumpukan plak dan sisa makanan di tepi gusi
+   d. Kebiasaan mengonsumsi makanan manis dan lengket
+9. Ciri-ciri radang gusi adalah ...
+   a. Gusi merah, bengkak, dan mudah berdarah
+   b. Timbul bercak putih atau luka di sudut bibir
+   c. Mulut terasa kering dan mudah sariawan
+   d. Gigi terasa ngilu saat minum dingin
+10. Yang bukan penyebab terjadinya radang gusi adalah ...
+   a. Kebiasaan merokok secara rutin
+   b. Kekurangan vitamin C dalam tubuh
+   c. Infeksi di mulut dan tambalan gigi rusak
+   d. Menggunakan sela gigi dengan benang gigi
+11. Cara mencegah terjadinya radang gusi adalah ...
+   a. Perawatan behel gigi ke klinik gigi
+   b. Perawatan tambal gigi ke klinik gigi
+   c. Sikat gigi rutin dan membersihkan sela gigi
+   d. Memasang gigi palsu ke dokter gigi
+12. Berikut ini manakah yang menjadi pemicu penyebab radang gusi?
+   a. Makanan pedas, rokok, dan minuman alkohol
+   b. Makanan manis, asam, dan minuman dingin
+   c. Kebiasaan menggigit bibir dan pipi bagian dalam
+   d. Kebiasaan menghisap jempol dan menggigit kuku
+13. Darah pada sikat gigi merupakan tanda dari ...
+   a. Penyakit gusi
+   b. Kerusakan gigi
+   c. Karang gigi
+   d. Sariawan
+14. Mengapa radang gusi perlu segera dicegah dan ditangani?
+   a. Agar gusi tidak semakin meradang dan berdarah
+   b. Agar gigi menjadi lebih putih dengan cepat
+   c. Agar bentuk gigi berubah menjadi lebih rapi
+   d. Agar gigi terasa lebih keras saat digigit
+15. Kapan waktu ideal menyikat gigi dalam sehari?
+   a. Setiap selesai mandi pagi dan mandi sore
+   b. Setiap selesai makan termasuk saat ngemil
+   c. Saat gigi terasa kotor pada waktu tertentu
+   d. Setelah sarapan pagi dan sebelum tidur malam
+16. Pasta gigi yang baik digunakan adalah ... agar membantu memperkuat gigi dan mencegah gigi berlubang
+   a. Pasta gigi berbahan pemutih kuat yang abrasif
+   b. Pasta gigi yang mengandung fluoride
+   c. Pasta gigi bermerk dan berkualitas tinggi
+   d. Pasta gigi dengan rasa mint yang segar
+17. Kapan Anda melakukan kunjungan ke klinik gigi untuk dilakukan pemeriksaan?
+   a. Saat gigi terasa sakit saja
+   b. Setiap 1 tahun sekali
+   c. Setiap 6 bulan sekali
+   d. Saat ada program gratis
+18. Bagaimana cara pemakaian sikat gigi yang benar?
+   a. Menggunakan sikat gigi sendiri dan tidak bergantian
+   b. Menggunakan satu sikat gigi bersama anggota keluarga
+   c. Menggunakan sikat gigi sampai bulunya rusak
+   d. Menggunakan sikat gigi tanpa dibilas sehabis pakai
+19. Apa fungsi fluoride?
+   a. Membuat gigi putih
+   b. Melindungi gigi dari kerusakan
+   c. Membuat gigi tumbuh
+   d. Mencegah bau mulut
+20. Jenis kepala dan bulu sikat gigi yang disarankan adalah ...
+   a. Kepala kecil dengan bulu lembut
+   b. Kepala sedang dengan bulu kasar
+   c. Kepala besar dengan bulu kasar
+   d. Kepala besar dengan bulu sedang
+
+KUNCI JAWABAN KUESIONER PENELITIAN
+No. Soal
+Kunci Jawaban
+Detail Jawaban
+1
+b
+Sisa makanan yang diubah bakteri menjadi asam melalui proses demineralisasi
+2
+c
+Gigi berlubang dan berwarna cokelat atau hitam
+3
+c
+Menyikat gigi dua kali sehari secara teratur
+4
+b
+Diperiksa dan ditambal oleh dokter gigi
+5
+d
+Bahan pengisi gigi untuk melindunginya dari kerusakan
+6
+b
+Saat gigi terlihat berlubang dan terasa nyeri
+7
+d
+Gigi menjadi sakit dan lubang semakin besar
+8
+c
+Penumpukan plak dan sisa makanan di tepi gusi
+9
+a
+Gusi merah, bengkak, dan mudah berdarah
+10
+d
+Menggunakan sela gigi dengan benang gigi
+11
+c
+Sikat gigi rutin dan membersihkan sela gigi
+12
+a
+Makanan pedas, rokok, dan minuman alkohol
+13
+a
+Penyakit gusi
+14
+a
+Agar gusi tidak semakin meradang dan berdarah
+15
+d
+Setelah sarapan pagi dan sebelum tidur malam
+16
+b
+Pasta gigi yang mengandung fluoride
+17
+c
+Setiap 6 bulan sekali
+18
+a
+Menggunakan sikat gigi sendiri dan tidak bergantian
+19
+b
+Melindungi gigi dari kerusakan
+20
+a
+Kepala kecil dengan bulu lembut

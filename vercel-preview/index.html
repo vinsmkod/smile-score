@@ -162,6 +162,12 @@
             <!-- Left Column: Headline, Description & CTA Button -->
             <div class="lg:col-span-6 space-y-6 text-center lg:text-left" data-aos="fade-right" data-aos-duration="700">
 
+                <!-- Badge: Media Edukasi Berbasis AI -->
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#D4F4E7]/80 border border-[#A8E6D7] text-[#11665F] text-xs sm:text-sm font-semibold shadow-sm">
+                    <span class="text-amber-400 text-sm">✦</span>
+                    <span>Media Edukasi Kesehatan Gigi dan Mulut Berbasis AI</span>
+                </div>
+
                 <!-- Main Headline with curved smile accent -->
                 <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-[1.18]">
                     Kenali Kesehatan<br>
@@ -172,11 +178,11 @@
 
                 <!-- Description -->
                 <p class="text-slate-600 text-sm sm:text-base md:text-[17px] leading-relaxed max-w-xl mx-auto lg:mx-0">
-                    Jawab beberapa pertanyaan sederhana tentang kebiasaan dan kondisi gigi serta mulutmu. Dapatkan hasil Smile Score, edukasi, dan saran untuk senyum yang lebih sehat!
+                    Smile Score adalah media edukasi berbasis Artificial Intelligence yang membantu kamu menilai kondisi kesehatan gigi dan mulut melalui jawaban dari 20 pertanyaan, lalu memberikan skor, kategori hasil, edukasi, dan saran yang sesuai dengan kondisi kamu.
                 </p>
 
-                <!-- CTA Pill Button -->
-                <div class="pt-1 flex items-center justify-center lg:justify-start">
+                <!-- CTA Pill Button & Quick Access Info -->
+                <div class="pt-1 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 sm:gap-6">
                     <a href="smile-score.html"
                         class="inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-[#168C83] hover:bg-[#11665F] text-white font-bold text-base shadow-lg shadow-[#168C83]/25 hover:shadow-xl hover:shadow-[#168C83]/35 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200">
                         <!-- White Tooth Icon -->
@@ -188,20 +194,76 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                     </a>
+
+                    <!-- Time & Accessibility Badge -->
+                    <div class="flex items-center gap-2.5 text-slate-500 text-xs sm:text-sm font-medium text-left">
+                        <div class="w-8 h-8 rounded-full bg-white/80 border border-[#D9EAE4] flex items-center justify-center text-[#168C83] shadow-sm flex-shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="9" stroke-width="2" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7v5l3 2" />
+                            </svg>
+                        </div>
+                        <span class="leading-tight">Mudah, cepat,<br class="hidden sm:inline"> dan bisa diakses kapan saja!</span>
+                    </div>
                 </div>
 
             </div>
 
-            <!-- Right Column: 3D Artwork of SMK Students & Tooth Mascot -->
+            <!-- Right Column: Hero Photo with Organic Backdrop & Dental Elements -->
             <div class="lg:col-span-6 flex justify-center lg:justify-end" data-aos="fade-left" data-aos-duration="700">
                 <div class="relative w-full max-w-lg">
-                    <div class="relative rounded-3xl overflow-hidden shadow-lg border border-[#D9EAE4]/80 bg-white/40 p-2">
-                        <img src="./images/gigi.jpg"
-                            alt="Siswa SMK dan Maskot Gigi Sehat Smile Score"
+
+                    <!-- Organic Mint Backdrop Shape matching reference -->
+                    <div class="absolute -top-5 -right-5 w-[104%] h-[104%] bg-[#C4EFE0]/70 rounded-[44px] transform rotate-2 pointer-events-none -z-10"></div>
+                    <div class="absolute -bottom-6 -left-6 w-36 h-36 bg-[#DDF5EC]/80 rounded-full blur-2xl pointer-events-none -z-10"></div>
+
+                    <!-- Top-Right Accent Rays radiating outward matching reference -->
+                    <div class="absolute -top-5 -right-3 sm:-top-6 sm:-right-4 pointer-events-none select-none text-[#0E6754]">
+                        <svg class="w-10 h-10 sm:w-11 sm:h-11" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round">
+                            <line x1="16" y1="28" x2="12" y2="12" />
+                            <line x1="24" y1="32" x2="33" y2="17" />
+                            <line x1="28" y1="38" x2="43" y2="34" />
+                        </svg>
+                    </div>
+
+                    <!-- Main White Frame Card with Rounded Corners & Soft Shadow -->
+                    <div class="relative rounded-[32px] sm:rounded-[36px] bg-white p-2.5 sm:p-3 shadow-xl shadow-[#168C83]/12 border border-slate-100/90">
+                        <img src="./images/hero-smile.jpg"
+                            alt="Pemeriksaan Gigi dan Senyum Sehat Smile Score"
                             loading="eager"
                             decoding="async"
-                            class="w-full h-auto object-cover rounded-[24px]">
+                            class="w-full h-auto aspect-[4/3] object-cover rounded-[24px] sm:rounded-[28px]">
                     </div>
+
+                    <!-- Cute Accent Ticks on bottom-left curve of photo matching reference -->
+                    <div class="absolute bottom-5 left-2 sm:bottom-6 sm:left-3 pointer-events-none select-none text-[#0E6754]">
+                        <svg class="w-7 h-7 sm:w-8 sm:h-8" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round">
+                            <line x1="10" y1="26" x2="16" y2="14" />
+                            <line x1="18" y1="32" x2="24" y2="20" />
+                        </svg>
+                    </div>
+
+                    <!-- Cute Tooth Illustration Accent with tilt & sparkle star matching client reference -->
+                    <div class="absolute -bottom-4 -right-2 sm:-bottom-5 sm:-right-4 pointer-events-none select-none z-10 flex items-start">
+                        <div class="relative transform rotate-[8deg] transition-transform duration-300">
+                            <!-- Clean Tooth Outline with White Fill -->
+                            <svg class="w-14 h-16 sm:w-16 sm:h-18 drop-shadow-md" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M 50 24 C 43 17, 30 15, 20 22 C 10 30, 8 46, 10 62 C 12 77, 18 92, 25 100 C 29 104, 37 103, 41 96 C 45 88, 48 77, 50 77 C 52 77, 55 88, 59 96 C 63 103, 71 104, 75 100 C 82 92, 88 77, 90 62 C 92 46, 90 30, 80 22 C 70 15, 57 17, 50 24 Z" 
+                                      fill="#FFFFFF" 
+                                      stroke="#0E6754" 
+                                      stroke-width="5" 
+                                      stroke-linecap="round" 
+                                      stroke-linejoin="round"/>
+                            </svg>
+                            <!-- Sparkle Star at Top-Right of Tooth -->
+                            <div class="absolute -top-1 -right-3 text-[#0E6754]">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5 fill-current" viewBox="0 0 24 24">
+                                    <path d="M12 2 C12 8 16 12 22 12 C16 12 12 16 12 22 C12 16 8 12 2 12 C8 12 12 8 12 2 Z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -368,10 +430,8 @@
                     <div class="w-7 h-7 rounded-full bg-[#8B5CF6] text-white font-bold text-xs flex items-center justify-center absolute top-4 left-4 shadow-sm">
                         3
                     </div>
-                    <div class="w-16 h-16 rounded-full bg-[#f3e8ff] text-[#8B5CF6] flex items-center justify-center mt-3 mb-3 group-hover:scale-105 transition-transform">
-                        <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 2C9.5 2 7.5 3.5 7.5 5.5c0 .7.2 1.4.6 2C6.8 8.1 6 9.4 6 11c0 2.5 1.5 6 3 9.5 1 2.3 2 2.5 3 2.5s2-.2 3-2.5c1.5-3.5 3-7 3-9.5 0-1.6-.8-2.9-2.1-3.5.4-.6.6-1.3.6-2C16.5 3.5 14.5 2 12 2z" />
-                        </svg>
+                    <div class="w-16 h-16 rounded-full bg-[#f3e8ff] flex items-center justify-center mt-3 mb-3 p-2.5 group-hover:scale-105 transition-transform">
+                        <img src="./images/tooth-illustration.svg" alt="Ilustrasi Dapatkan Smile Score" class="w-full h-full object-contain">
                     </div>
                     <h3 class="text-base font-bold text-slate-900 mb-1">Dapatkan Smile Score</h3>
                     <p class="text-slate-500 text-xs leading-relaxed">
@@ -596,41 +656,90 @@
 </section>
 
 <!-- ============================================================== -->
-<!-- 5. CALL TO ACTION SECTION (BLUE BANNER WITH SMILING TOOTH)    -->
+<!-- 5. CALL TO ACTION SECTION (BANNER WITH 3 SMK STUDENTS)        -->
 <!-- ============================================================== -->
 <section class="py-10 md:py-14">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="relative rounded-3xl sm:rounded-[32px] bg-[#11665F] p-6 sm:p-8 shadow-xl shadow-[#168C83]/15 overflow-hidden text-white flex flex-col lg:flex-row items-center justify-between gap-6" data-aos="zoom-in" data-aos-duration="600">
+        <div class="relative rounded-3xl sm:rounded-[36px] bg-[#0E6754] shadow-xl shadow-[#0E6754]/20 overflow-hidden text-white grid grid-cols-1 md:grid-cols-12 items-stretch" data-aos="zoom-in" data-aos-duration="600">
 
-            <!-- Left Content: Tooth Mascot + Heading + Subtitle -->
-            <div class="flex items-center gap-5 sm:gap-6 text-center lg:text-left flex-col sm:flex-row">
-                <!-- Waving Smiling Tooth Mascot -->
-                <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-white/15 p-1 backdrop-blur-sm border border-white/25 shadow-inner flex-shrink-0 animate-float">
-                    <img src="./images/gigi.jpg"
-                        alt="Maskot Gigi Senyum"
-                        loading="lazy"
-                        decoding="async"
-                        class="w-full h-full object-cover rounded-xl">
+            <!-- Left: Photo of 3 SMK Students seamlessly filling the left side -->
+            <div class="md:col-span-5 relative h-56 sm:h-64 md:h-auto min-h-[220px] overflow-hidden">
+                <img src="./images/students-cta.jpg"
+                    alt="Tiga Siswa SMK Tersenyum Percaya Diri"
+                    loading="lazy"
+                    decoding="async"
+                    class="w-full h-full object-cover object-[center_15%]">
+
+                <!-- Playful White Doodle Rays above Students (matching reference) -->
+                <!-- White rays above Left Student -->
+                <div class="absolute top-4 left-8 pointer-events-none select-none text-white drop-shadow">
+                    <svg class="w-7 h-7 sm:w-8 sm:h-8" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round">
+                        <line x1="22" y1="24" x2="10" y2="12" />
+                        <line x1="26" y1="28" x2="22" y2="13" />
+                    </svg>
                 </div>
-
-                <div class="space-y-1.5">
-                    <h2 class="text-xl sm:text-2xl font-bold text-white tracking-tight">
-                        Sudah siap mengetahui Smile Score kamu?
-                    </h2>
-                    <p class="text-[#DDF5EC] text-xs sm:text-sm font-normal">
-                        Yuk, mulai pemeriksaan sekarang dan jaga senyummu setiap hari!
-                    </p>
+                <!-- White rays above Right Student -->
+                <div class="absolute top-5 right-8 pointer-events-none select-none text-white drop-shadow">
+                    <svg class="w-7 h-7 sm:w-8 sm:h-8" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round">
+                        <line x1="12" y1="28" x2="16" y2="13" />
+                        <line x1="16" y1="24" x2="28" y2="14" />
+                    </svg>
                 </div>
             </div>
 
-            <!-- Right Button: Pure White Pill Button -->
-            <div class="flex-shrink-0">
-                <a href="smile-score.html" class="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-white hover:bg-[#DDF5EC] text-[#168C83] font-bold text-sm shadow-md hover:shadow-lg transition-all duration-200">
-                    <span>Mulai Sekarang</span>
-                    <svg class="w-4 h-4 text-[#168C83]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            <!-- Right: Invitation Text, Tooth Doodle & Mulai Sekarang Button -->
+            <div class="md:col-span-7 p-6 sm:p-8 lg:py-9 lg:px-9 flex flex-col md:flex-row items-center justify-between gap-6 bg-[#0E6754]">
+
+                <!-- Text Content -->
+                <div class="space-y-2 text-center md:text-left flex-1">
+                    <h2 class="text-xl sm:text-2xl lg:text-[25px] font-extrabold text-white tracking-tight leading-snug">
+                        Sudah siap mengetahui<br>
+                        <span class="inline-flex items-center gap-1.5">
+                            Smile Score kamu?
+                            <span class="text-amber-300 text-lg sm:text-xl">✦</span>
+                        </span>
+                    </h2>
+                    <p class="text-[#DDF5EC] text-xs sm:text-sm font-medium leading-relaxed max-w-sm">
+                        Yuk, mulai pemeriksaan sekarang dan jaga senyummu setiap hari!
+                    </p>
+                </div>
+
+                <!-- White Outline Tooth tilted -14deg with Sparkles matching client reference -->
+                <div class="flex items-center gap-2 sm:gap-2.5 text-white flex-shrink-0 pointer-events-none select-none my-1 md:my-0">
+                    <!-- Sparkle on left -->
+                    <svg class="w-3.5 h-3.5 text-white/90 fill-current -mb-3" viewBox="0 0 24 24">
+                        <path d="M12 2 C12 8 16 12 22 12 C16 12 12 16 12 22 C12 16 8 12 2 12 C8 12 12 8 12 2 Z"/>
                     </svg>
-                </a>
+
+                    <!-- Tilted Tooth outline -->
+                    <div class="relative transform -rotate-[14deg] transition-transform duration-300">
+                        <svg class="w-11 h-13 sm:w-12 sm:h-14 drop-shadow" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M 50 24 C 43 17, 30 15, 20 22 C 10 30, 8 46, 10 62 C 12 77, 18 92, 25 100 C 29 104, 37 103, 41 96 C 45 88, 48 77, 50 77 C 52 77, 55 88, 59 96 C 63 103, 71 104, 75 100 C 82 92, 88 77, 90 62 C 92 46, 90 30, 80 22 C 70 15, 57 17, 50 24 Z" 
+                                  stroke="#FFFFFF" 
+                                  stroke-width="5" 
+                                  stroke-linecap="round" 
+                                  stroke-linejoin="round"/>
+                        </svg>
+                        <span class="absolute -top-1 -right-2 text-[11px] text-white/95">✦</span>
+                    </div>
+
+                    <!-- Sparkle on right -->
+                    <svg class="w-4 h-4 text-white fill-current -mt-3" viewBox="0 0 24 24">
+                        <path d="M12 2 C12 8 16 12 22 12 C16 12 12 16 12 22 C12 16 8 12 2 12 C8 12 12 8 12 2 Z"/>
+                    </svg>
+                </div>
+
+                <!-- Button: Pure White Pill Button with Teal Text -->
+                <div class="flex-shrink-0">
+                    <a href="smile-score.html"
+                        class="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-white hover:bg-[#DDF5EC] text-[#0E6754] font-bold text-sm sm:text-base shadow-md hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 whitespace-nowrap">
+                        <span>Mulai Sekarang</span>
+                        <svg class="w-4 h-4 text-[#0E6754]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </a>
+                </div>
+
             </div>
 
         </div>
