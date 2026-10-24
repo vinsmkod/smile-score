@@ -200,11 +200,29 @@ class SmileScoreServiceTest extends TestCase
             ]
         ];
 
-        $education = $this->service->generateEducationContent($eval);
+        $originalEnv = getenv('GEMINI_API_KEY');
+        putenv('GEMINI_API_KEY=');
+        unset($_ENV['GEMINI_API_KEY'], $_SERVER['GEMINI_API_KEY']);
+        config(['services.gemini.api_key' => null]);
 
-        $this->assertNotEmpty($education['overview']);
-        $this->assertNotEmpty($education['topic_analyses']);
-        $this->assertNotEmpty($education['recommendations']);
-        $this->assertStringContainsString('bukan merupakan diagnosis medis', $education['disclaimer']);
+        try {
+            $education = $this->service->generateEducationContent($eval);
+
+            $this->assertEquals('rule_based', $education['source']);
+            $this->assertNotEmpty($education['introduction']);
+            $this->assertNotEmpty($education['score_interpretation']);
+            $this->assertNotEmpty($education['priority_topics']);
+            $this->assertNotEmpty($education['key_points']);
+            $this->assertNotEmpty($education['daily_habits']);
+            $this->assertNotEmpty($education['when_to_seek_care']);
+            $this->assertStringContainsString('diagnosis medis', $education['disclaimer']);
+        } finally {
+            if ($originalEnv !== false) {
+                putenv("GEMINI_API_KEY={$originalEnv}");
+                $_ENV['GEMINI_API_KEY'] = $originalEnv;
+                $_SERVER['GEMINI_API_KEY'] = $originalEnv;
+                config(['services.gemini.api_key' => $originalEnv]);
+            }
+        }
     }
 }

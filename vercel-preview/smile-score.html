@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Smile Score - Segera Dimulai</title>
-    <meta name="description" content="Halaman persiapan Smile Score untuk siswa SMK.">
-    <meta name="keywords" content="Smile Score, kesehatan gigi, edukasi gigi siswa SMK, gigi sehat, periksa gigi online">
-    
+    <title>Smile Score - Kuesioner Literasi Kesehatan Gigi Siswa SMK</title>
+    <meta name="description" content="Lengkapi biodata dan kerjakan kuesioner Smile Score untuk mengetahui skor dan edukasi kesehatan gigi dan mulutmu.">
+    <meta name="keywords" content="Smile Score, kuesioner gigi, biodata siswa SMK, periksa gigi online, edukasi kesehatan gigi">
+
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23168C83'><path d='M12 2C9.5 2 7.5 3.5 7.5 5.5c0 .7.2 1.4.6 2C6.8 8.1 6 9.4 6 11c0 2.5 1.5 6 3 9.5 1 2.3 2 2.5 3 2.5s2-.2 3-2.5c1.5-3.5 3-7 3-9.5 0-1.6-.8-2.9-2.1-3.5.4-.6.6-1.3.6-2C16.5 3.5 14.5 2 12 2z'/></svg>">
 
@@ -67,276 +67,1331 @@
 </head>
 <body class="bg-[#F1FAF6] text-[#183B38] font-sans antialiased selection:bg-[#168C83] selection:text-white flex flex-col min-h-screen">
 
-    <!-- Sticky Navbar -->
     <!-- Header / Sticky Navbar -->
-<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-20">
-            
-            <!-- Left: Logo & Tagline -->
-            <a href="index.html" class="flex items-center gap-3 group">
-                <div class="w-11 h-11 rounded-2xl bg-[#E6F7F5] flex items-center justify-center border border-[#D9EAE4] shadow-sm group-hover:scale-105 transition-transform">
-                    <!-- Friendly Tooth SVG Icon -->
-                    <svg class="w-7 h-7 text-brand-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M7 3C4.5 3 3 5 3 7.5C3 11 4.5 14 6 18C7 20.5 8 21.5 9.5 21.5C11 21.5 11.5 19.5 12 17C12.5 19.5 13 21.5 14.5 21.5C16 21.5 17 20.5 18 18C19.5 14 21 11 21 7.5C21 5 19.5 3 17 3C14.5 3 13.5 4.5 12 4.5C10.5 4.5 9.5 3 7 3Z" fill="#2AAB9A" stroke="#168C83" stroke-width="1.5" stroke-linejoin="round"/>
-                        <!-- Cute Face details -->
-                        <circle cx="9.5" cy="9.5" r="1" fill="#183B38"/>
-                        <circle cx="14.5" cy="9.5" r="1" fill="#183B38"/>
-                        <path d="M10 13C10.8 14.2 13.2 14.2 14 13" stroke="#183B38" stroke-width="1.5" stroke-linecap="round"/>
-                        <!-- Rosy Cheeks -->
-                        <circle cx="8" cy="11.5" r="1" fill="#F472B6" opacity="0.6"/>
-                        <circle cx="16" cy="11.5" r="1" fill="#F472B6" opacity="0.6"/>
-                    </svg>
-                </div>
-                <div class="flex flex-col">
-                    <span class="text-xl font-extrabold tracking-tight text-navy-900 leading-tight">
-                        Smile <span class="text-brand-600">Score</span>
-                    </span>
-                    <span class="text-[11px] font-medium text-slate-500 tracking-wide">
-                        Sehat Gigi, Senyum Percaya Diri
-                    </span>
-                </div>
-            </a>
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
 
-            <!-- Center: Nav Links (Desktop) -->
-            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-                <a href="index.html" class="nav-link  hover:text-brand-600 transition-colors py-1">Beranda</a>
-                <a href="index.html#tentang" class="nav-link hover:text-brand-600 transition-colors py-1">Tentang</a>
-                <a href="index.html#cara-kerja" class="nav-link hover:text-brand-600 transition-colors py-1">Cara Kerja</a>
-                <a href="index.html#edukasi" class="nav-link hover:text-brand-600 transition-colors py-1">Edukasi</a>
-                <a href="#tentang-penelitian" onclick="openResearchModal(); return false;" class="nav-link hover:text-brand-600 transition-colors py-1 cursor-pointer">Tentang Penelitian</a>
-            </nav>
-
-            <!-- Right: CTA Button (Desktop) -->
-            <div class="hidden md:flex items-center">
-                <a href="smile-score.html" class="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-brand-500 hover:bg-brand-600 text-white font-semibold text-sm shadow-md hover:shadow-lg hover:shadow-[#168C83]/25 active:scale-95 transition-all duration-200">
-                    <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C9.5 2 7.5 3.5 7.5 5.5c0 .7.2 1.4.6 2C6.8 8.1 6 9.4 6 11c0 2.5 1.5 6 3 9.5 1 2.3 2 2.5 3 2.5s2-.2 3-2.5c1.5-3.5 3-7 3-9.5 0-1.6-.8-2.9-2.1-3.5.4-.6.6-1.3.6-2C16.5 3.5 14.5 2 12 2z"/>
-                    </svg>
-                    <span>Mulai Smile Score</span>
+                <!-- Left: Logo & Tagline -->
+                <a href="index.html" class="flex items-center gap-3 group">
+                    <div class="w-11 h-11 rounded-2xl bg-[#E6F7F5] flex items-center justify-center border border-[#D9EAE4] shadow-sm group-hover:scale-105 transition-transform">
+                        <svg class="w-7 h-7 text-brand-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 3C4.5 3 3 5 3 7.5C3 11 4.5 14 6 18C7 20.5 8 21.5 9.5 21.5C11 21.5 11.5 19.5 12 17C12.5 19.5 13 21.5 14.5 21.5C16 21.5 17 20.5 18 18C19.5 14 21 11 21 7.5C21 5 19.5 3 17 3C14.5 3 13.5 4.5 12 4.5C10.5 4.5 9.5 3 7 3Z" fill="#2AAB9A" stroke="#168C83" stroke-width="1.5" stroke-linejoin="round"/>
+                            <circle cx="9.5" cy="9.5" r="1" fill="#183B38"/>
+                            <circle cx="14.5" cy="9.5" r="1" fill="#183B38"/>
+                            <path d="M10 13C10.8 14.2 13.2 14.2 14 13" stroke="#183B38" stroke-width="1.5" stroke-linecap="round"/>
+                            <circle cx="8" cy="11.5" r="1" fill="#F472B6" opacity="0.6"/>
+                            <circle cx="16" cy="11.5" r="1" fill="#F472B6" opacity="0.6"/>
+                        </svg>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xl font-extrabold tracking-tight text-navy-900 leading-tight">
+                            Smile <span class="text-brand-600">Score</span>
+                        </span>
+                        <span class="text-[11px] font-medium text-slate-500 tracking-wide">
+                            Sehat Gigi, Senyum Percaya Diri
+                        </span>
+                    </div>
                 </a>
-            </div>
 
-            <!-- Mobile Hamburger Button -->
-            <div class="flex md:hidden items-center">
-                <button type="button" id="mobile-menu-btn" class="p-2 rounded-xl text-slate-600 hover:text-brand-600 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500" aria-label="Buka Menu" aria-expanded="false">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                    </svg>
-                </button>
+                <!-- Center: Nav Links (Desktop) -->
+                <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+                    <a href="index.html" class="nav-link hover:text-brand-600 transition-colors py-1">Beranda</a>
+                    <a href="index.html#tentang" class="nav-link hover:text-brand-600 transition-colors py-1">Tentang</a>
+                    <a href="index.html#cara-kerja" class="nav-link hover:text-brand-600 transition-colors py-1">Cara Kerja</a>
+                    <a href="index.html#edukasi" class="nav-link hover:text-brand-600 transition-colors py-1">Edukasi</a>
+                    <a href="#tentang-penelitian" onclick="openResearchModal(); return false;" class="nav-link hover:text-brand-600 transition-colors py-1 cursor-pointer">Tentang Penelitian</a>
+                </nav>
+
+                <!-- Right: CTA Button (Desktop) -->
+                <div class="hidden md:flex items-center gap-3">
+                    <button type="button" onclick="resetToBiodata()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-200 hover:border-brand-500 text-slate-700 hover:text-brand-600 text-xs font-bold transition-all">
+                        <span>Mulai Ulang</span>
+                    </button>
+                    <a href="index.html" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-brand-500 hover:bg-brand-600 text-white font-semibold text-xs shadow-md hover:shadow-lg transition-all">
+                        <span>Ke Beranda</span>
+                    </a>
+                </div>
+
+                <!-- Mobile Hamburger Button -->
+                <div class="flex md:hidden items-center">
+                    <button type="button" id="mobile-menu-btn" class="p-2 rounded-xl text-slate-600 hover:text-brand-600 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500" aria-label="Buka Menu" aria-expanded="false">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Mobile Drawer Menu -->
-    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-white/98 px-4 pt-3 pb-6 space-y-3 shadow-xl animate-in slide-in-from-top duration-200">
-        <a href="index.html" class="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-[#E6F7F5] transition-colors">Beranda</a>
-        <a href="index.html#tentang" class="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-[#E6F7F5] transition-colors">Tentang</a>
-        <a href="index.html#cara-kerja" class="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-[#E6F7F5] transition-colors">Cara Kerja</a>
-        <a href="index.html#edukasi" class="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-[#E6F7F5] transition-colors">Edukasi</a>
-        <a href="#tentang-penelitian" onclick="openResearchModal(); return false;" class="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-[#E6F7F5] transition-colors">Tentang Penelitian</a>
-        <div class="pt-2">
-            <a href="smile-score.html" class="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-brand-500 text-white font-semibold text-sm shadow-md hover:bg-brand-600 transition-colors">
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2C9.5 2 7.5 3.5 7.5 5.5c0 .7.2 1.4.6 2C6.8 8.1 6 9.4 6 11c0 2.5 1.5 6 3 9.5 1 2.3 2 2.5 3 2.5s2-.2 3-2.5c1.5-3.5 3-7 3-9.5 0-1.6-.8-2.9-2.1-3.5.4-.6.6-1.3.6-2C16.5 3.5 14.5 2 12 2z"/>
-                </svg>
-                <span>Mulai Smile Score</span>
-            </a>
+        <!-- Mobile Drawer Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-white/98 px-4 pt-3 pb-6 space-y-3 shadow-xl">
+            <a href="index.html" class="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-[#E6F7F5] transition-colors">Beranda</a>
+            <a href="index.html#tentang" class="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-[#E6F7F5] transition-colors">Tentang</a>
+            <a href="index.html#cara-kerja" class="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-[#E6F7F5] transition-colors">Cara Kerja</a>
+            <a href="index.html#edukasi" class="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-[#E6F7F5] transition-colors">Edukasi</a>
+            <a href="#tentang-penelitian" onclick="openResearchModal(); return false;" class="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-[#E6F7F5] transition-colors">Tentang Penelitian</a>
+            <div class="pt-2 flex flex-col gap-2">
+                <button type="button" onclick="resetToBiodata()" class="w-full py-2.5 rounded-xl border border-slate-200 text-slate-700 font-bold text-xs">Mulai Ulang</button>
+                <a href="index.html" class="w-full text-center py-2.5 rounded-xl bg-brand-500 text-white font-bold text-xs">Ke Beranda</a>
+            </div>
         </div>
-    </div>
-</header>
+    </header>
 
-    <!-- Main Content -->
+    <!-- Main Content Container -->
     <main class="flex-grow">
-        <section class="min-h-[75vh] flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-lg w-full text-center">
-        <!-- Mascot Tooth Badge -->
-        <div class="relative inline-block mb-6">
-            <div class="w-32 h-32 mx-auto rounded-3xl bg-[#E6F7F5] border-2 border-[#D9EAE4] flex items-center justify-center shadow-lg p-2 animate-float">
-                <img src="./images/cta_tooth_mascot.jpg" alt="Maskot Gigi Ceria" class="w-full h-full object-cover rounded-2xl">
-            </div>
-            <div class="absolute -top-2 -right-2 bg-amber-400 text-slate-900 text-xs font-extrabold px-2.5 py-1 rounded-full shadow">
-                Coming Soon ✨
-            </div>
-        </div>
 
-        <!-- Heading -->
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-navy-900 tracking-tight mb-3">
-            Smile Score akan Segera Dimulai!
-        </h1>
-
-        <!-- Subtitle -->
-        <p class="text-slate-600 text-base leading-relaxed mb-8">
-            Modul kuesioner dan penilaian mandiri kesehatan gigi &amp; mulut untuk siswa SMK sedang dipersiapkan. Senyum sehat dan percaya diri segera menantimu!
-        </p>
-
-        <!-- Information Card -->
-        <div class="bg-white rounded-2xl border border-[#D9EAE4] p-6 shadow-sm mb-8 text-left space-y-3">
-            <div class="flex items-start gap-3">
-                <div class="w-7 h-7 rounded-full bg-[#DDF5EC] text-brand-600 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                    </svg>
+        <!-- Universal Global Stepper Indicator -->
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+            <div class="bg-white/90 backdrop-blur-sm rounded-2xl p-3 sm:p-4 border border-[#D9EAE4] shadow-sm flex items-center justify-between text-xs font-bold">
+                <!-- Step 1 -->
+                <div id="stepper-step-1" class="flex items-center gap-2 text-[#168C83] transition-colors">
+                    <span id="stepper-badge-1" class="w-6 h-6 rounded-full bg-[#168C83] text-white flex items-center justify-center text-[11px] font-extrabold shadow-sm">
+                        01
+                    </span>
+                    <span id="stepper-label-1" class="hidden sm:inline">Biodata Siswa</span>
+                    <span class="sm:hidden">Biodata</span>
                 </div>
-                <div>
-                    <h2 class="text-sm font-bold text-slate-800">Pertanyaan Mudah &amp; Cepat</h2>
-                    <p class="text-xs text-slate-500">Hanya butuh 3-5 menit untuk mengetahui skor kesehatan gigimu.</p>
-                </div>
-            </div>
 
-            <div class="flex items-start gap-3">
-                <div class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                    </svg>
+                <div id="stepper-line-1" class="h-0.5 w-6 sm:w-12 bg-slate-200 transition-colors"></div>
+
+                <!-- Step 2 -->
+                <div id="stepper-step-2" class="flex items-center gap-2 text-slate-400 transition-colors">
+                    <span id="stepper-badge-2" class="w-6 h-6 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center text-[11px] font-extrabold">
+                        02
+                    </span>
+                    <span class="hidden sm:inline">Kuesioner 20 Soal</span>
+                    <span class="sm:hidden">Kuesioner</span>
                 </div>
-                <div>
-                    <h2 class="text-sm font-bold text-slate-800">Edukasi &amp; Rekomendasi Terarah</h2>
-                    <p class="text-xs text-slate-500">Rekomendasi disesuaikan khusus untuk kebiasaan siswa sekolah menengah kejuruan.</p>
+
+                <div id="stepper-line-2" class="h-0.5 w-6 sm:w-12 bg-slate-200 transition-colors"></div>
+
+                <!-- Step 3 -->
+                <div id="stepper-step-3" class="flex items-center gap-2 text-slate-400 transition-colors">
+                    <span id="stepper-badge-3" class="w-6 h-6 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center text-[11px] font-extrabold">
+                        03
+                    </span>
+                    <span>Hasil &amp; Edukasi</span>
                 </div>
             </div>
         </div>
 
-        <!-- Back to Home CTA -->
-        <div>
-            <a href="index.html" class="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-brand-500 hover:bg-brand-600 text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-200">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                </svg>
-                <span>Kembali ke Beranda</span>
-            </a>
-        </div>
-    </div>
-</section>
+        <!-- ========================================== -->
+        <!-- STAGE 1: FORM BIODATA SISWA                -->
+        <!-- ========================================== -->
+        <section id="stage-biodata" class="py-8 md:py-14 min-h-[75vh] flex items-center justify-center">
+            <div class="max-w-xl w-full mx-auto px-4 sm:px-6 lg:px-8">
+
+                <!-- Biodata Form Card -->
+                <div class="bg-white rounded-3xl p-6 sm:p-10 border border-[#D9EAE4] shadow-xl relative overflow-hidden" data-aos="zoom-in" data-aos-duration="400">
+
+                    <!-- Header Section -->
+                    <div class="text-center mb-8">
+                        <div class="w-14 h-14 rounded-2xl bg-[#E6F7F5] text-[#168C83] flex items-center justify-center mx-auto mb-3 border border-[#D9EAE4] shadow-sm">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </div>
+                        <h1 class="text-2xl sm:text-3xl font-extrabold text-[#183B38] tracking-tight mb-2">
+                            Biodata Siswa
+                        </h1>
+                        <p class="text-slate-500 text-xs sm:text-sm leading-relaxed max-w-sm mx-auto">
+                            Lengkapi biodata berikut sebelum memulai kuesioner Smile Score.
+                        </p>
+                    </div>
+
+                    <!-- Client-Side Form -->
+                    <form id="biodata-form" onsubmit="handleBiodataSubmit(event)" class="space-y-5">
+
+                        <!-- A. Nama Lengkap -->
+                        <div>
+                            <label for="name" class="block text-xs sm:text-sm font-bold text-[#183B38] mb-1.5">
+                                Nama Lengkap <span class="text-rose-500">*</span>
+                            </label>
+                            <input type="text"
+                                   id="name"
+                                   name="name"
+                                   placeholder="Masukkan nama lengkap Anda"
+                                   required
+                                   class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50/50 text-slate-800 text-sm focus:outline-none focus:border-[#168C83] focus:bg-white focus:ring-2 focus:ring-[#168C83]/20 transition-all duration-150">
+                            <p id="error-name" class="hidden text-xs text-rose-600 mt-1.5 font-medium flex items-center gap-1">
+                                <span>⚠️</span> <span class="error-text">Nama Lengkap minimal 2 karakter.</span>
+                            </p>
+                        </div>
+
+                        <!-- B. Usia & D. Kelas (Grid on Desktop) -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- B. Usia -->
+                            <div>
+                                <label for="age" class="block text-xs sm:text-sm font-bold text-[#183B38] mb-1.5">
+                                    Usia <span class="text-rose-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <input type="number"
+                                           id="age"
+                                           name="age"
+                                           min="12"
+                                           max="25"
+                                           placeholder="Contoh: 16"
+                                           required
+                                           class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50/50 text-slate-800 text-sm focus:outline-none focus:border-[#168C83] focus:bg-white focus:ring-2 focus:ring-[#168C83]/20 transition-all duration-150">
+                                    <span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-semibold text-slate-400 pointer-events-none">
+                                        Tahun
+                                    </span>
+                                </div>
+                                <p id="error-age" class="hidden text-xs text-rose-600 mt-1.5 font-medium flex items-center gap-1">
+                                    <span>⚠️</span> <span class="error-text">Usia harus dalam rentang 12-25 tahun.</span>
+                                </p>
+                            </div>
+
+                            <!-- D. Kelas -->
+                            <div>
+                                <label for="class_name" class="block text-xs sm:text-sm font-bold text-[#183B38] mb-1.5">
+                                    Kelas <span class="text-rose-500">*</span>
+                                </label>
+                                <input type="text"
+                                       id="class_name"
+                                       name="class_name"
+                                       placeholder="Contoh: X Teknik Mesin"
+                                       required
+                                       class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50/50 text-slate-800 text-sm focus:outline-none focus:border-[#168C83] focus:bg-white focus:ring-2 focus:ring-[#168C83]/20 transition-all duration-150">
+                                <p id="error-class_name" class="hidden text-xs text-rose-600 mt-1.5 font-medium flex items-center gap-1">
+                                    <span>⚠️</span> <span class="error-text">Kelas wajib diisi.</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- C. Jenis Kelamin -->
+                        <div>
+                            <label class="block text-xs sm:text-sm font-bold text-[#183B38] mb-2">
+                                Jenis Kelamin <span class="text-rose-500">*</span>
+                            </label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <!-- Option: Laki-laki -->
+                                <label class="gender-card group flex items-center justify-center gap-2.5 p-3.5 rounded-2xl border border-slate-200 bg-slate-50/50 text-slate-700 hover:border-[#168C83] hover:bg-[#F1FAF6] cursor-pointer transition-all">
+                                    <input type="radio"
+                                           name="gender"
+                                           value="Laki-laki"
+                                           class="sr-only"
+                                           required>
+                                    <span class="w-4 h-4 rounded-full border border-slate-300 bg-white flex items-center justify-center"></span>
+                                    <span class="text-xs sm:text-sm font-bold">Laki-laki</span>
+                                </label>
+
+                                <!-- Option: Perempuan -->
+                                <label class="gender-card group flex items-center justify-center gap-2.5 p-3.5 rounded-2xl border border-slate-200 bg-slate-50/50 text-slate-700 hover:border-[#168C83] hover:bg-[#F1FAF6] cursor-pointer transition-all">
+                                    <input type="radio"
+                                           name="gender"
+                                           value="Perempuan"
+                                           class="sr-only"
+                                           required>
+                                    <span class="w-4 h-4 rounded-full border border-slate-300 bg-white flex items-center justify-center"></span>
+                                    <span class="text-xs sm:text-sm font-bold">Perempuan</span>
+                                </label>
+                            </div>
+                            <p id="error-gender" class="hidden text-xs text-rose-600 mt-1.5 font-medium flex items-center gap-1">
+                                <span>⚠️</span> <span class="error-text">Jenis Kelamin wajib dipilih.</span>
+                            </p>
+                        </div>
+
+                        <!-- Form Action Buttons -->
+                        <div class="pt-4 space-y-3">
+                            <button type="submit"
+                                    id="btn-submit-biodata"
+                                    class="w-full flex items-center justify-center gap-3 px-8 py-3.5 rounded-full bg-[#168C83] hover:bg-[#11665F] text-white font-bold text-sm sm:text-base shadow-lg shadow-[#168C83]/25 hover:shadow-xl hover:shadow-[#168C83]/35 active:scale-95 transition-all duration-200">
+                                <span>Lanjutkan ke Kuesioner</span>
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </button>
+
+                            <a href="index.html"
+                               class="w-full flex items-center justify-center gap-2 px-6 py-2.5 rounded-full text-slate-500 hover:text-slate-800 text-xs sm:text-sm font-semibold transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                                </svg>
+                                <span>Kembali ke Beranda</span>
+                            </a>
+                        </div>
+
+                    </form>
+
+                </div>
+
+                <!-- Privacy Assurance Note -->
+                <div class="mt-6 text-center">
+                    <p class="text-xs text-slate-400">
+                        🔒 Data diri Anda hanya digunakan untuk kepentingan penelitian literasi kesehatan gigi SMK Putra Nasional Cibodas dan dijamin kerahasiaannya.
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- STAGE 2: KUESIONER 20 SOAL                 -->
+        <!-- ========================================== -->
+        <section id="stage-kuesioner" class="hidden py-8 md:py-12 min-h-[85vh]">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <!-- Student Profile Summary Card -->
+                <div class="bg-white rounded-2xl p-4 border border-[#D9EAE4] shadow-sm mb-6 flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-[#E6F7F5] text-[#168C83] flex items-center justify-center font-bold">
+                            👤
+                        </div>
+                        <div>
+                            <span class="text-slate-400 text-[11px] uppercase tracking-wider block font-bold">Siswa Responden:</span>
+                            <strong id="display-student-name" class="text-[#183B38] font-extrabold">-</strong>
+                            <span class="text-slate-400">&bull;</span>
+                            <span class="text-slate-600 font-medium">Kelas <span id="display-student-class">-</span></span>
+                            <span class="text-slate-400">&bull;</span>
+                            <span class="text-slate-500"><span id="display-student-age">-</span> th (<span id="display-student-gender">-</span>)</span>
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="editBiodata()" class="text-xs font-semibold text-[#168C83] hover:underline flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                        </svg>
+                        <span>Ubah Biodata</span>
+                    </button>
+                </div>
+
+                <!-- Header Card -->
+                <div class="text-center max-w-2xl mx-auto mb-8">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#DDF5EC] text-[#168C83] text-xs font-bold uppercase tracking-wider mb-3">
+                        <span>📝 Kuesioner Penelitian Literasi Gigi</span>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#183B38] tracking-tight mb-2">
+                        Ukur <span class="text-[#168C83]">Smile Score</span> Kamu
+                    </h1>
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
+                        Jawablah <strong>20 pertanyaan</strong> pilihan ganda di bawah ini dengan memilih satu jawaban yang paling tepat menurutmu.
+                    </p>
+                </div>
+
+                <!-- Sticky Floating Progress Tracker -->
+                <div class="sticky top-20 z-40 bg-white/95 backdrop-blur-md rounded-2xl p-4 mb-8 border border-[#D9EAE4] shadow-md transition-all">
+                    <div class="flex items-center justify-between text-xs sm:text-sm font-bold text-slate-700 mb-2">
+                        <span class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-[#168C83] animate-pulse"></span>
+                            <span>Progres Pengisian:</span>
+                        </span>
+                        <span id="progress-text" class="text-[#168C83] font-extrabold">0 / 20 Soal Terjawab (0%)</span>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden p-0.5">
+                        <div id="progress-bar" class="bg-gradient-to-r from-[#2AAB9A] to-[#168C83] h-full rounded-full transition-all duration-300 w-0"></div>
+                    </div>
+                </div>
+
+                <!-- Validation Warning if incomplete -->
+                <div id="incomplete-warning" class="hidden bg-rose-50 border-l-4 border-rose-500 rounded-xl p-4 mb-8 shadow-sm" role="alert">
+                    <div class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-rose-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                        <div>
+                            <h2 class="text-sm font-bold text-rose-800">Mohon lengkapi seluruh pertanyaan</h2>
+                            <p class="text-xs text-rose-700 mt-1">
+                                Seluruh 20 pertanyaan wajib dijawab agar perhitungan Smile Score akurat dan valid.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Questions Container -->
+                <form id="questionnaire-form" onsubmit="handleQuestionnaireSubmit(event)">
+                    <div id="questions-list" class="space-y-6">
+                        <!-- Questions will be rendered dynamically by JavaScript -->
+                    </div>
+
+                    <!-- Bottom Action Panel -->
+                    <div class="mt-10 p-6 sm:p-8 bg-white rounded-3xl border border-[#D9EAE4] shadow-lg text-center">
+                        <div class="max-w-md mx-auto space-y-3 mb-6">
+                            <h3 class="text-base sm:text-lg font-bold text-[#183B38]">
+                                Sudah Menjawab Semua Pertanyaan?
+                            </h3>
+                            <p class="text-xs sm:text-sm text-slate-500">
+                                Pastikan seluruh 20 pertanyaan sudah terisi sebelum menekan tombol kirim di bawah. Sistem akan langsung menghitung hasil Smile Score kamu!
+                            </p>
+                        </div>
+
+                        <button type="submit" id="submit-questionnaire-btn" class="inline-flex items-center gap-3 px-10 py-4 rounded-full bg-[#168C83] hover:bg-[#11665F] text-white font-bold text-base shadow-lg shadow-[#168C83]/25 hover:shadow-xl hover:shadow-[#168C83]/35 active:scale-95 transition-all duration-200">
+                            <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C9.5 2 7.5 3.5 7.5 5.5c0 .7.2 1.4.6 2C6.8 8.1 6 9.4 6 11c0 2.5 1.5 6 3 9.5 1 2.3 2 2.5 3 2.5s2-.2 3-2.5c1.5-3.5 3-7 3-9.5 0-1.6-.8-2.9-2.1-3.5.4-.6.6-1.3.6-2C16.5 3.5 14.5 2 12 2z"/>
+                            </svg>
+                            <span>Selesai &amp; Hitung Smile Score</span>
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- STAGE 3: HASIL SMILE SCORE & EDUKASI       -->
+        <!-- ========================================== -->
+        <section id="stage-result" class="hidden py-8 md:py-14 min-h-[85vh]">
+            <div class="max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+
+                <!-- Main Result Card -->
+                <div class="bg-white rounded-4xl p-6 sm:p-10 border border-[#D9EAE4] shadow-xl text-center relative overflow-hidden">
+
+                    <!-- Decorative curved gradient behind badge -->
+                    <div class="absolute -top-16 -left-16 w-48 h-48 bg-[#DDF5EC]/60 rounded-full blur-2xl pointer-events-none"></div>
+                    <div class="absolute -bottom-16 -right-16 w-48 h-48 bg-amber-100/50 rounded-full blur-2xl pointer-events-none"></div>
+
+                    <!-- Page / Section Title -->
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#DDF5EC] text-[#168C83] text-xs font-bold uppercase tracking-wider mb-4">
+                        <span>✦ Hasil Penilaian Mandiri ✦</span>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-[#183B38] tracking-tight mb-2">
+                        Hasil Smile Score
+                    </h1>
+
+                    <!-- Student Biodata Identity Card -->
+                    <div class="block mb-6">
+                        <div class="inline-flex flex-wrap items-center justify-center gap-2 px-4 py-2 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs text-slate-600 font-medium">
+                            <span class="text-slate-400 font-bold">Responden:</span>
+                            <strong id="result-student-name" class="text-slate-900 font-extrabold">-</strong>
+                            <span class="text-slate-300">&bull;</span>
+                            <span>Kelas <span id="result-student-class">-</span></span>
+                            <span class="text-slate-300">&bull;</span>
+                            <span><span id="result-student-age">-</span> th (<span id="result-student-gender">-</span>)</span>
+                        </div>
+                    </div>
+
+                    <!-- Large Prominent Emoji Display with subtle tilt -->
+                    <div class="relative inline-block mb-4">
+                        <div id="result-emoji-card" class="w-32 h-32 sm:w-36 sm:h-36 mx-auto rounded-3xl bg-emerald-50 border-emerald-200 ring-4 ring-emerald-100 border-2 flex items-center justify-center shadow-md transform -rotate-2 hover:rotate-0 transition-transform duration-300">
+                            <span id="result-emoji" class="text-6xl sm:text-7xl select-none" role="img" aria-label="Emoji Hasil">
+                                😍
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Category Name Badge -->
+                    <div class="mb-6">
+                        <span id="result-category-badge" class="inline-block px-5 py-2 rounded-full text-base sm:text-lg font-extrabold shadow-sm bg-emerald-100 text-emerald-800 border border-emerald-200">
+                            Kategori: Baik
+                        </span>
+                    </div>
+
+                    <!-- Score & Percentage Display Box -->
+                    <div class="grid grid-cols-2 gap-4 max-w-sm mx-auto mb-6">
+                        <div class="bg-[#F1FAF6] rounded-2xl p-4 border border-[#D9EAE4] shadow-sm">
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">
+                                Jawaban Benar
+                            </span>
+                            <span class="text-2xl sm:text-3xl font-extrabold text-[#168C83]">
+                                <span id="result-correct-count">20</span> <span class="text-sm font-bold text-slate-400">/ 20</span>
+                            </span>
+                        </div>
+
+                        <div class="bg-[#F1FAF6] rounded-2xl p-4 border border-[#D9EAE4] shadow-sm">
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">
+                                Nilai Persentase
+                            </span>
+                            <span class="text-2xl sm:text-3xl font-extrabold text-[#183B38]">
+                                <span id="result-percentage">100</span>%
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Brief Interpretation -->
+                    <p id="result-interpretation" class="text-slate-600 text-sm sm:text-base leading-relaxed max-w-lg mx-auto mb-8 font-medium">
+                        Pengetahuan kesehatan gigi dan mulutmu sudah sangat baik! Pertahankan kebiasaan merawat gigi setiap hari.
+                    </p>
+
+                    <!-- CTAs -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+                        <a href="#section-edukasi" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-3.5 rounded-full bg-[#168C83] hover:bg-[#11665F] text-white font-bold text-sm sm:text-base shadow-lg shadow-[#168C83]/25 transition-all">
+                            <span>Baca Materi Edukasi Lengkap</span>
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </a>
+                        <button type="button" onclick="resetToBiodata()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full border border-slate-200 text-slate-700 hover:border-brand-500 text-sm font-bold transition-all">
+                            <span>Ulangi Tes</span>
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Education Content Section -->
+                <div id="section-edukasi" class="bg-white rounded-4xl p-6 sm:p-10 border border-[#D9EAE4] shadow-xl space-y-8">
+
+                    <div class="border-b border-slate-100 pb-5 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-[#168C83] uppercase tracking-wider block mb-1">Materi Rekomendasi</span>
+                            <h2 class="text-xl sm:text-2xl font-extrabold text-[#183B38]">Edukasi Kesehatan Gigi &amp; Mulut</h2>
+                        </div>
+                        <span class="text-3xl">🦷</span>
+                    </div>
+
+                    <!-- Category Intro & Interpretation -->
+                    <div class="bg-[#E6F7F5]/70 rounded-2xl p-5 border border-[#D9EAE4] space-y-2">
+                        <h3 class="font-extrabold text-[#11665F] text-sm">Evaluasi Hasil Kuesioner:</h3>
+                        <p id="edu-intro-text" class="text-xs sm:text-sm text-slate-700 leading-relaxed"></p>
+                    </div>
+
+                    <!-- Priority Topics (Mistakes Review) -->
+                    <div class="space-y-4">
+                        <h3 class="font-bold text-slate-800 text-sm sm:text-base flex items-center gap-2">
+                            <span>🔍</span> Topik Pembelajaran Khusus:
+                        </h3>
+                        <div id="edu-priority-topics" class="space-y-3">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+
+                    <!-- 5 Key Points -->
+                    <div class="space-y-3">
+                        <h3 class="font-bold text-slate-800 text-sm sm:text-base flex items-center gap-2">
+                            <span>✨</span> 5 Poin Emas Menjaga Gigi Sehat:
+                        </h3>
+                        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm text-slate-700">
+                            <li class="flex items-start gap-2.5 p-3 rounded-2xl bg-slate-50 border border-slate-200/60">
+                                <span class="text-emerald-600 font-bold">1.</span>
+                                <span>Sikat gigi 2 kali sehari: pagi setelah sarapan dan malam sebelum tidur.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5 p-3 rounded-2xl bg-slate-50 border border-slate-200/60">
+                                <span class="text-emerald-600 font-bold">2.</span>
+                                <span>Gunakan pasta gigi berfluoride untuk memperkuat enamel gigi.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5 p-3 rounded-2xl bg-slate-50 border border-slate-200/60">
+                                <span class="text-emerald-600 font-bold">3.</span>
+                                <span>Gunakan dental floss (benang gigi) untuk membersihkan sela gigi dari plak.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5 p-3 rounded-2xl bg-slate-50 border border-slate-200/60">
+                                <span class="text-emerald-600 font-bold">4.</span>
+                                <span>Batasi konsumsi cemilan manis dan minuman bersoda/asam.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5 p-3 rounded-2xl bg-slate-50 border border-slate-200/60 sm:col-span-2">
+                                <span class="text-emerald-600 font-bold">5.</span>
+                                <span>Kunjungi dokter gigi secara teratur setiap 6 bulan sekali.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Practical Daily Habits -->
+                    <div class="space-y-3">
+                        <h3 class="font-bold text-slate-800 text-sm sm:text-base flex items-center gap-2">
+                            <span>💡</span> Kebiasaan Praktis untuk Siswa SMK:
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm text-slate-600">
+                            <div class="p-3.5 rounded-2xl bg-[#F1FAF6] border border-[#D9EAE4]">
+                                <strong>Gerakan Menyikat:</strong> Sikat gigi selama minimal 2 menit dengan gerakan melingkar lembut tanpa menekan terlalu keras.
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-[#F1FAF6] border border-[#D9EAE4]">
+                                <strong>Ganti Sikat Gigi:</strong> Ganti sikat gigi setiap 3 bulan sekali atau saat bulu sikat sudah mulai mekar.
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-[#F1FAF6] border border-[#D9EAE4]">
+                                <strong>Minum Air Putih:</strong> Selalu bilas mulut dengan minum air putih setelah mengonsumsi makanan manis saat istirahat sekolah.
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-[#F1FAF6] border border-[#D9EAE4]">
+                                <strong>Jangan Berbagi Sikat:</strong> Selalu gunakan sikat gigimu sendiri demi mencegah perpindahan kuman penyakit.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- When to Seek Dental Care -->
+                    <div class="bg-amber-50 rounded-2xl p-5 border border-amber-200 text-xs sm:text-sm text-amber-900 leading-relaxed">
+                        <h4 class="font-extrabold text-amber-950 mb-1 flex items-center gap-1.5">
+                            <span>🏥</span> Kapan Harus ke Dokter Gigi?
+                        </h4>
+                        <p>
+                            Segera periksakan diri ke dokter gigi atau puskesmas jika mengalami gusi mudah berdarah, gigi berdenyut nyeri, atau tampak bercak hitam berlubang. Ingat, pemeriksaan rutin 6 bulan sekali mendeteksi masalah jauh sebelum rasa sakit muncul!
+                        </p>
+                    </div>
+
+                    <!-- Architecture / Environment Notice -->
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-500 text-xs space-y-1">
+                        <div class="font-bold text-slate-700 flex items-center gap-1.5">
+                            <span>ℹ️</span> Catatan Mode Pratinjau (Vercel Preview):
+                        </div>
+                        <p>
+                            Halaman ini menyajikan alur interaktif biodata, kuesioner, dan edukasi literasi secara instan melalui peramban. Pada deployment server backend Laravel (seperti di server kampus atau localhost XAMPP), sistem menyimpan pengerjaan ke database relasional SQLite/MySQL, mendukung dashboard administrator peneliti, ekspor CSV/Excel, serta analisis personal lanjutan oleh Gemini AI.
+                        </p>
+                    </div>
+
+                    <!-- Medical Disclaimer -->
+                    <p class="text-[11px] text-slate-400 text-center italic">
+                        Materi edukasi ini disusun sebagai media literasi kesehatan gigi dan mulut bagi remaja, bukan merupakan pengganti diagnosis medis langsung oleh dokter gigi.
+                    </p>
+
+                </div>
+
+            </div>
+        </section>
+
     </main>
 
     <!-- Footer -->
-    <!-- Footer -->
-<footer class="bg-white border-t border-slate-100 py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm text-slate-500 text-center font-medium">
-            <span class="font-semibold text-slate-700">Smile Score &copy; 2026</span>
-            <span class="hidden sm:inline text-slate-300">&bull;</span>
-            <span>Media Edukasi Kesehatan Gigi &amp; Mulut</span>
-            <span class="hidden sm:inline text-slate-300">&bull;</span>
-            <span class="inline-flex items-center gap-1 text-slate-600 font-medium">
-                Untuk Siswa SMK
-                <svg class="w-3.5 h-3.5 text-rose-500 fill-current inline" viewBox="0 0 24 24">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                </svg>
-            </span>
-        </div>
-    </div>
-</footer>
-
-    <!-- Research Modal (Global on all pages) -->
-    <!-- Modal: Tentang Penelitian -->
-<div id="researchModal" onclick="if(event.target === this) closeResearchModal()" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300">
-    <div class="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-6 sm:p-8 overflow-hidden border border-slate-100 max-h-[90vh] flex flex-col animate-in fade-in zoom-in-95 duration-200">
-        
-        <!-- Header -->
-        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-[#E6F7F5] text-[#168C83] flex items-center justify-center font-bold text-lg">
-                    🔬
-                </div>
-                <div>
-                    <h3 class="text-lg font-extrabold text-navy-900">Tentang Penelitian Smile Score</h3>
-                    <p class="text-xs text-slate-500">Pengembangan Media Edukasi Kesehatan Gigi Remaja</p>
-                </div>
+    <footer class="bg-white border-t border-slate-100 py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm text-slate-500 text-center font-medium">
+                <span class="font-semibold text-slate-700">Smile Score &copy; 2026</span>
+                <span class="hidden sm:inline text-slate-300">&bull;</span>
+                <span>Media Edukasi Kesehatan Gigi &amp; Mulut</span>
+                <span class="hidden sm:inline text-slate-300">&bull;</span>
+                <span class="inline-flex items-center gap-1 text-slate-600 font-medium">
+                    Untuk Siswa SMK
+                    <svg class="w-3.5 h-3.5 text-rose-500 fill-current inline" viewBox="0 0 24 24">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                </span>
             </div>
-            <button type="button" onclick="closeResearchModal()" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 flex items-center justify-center transition-colors" aria-label="Tutup Modal">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
-            </button>
         </div>
+    </footer>
 
-        <!-- Body Content -->
-        <div class="py-5 overflow-y-auto space-y-4 text-sm text-slate-600 leading-relaxed">
-            <p>
-                <strong>Smile Score</strong> dikembangkan sebagai bagian dari inisiatif riset dan edukasi kesehatan gigi dan mulut yang dikhususkan bagi siswa <strong>Sekolah Menengah Kejuruan (SMK)</strong>.
-            </p>
+    <!-- Research Modal -->
+    <div id="researchModal" onclick="if(event.target === this) closeResearchModal()" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300">
+        <div class="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-6 sm:p-8 overflow-hidden border border-slate-100 max-h-[90vh] flex flex-col animate-in fade-in zoom-in-95 duration-200">
 
-            <div class="bg-[#E6F7F5]/70 rounded-2xl p-4 border border-[#D9EAE4] space-y-2">
-                <h4 class="font-bold text-[#183B38] text-xs uppercase tracking-wider text-[#168C83]">Tujuan Penelitian:</h4>
-                <ul class="list-disc list-inside space-y-1 text-xs text-slate-700">
-                    <li>Mengidentifikasi tingkat pengetahuan &amp; kebiasaan merawat gigi pada kalangan remaja SMK.</li>
-                    <li>Menyediakan sarana skrining mandiri yang ramah dan tidak menghakimi.</li>
-                    <li>Meningkatkan kesadaran preventif terhadap karies gigi dan kesehatan gusi sejak dini.</li>
-                </ul>
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-[#E6F7F5] text-[#168C83] flex items-center justify-center font-bold text-lg">
+                        🔬
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-extrabold text-navy-900">Tentang Penelitian Smile Score</h3>
+                        <p class="text-xs text-slate-500">Pengembangan Media Edukasi Kesehatan Gigi Remaja</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeResearchModal()" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 flex items-center justify-center transition-colors" aria-label="Tutup Modal">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
             </div>
 
-            <p class="text-xs text-slate-500">
-                Setiap data respon yang diinput dalam program Smile Score dijamin kerahasiaannya dan hanya digunakan semata-mata untuk tujuan pengembangan modul edukasi dan ilmiah.
-            </p>
-        </div>
+            <div class="py-5 overflow-y-auto space-y-4 text-sm text-slate-600 leading-relaxed">
+                <p>
+                    <strong>Smile Score</strong> dikembangkan sebagai bagian dari inisiatif riset dan edukasi kesehatan gigi dan mulut yang dikhususkan bagi siswa <strong>Sekolah Menengah Kejuruan (SMK)</strong>.
+                </p>
 
-        <!-- Modal Footer -->
-        <div class="pt-4 border-t border-slate-100 flex justify-end">
-            <button type="button" onclick="closeResearchModal()" class="px-6 py-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition-colors">
-                Tutup
-            </button>
-        </div>
+                <div class="bg-[#E6F7F5]/70 rounded-2xl p-4 border border-[#D9EAE4] space-y-2">
+                    <h4 class="font-bold text-[#183B38] text-xs uppercase tracking-wider text-[#168C83]">Tujuan Penelitian:</h4>
+                    <ul class="list-disc list-inside space-y-1 text-xs text-slate-700">
+                        <li>Mengidentifikasi tingkat pengetahuan &amp; kebiasaan merawat gigi pada kalangan remaja SMK.</li>
+                        <li>Menyediakan sarana skrining mandiri yang ramah dan tidak menghakimi.</li>
+                        <li>Meningkatkan kesadaran preventif terhadap karies gigi dan kesehatan gusi sejak dini.</li>
+                    </ul>
+                </div>
 
+                <p class="text-xs text-slate-500">
+                    Setiap data respon yang diinput dalam program Smile Score dijamin kerahasiaannya dan hanya digunakan semata-mata untuk tujuan pengembangan modul edukasi dan ilmiah.
+                </p>
+            </div>
+
+            <div class="pt-4 border-t border-slate-100 flex justify-end">
+                <button type="button" onclick="closeResearchModal()" class="px-6 py-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition-colors">
+                    Tutup
+                </button>
+            </div>
+
+        </div>
     </div>
-</div>
 
-    <!-- Global Scripts -->
+    <!-- Questionnaire Questions Data & Interactive Logic -->
     <script>
-        // Mobile menu toggle
-        const menuToggleBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
+        const QUESTIONS_DATA = [
+            {
+                id: 1,
+                question: 'Apa yang menyebabkan terjadinya gigi berlubang?',
+                topic: 'Penyebab Gigi Berlubang',
+                category_group: 'Karies Gigi',
+                options: {
+                    a: 'Gigi dan mulut yang jarang dibersihkan dalam kehidupan sehari-hari',
+                    b: 'Sisa makanan yang diubah bakteri menjadi asam melalui proses demineralisasi',
+                    c: 'Kebiasaan menggertakan gigi secara terus-menerus',
+                    d: 'Kebiasaan mengunyah makanan keras yang memicu keretakan struktur gigi'
+                },
+                correct: 'b',
+                explanation: 'Gigi berlubang (karies) terjadi ketika sisa makanan berkarbohidrat difermentasi oleh bakteri rongga mulut menjadi asam, yang melarutkan mineral enamel gigi (demineralisasi).'
+            },
+            {
+                id: 2,
+                question: 'Tanda-tanda gigi berlubang adalah ...',
+                topic: 'Tanda Gigi Berlubang',
+                category_group: 'Karies Gigi',
+                options: {
+                    a: 'Gigi tertutup lapisan keras seperti kerak',
+                    b: 'Gusi menebal dan menutupi bagian gigi',
+                    c: 'Gigi berlubang dan berwarna cokelat atau hitam',
+                    d: 'Luka kecil berwarna putih kekuningan di mulut'
+                },
+                correct: 'c',
+                explanation: 'Tanda khas gigi berlubang adalah terlihatnya kavitas/lubang pada permukaan gigi yang berubah warna menjadi kecokelatan hingga kehitaman.'
+            },
+            {
+                id: 3,
+                question: 'Bagaimana cara mencegah terjadinya gigi berlubang?',
+                topic: 'Pencegahan Gigi Berlubang',
+                category_group: 'Karies Gigi',
+                options: {
+                    a: 'Mengompres pipi dengan air hangat',
+                    b: 'Meminum obat pereda nyeri saat gigi sakit',
+                    c: 'Menyikat gigi dua kali sehari secara teratur',
+                    d: 'Beristirahat cukup agar tubuh tetap sehat'
+                },
+                correct: 'c',
+                explanation: 'Pencegahan paling mendasar dan terbukti efektif untuk gigi berlubang adalah menyikat gigi minimal 2 kali sehari secara teratur dengan pasta gigi berfluoride.'
+            },
+            {
+                id: 4,
+                question: 'Bagaimana cara penanganan yang tepat mengatasi gigi berlubang?',
+                topic: 'Penanganan Gigi Berlubang',
+                category_group: 'Karies Gigi',
+                options: {
+                    a: 'Dibiarkan agar lubang gigi tertutup sendiri',
+                    b: 'Diperiksa dan ditambal oleh dokter gigi',
+                    c: 'Diberi pasta gigi lebih banyak saat sikat gigi',
+                    d: 'Dioleskan obat tradisional tanpa pemeriksaan'
+                },
+                correct: 'b',
+                explanation: 'Lubang gigi tidak dapat menutup atau sembuh dengan sendirinya; harus dibersihkan dari jaringan terinfeksi dan direstorasi (ditambal) oleh dokter gigi.'
+            },
+            {
+                id: 5,
+                question: 'Apa itu tambal gigi?',
+                topic: 'Konsep Tambal Gigi',
+                category_group: 'Perawatan Gigi',
+                options: {
+                    a: 'Lapisan yang digunakan untuk mencegah gusi berdarah',
+                    b: 'Alat yang digunakan untuk mencabut gigi berlubang',
+                    c: 'Cairan yang digunakan untuk membersihkan gigi',
+                    d: 'Bahan pengisi gigi untuk melindunginya dari kerusakan'
+                },
+                correct: 'd',
+                explanation: 'Tambal gigi adalah prosedur penempatan bahan restorasi ke dalam kavitas gigi yang telah dibersihkan untuk mengembalikan fungsi kunyah dan menghentikan kerusakan lebih lanjut.'
+            },
+            {
+                id: 6,
+                question: 'Kapan gigi perlu ditambal akibat gigi berlubang?',
+                topic: 'Indikasi Tambal Gigi',
+                category_group: 'Perawatan Gigi',
+                options: {
+                    a: 'Saat gigi terasa bersih setelah disikat',
+                    b: 'Saat gigi terlihat berlubang dan terasa nyeri',
+                    c: 'Saat gusi terlihat merah muda dan sehat',
+                    d: 'Saat gigi terasa kuat saat digunakan makan'
+                },
+                correct: 'b',
+                explanation: 'Tambal gigi harus dilakukan sedini mungkin ketika tampak lubang dan mulai muncul rasa linu atau nyeri sebelum mencapai pulpa/saraf gigi.'
+            },
+            {
+                id: 7,
+                question: 'Apa yang dapat terjadi jika gigi berlubang tidak segera ditangani?',
+                topic: 'Akibat Gigi Berlubang',
+                category_group: 'Karies Gigi',
+                options: {
+                    a: 'Gigi menjadi rapuh dan mudah patah',
+                    b: 'Gigi terkikis lebih tipis dan menjadi sensitif',
+                    c: 'Gigi maju ke depan sehingga menjadi tonggos',
+                    d: 'Gigi menjadi sakit dan lubang semakin besar'
+                },
+                correct: 'd',
+                explanation: 'Jika gigi berlubang diabaikan, bakteri akan terus mengikis jaringan keras gigi hingga infeksi menyentuh saraf, menimbulkan sakit hebat, pembengkakan, bahkan abses.'
+            },
+            {
+                id: 8,
+                question: 'Radang gusi umumnya disebabkan oleh ...',
+                topic: 'Penyebab Radang Gusi',
+                category_group: 'Kesehatan Gusi',
+                options: {
+                    a: 'Kebiasaan mengunyah di satu sisi rahang',
+                    b: 'Kebiasaan sering menggigit-gigit bibir',
+                    c: 'Penumpukan plak dan sisa makanan di tepi gusi',
+                    d: 'Kebiasaan mengonsumsi makanan manis dan lengket'
+                },
+                correct: 'c',
+                explanation: 'Gingivitis (radang gusi) utamanya dipicu oleh penumpukan plak (lapisan lengket berisi koloni bakteri) yang tertinggal di perbatasan gigi dan gusi.'
+            },
+            {
+                id: 9,
+                question: 'Ciri-ciri radang gusi adalah ...',
+                topic: 'Tanda Radang Gusi',
+                category_group: 'Kesehatan Gusi',
+                options: {
+                    a: 'Gusi merah, bengkak, dan mudah berdarah',
+                    b: 'Timbul bercak putih atau luka di sudut bibir',
+                    c: 'Mulut terasa kering dan mudah sariawan',
+                    d: 'Gigi terasa ngilu saat minum dingin'
+                },
+                correct: 'a',
+                explanation: 'Ciri utama radang gusi adalah gusi tampak merah terang, membengkak, dan gampang mengeluarkan darah terutama saat menyikat gigi.'
+            },
+            {
+                id: 10,
+                question: 'Yang bukan penyebab terjadinya radang gusi adalah ...',
+                topic: 'Faktor Pencegah Radang Gusi',
+                category_group: 'Kesehatan Gusi',
+                options: {
+                    a: 'Kebiasaan merokok secara rutin',
+                    b: 'Kekurangan vitamin C dalam tubuh',
+                    c: 'Infeksi di mulut dan tambalan gigi rusak',
+                    d: 'Menggunakan sela gigi dengan benang gigi'
+                },
+                correct: 'd',
+                explanation: 'Menggunakan benang gigi (dental floss) justru adalah metode yang dianjurkan untuk membersihkan sela gigi dari plak, sehingga BUKAN penyebab radang gusi.'
+            },
+            {
+                id: 11,
+                question: 'Cara mencegah terjadinya radang gusi adalah ...',
+                topic: 'Pencegahan Radang Gusi',
+                category_group: 'Kesehatan Gusi',
+                options: {
+                    a: 'Perawatan behel gigi ke klinik gigi',
+                    b: 'Perawatan tambal gigi ke klinik gigi',
+                    c: 'Sikat gigi rutin dan membersihkan sela gigi',
+                    d: 'Memasang gigi palsu ke dokter gigi'
+                },
+                correct: 'c',
+                explanation: 'Menjaga kebersihan rongga mulut melalui menyikat gigi teratur dan membersihkan sela gigi dengan benang gigi merupakan cara paling ampuh mencegah radang gusi.'
+            },
+            {
+                id: 12,
+                question: 'Berikut ini manakah yang menjadi pemicu penyebab radang gusi?',
+                topic: 'Pemicu Radang Gusi',
+                category_group: 'Kesehatan Gusi',
+                options: {
+                    a: 'Makanan pedas, rokok, dan minuman alkohol',
+                    b: 'Makanan manis, asam, dan minuman dingin',
+                    c: 'Kebiasaan menggigit bibir dan pipi bagian dalam',
+                    d: 'Kebiasaan menghisap jempol dan menggigit kuku'
+                },
+                correct: 'a',
+                explanation: 'Konsumsi makanan yang mengiritasi seperti makanan pedas, zat beracun rokok, dan alkohol dapat memperburuk inflamasi serta menurunkan daya tahan jaringan gusi.'
+            },
+            {
+                id: 13,
+                question: 'Darah pada sikat gigi merupakan tanda dari ...',
+                topic: 'Gejala Penyakit Gusi',
+                category_group: 'Kesehatan Gusi',
+                options: {
+                    a: 'Penyakit gusi',
+                    b: 'Kerusakan gigi',
+                    c: 'Karang gigi',
+                    d: 'Sariawan'
+                },
+                correct: 'a',
+                explanation: 'Bercak darah pada bulu sikat gigi atau busa pasta gigi adalah tanda paling umum dari peradangan gusi (penyakit gusi).'
+            },
+            {
+                id: 14,
+                question: 'Mengapa radang gusi perlu segera dicegah dan ditangani?',
+                topic: 'Urgensi Penanganan Gusi',
+                category_group: 'Kesehatan Gusi',
+                options: {
+                    a: 'Agar gusi tidak semakin meradang dan berdarah',
+                    b: 'Agar gigi menjadi lebih putih dengan cepat',
+                    c: 'Agar bentuk gigi berubah menjadi lebih rapi',
+                    d: 'Agar gigi terasa lebih keras saat digigit'
+                },
+                correct: 'a',
+                explanation: 'Radang gusi harus segera ditangani agar inflamasi tidak meluas ke jaringan periodontal yang lebih dalam dan menyebabkan kerusakan tulang penyangga gigi.'
+            },
+            {
+                id: 15,
+                question: 'Kapan waktu ideal menyikat gigi dalam sehari?',
+                topic: 'Waktu Menyikat Gigi',
+                category_group: 'Kebiasaan Sehat',
+                options: {
+                    a: 'Setiap selesai mandi pagi dan mandi sore',
+                    b: 'Setiap selesai makan termasuk saat ngemil',
+                    c: 'Saat gigi terasa kotor pada waktu tertentu',
+                    d: 'Setelah sarapan pagi dan sebelum tidur malam'
+                },
+                correct: 'd',
+                explanation: 'Waktu menyikat gigi yang tepat dan direkomendasikan secara ilmiah adalah pagi setelah sarapan dan malam sebelum beristirahat tidur.'
+            },
+            {
+                id: 16,
+                question: 'Pasta gigi yang baik digunakan adalah ... agar membantu memperkuat gigi dan mencegah gigi berlubang',
+                topic: 'Pasta Gigi Berfluoride',
+                category_group: 'Kebiasaan Sehat',
+                options: {
+                    a: 'Pasta gigi berbahan pemutih kuat yang abrasif',
+                    b: 'Pasta gigi yang mengandung fluoride',
+                    c: 'Pasta gigi bermerk dan berkualitas tinggi',
+                    d: 'Pasta gigi dengan rasa mint yang segar'
+                },
+                correct: 'b',
+                explanation: 'Kandungan fluoride pada pasta gigi berfungsi meremineralisasi enamel gigi, menjadikannya lebih tahan terhadap serangan asam penyebab gigi berlubang.'
+            },
+            {
+                id: 17,
+                question: 'Kapan Anda melakukan kunjungan ke klinik gigi untuk dilakukan pemeriksaan?',
+                topic: 'Pemeriksaan Rutin',
+                category_group: 'Pemeriksaan Gigi',
+                options: {
+                    a: 'Saat gigi terasa sakit saja',
+                    b: 'Setiap 1 tahun sekali',
+                    c: 'Setiap 6 bulan sekali',
+                    d: 'Saat ada program gratis'
+                },
+                correct: 'c',
+                explanation: 'Pemeriksaan gigi ke dokter gigi dianjurkan dilakukan secara berkala setiap 6 bulan sekali, meskipun tidak ada keluhan rasa sakit.'
+            },
+            {
+                id: 18,
+                question: 'Bagaimana cara pemakaian sikat gigi yang benar?',
+                topic: 'Higienitas Sikat Gigi',
+                category_group: 'Kebiasaan Sehat',
+                options: {
+                    a: 'Menggunakan sikat gigi sendiri dan tidak bergantian',
+                    b: 'Menggunakan satu sikat gigi bersama anggota keluarga',
+                    c: 'Menggunakan sikat gigi sampai bulunya rusak',
+                    d: 'Menggunakan sikat gigi tanpa dibilas sehabis pakai'
+                },
+                correct: 'a',
+                explanation: 'Sikat gigi adalah benda personal yang tidak boleh digunakan bergantian dengan orang lain untuk mencegah transmisi kuman dan bakteri patogen.'
+            },
+            {
+                id: 19,
+                question: 'Apa fungsi fluoride?',
+                topic: 'Fungsi Fluoride',
+                category_group: 'Kebiasaan Sehat',
+                options: {
+                    a: 'Membuat gigi putih',
+                    b: 'Melindungi gigi dari kerusakan',
+                    c: 'Membuat gigi tumbuh',
+                    d: 'Mencegah bau mulut'
+                },
+                correct: 'b',
+                explanation: 'Fluoride bekerja memperkuat lapisan enamel gigi sehingga lebih tahan terhadap asam dan membantu proses remineralisasi dini untuk mencegah gigi berlubang.'
+            },
+            {
+                id: 20,
+                question: 'Jenis kepala dan bulu sikat gigi yang disarankan adalah ...',
+                topic: 'Karakteristik Sikat Gigi',
+                category_group: 'Kebiasaan Sehat',
+                options: {
+                    a: 'Kepala kecil dengan bulu lembut',
+                    b: 'Kepala sedang dengan bulu kasar',
+                    c: 'Kepala besar dengan bulu kasar',
+                    d: 'Kepala besar dengan bulu sedang'
+                },
+                correct: 'a',
+                explanation: 'Kepala sikat gigi berukuran kecil mampu menjangkau area gigi belakang (geraham), dan bulu lembut (soft bristles) tidak melukai gusi maupun mengikis email gigi.'
+            }
+        ];
 
-        if (menuToggleBtn && mobileMenu) {
-            menuToggleBtn.addEventListener('click', () => {
-                const isExpanded = menuToggleBtn.getAttribute('aria-expanded') === 'true';
-                menuToggleBtn.setAttribute('aria-expanded', !isExpanded);
-                mobileMenu.classList.toggle('hidden');
+        // State Store
+        let currentStudent = {
+            name: '',
+            age: '',
+            gender: '',
+            className: ''
+        };
+        let currentAnswers = {};
+
+        // DOM Elements
+        const stageBiodata = document.getElementById('stage-biodata');
+        const stageKuesioner = document.getElementById('stage-kuesioner');
+        const stageResult = document.getElementById('stage-result');
+
+        const stepperStep1 = document.getElementById('stepper-step-1');
+        const stepperBadge1 = document.getElementById('stepper-badge-1');
+        const stepperLabel1 = document.getElementById('stepper-label-1');
+        const stepperLine1 = document.getElementById('stepper-line-1');
+
+        const stepperStep2 = document.getElementById('stepper-step-2');
+        const stepperBadge2 = document.getElementById('stepper-badge-2');
+        const stepperLine2 = document.getElementById('stepper-line-2');
+
+        const stepperStep3 = document.getElementById('stepper-step-3');
+        const stepperBadge3 = document.getElementById('stepper-badge-3');
+
+        // Render Questions on Init
+        function renderQuestions() {
+            const container = document.getElementById('questions-list');
+            container.innerHTML = '';
+
+            QUESTIONS_DATA.forEach(q => {
+                const card = document.createElement('div');
+                card.id = `card-question-${q.id}`;
+                card.className = 'bg-white rounded-3xl p-6 sm:p-7 border border-[#D9EAE4] shadow-sm hover:shadow-md transition-shadow';
+
+                let optionsHtml = '';
+                for (const [letter, optText] of Object.entries(q.options)) {
+                    optionsHtml += `
+                        <label class="option-label group flex items-center gap-3.5 p-3.5 sm:p-4 rounded-2xl border border-slate-200 hover:border-[#168C83] hover:bg-[#F1FAF6] cursor-pointer transition-all duration-150 select-none bg-white">
+                            <input type="radio"
+                                   name="answer_${q.id}"
+                                   value="${letter}"
+                                   data-qid="${q.id}"
+                                   onchange="handleOptionChange(${q.id}, '${letter}')"
+                                   class="sr-only option-radio"
+                                   required>
+                            <span class="radio-badge flex-shrink-0 w-7 h-7 rounded-xl flex items-center justify-center text-xs font-bold uppercase transition-all bg-slate-100 text-slate-600 group-hover:bg-[#DDF5EC] group-hover:text-[#168C83]">
+                                ${letter}
+                            </span>
+                            <span class="option-text text-xs sm:text-sm text-slate-700 group-hover:text-slate-900 font-medium leading-relaxed">
+                                ${optText}
+                            </span>
+                        </label>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="flex items-start gap-3.5 mb-4">
+                        <span class="flex-shrink-0 w-8 h-8 rounded-xl bg-[#E6F7F5] text-[#168C83] font-extrabold text-sm flex items-center justify-center border border-[#D9EAE4]">
+                            ${q.id}
+                        </span>
+                        <div class="flex-grow">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                                Topik: ${q.topic}
+                            </span>
+                            <h3 class="text-base sm:text-lg font-bold text-[#183B38] leading-snug">
+                                ${q.question}
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 gap-2.5 sm:gap-3 pl-0 sm:pl-11">
+                        ${optionsHtml}
+                    </div>
+                `;
+                container.appendChild(card);
             });
         }
 
-        // Close mobile menu on link click
-        document.querySelectorAll('#mobile-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
-                    mobileMenu.classList.add('hidden');
-                    if (menuToggleBtn) menuToggleBtn.setAttribute('aria-expanded', 'false');
-                }
+        // Gender Radio Styling
+        document.addEventListener('DOMContentLoaded', () => {
+            renderQuestions();
+
+            const genderRadios = document.querySelectorAll('input[name="gender"]');
+            genderRadios.forEach(radio => {
+                radio.addEventListener('change', () => {
+                    document.querySelectorAll('.gender-card').forEach(card => {
+                        const r = card.querySelector('input[type="radio"]');
+                        const dotWrapper = card.querySelector('span:first-child');
+                        if (r && r.checked) {
+                            card.classList.add('border-[#168C83]', 'bg-[#E6F7F5]', 'ring-2', 'ring-[#168C83]/20', 'text-[#168C83]');
+                            card.classList.remove('border-slate-200', 'bg-slate-50/50', 'text-slate-700');
+                            if (dotWrapper) {
+                                dotWrapper.className = 'w-4 h-4 rounded-full border border-[#168C83] bg-[#168C83] flex items-center justify-center';
+                                dotWrapper.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-white"></span>';
+                            }
+                        } else if (r) {
+                            card.classList.remove('border-[#168C83]', 'bg-[#E6F7F5]', 'ring-2', 'ring-[#168C83]/20', 'text-[#168C83]');
+                            card.classList.add('border-slate-200', 'bg-slate-50/50', 'text-slate-700');
+                            if (dotWrapper) {
+                                dotWrapper.className = 'w-4 h-4 rounded-full border border-slate-300 bg-white flex items-center justify-center';
+                                dotWrapper.innerHTML = '';
+                            }
+                        }
+                    });
+                });
             });
         });
 
-        // Highlight active nav item on scroll (Throttled with rAF and passive listener for silky 60/120fps)
-        const sections = document.querySelectorAll('section[id]');
-        const navLinks = document.querySelectorAll('.nav-link');
-        let scrollTicking = false;
+        // Stage Transitions
+        function setStepper(step) {
+            if (step === 1) {
+                stepperStep1.className = 'flex items-center gap-2 text-[#168C83] transition-colors';
+                stepperBadge1.className = 'w-6 h-6 rounded-full bg-[#168C83] text-white flex items-center justify-center text-[11px] font-extrabold shadow-sm';
+                stepperBadge1.textContent = '01';
+                stepperLine1.className = 'h-0.5 w-6 sm:w-12 bg-slate-200 transition-colors';
 
-        window.addEventListener('scroll', () => {
-            if (!scrollTicking) {
-                window.requestAnimationFrame(() => {
-                    let current = '';
-                    const scrollY = window.scrollY;
-                    sections.forEach(section => {
-                        const sectionTop = section.offsetTop - 120;
-                        const sectionHeight = section.offsetHeight;
-                        if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
-                            current = section.getAttribute('id');
-                        }
-                    });
+                stepperStep2.className = 'flex items-center gap-2 text-slate-400 transition-colors';
+                stepperBadge2.className = 'w-6 h-6 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center text-[11px] font-extrabold';
+                stepperLine2.className = 'h-0.5 w-6 sm:w-12 bg-slate-200 transition-colors';
 
-                    navLinks.forEach(link => {
-                        link.classList.remove('active');
-                        if (link.getAttribute('href') === `#${current}` || (current === '' && link.getAttribute('href') === '#beranda')) {
-                            link.classList.add('active');
-                        }
-                    });
-                    scrollTicking = false;
-                });
-                scrollTicking = true;
+                stepperStep3.className = 'flex items-center gap-2 text-slate-400 transition-colors';
+                stepperBadge3.className = 'w-6 h-6 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center text-[11px] font-extrabold';
+            } else if (step === 2) {
+                stepperStep1.className = 'flex items-center gap-2 text-emerald-600 transition-colors cursor-pointer';
+                stepperBadge1.className = 'w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[11px] font-extrabold shadow-sm';
+                stepperBadge1.textContent = '✓';
+                stepperLine1.className = 'h-0.5 w-6 sm:w-12 bg-emerald-300 transition-colors';
+
+                stepperStep2.className = 'flex items-center gap-2 text-[#168C83] transition-colors';
+                stepperBadge2.className = 'w-6 h-6 rounded-full bg-[#168C83] text-white flex items-center justify-center text-[11px] font-extrabold shadow-sm';
+                stepperBadge2.textContent = '02';
+                stepperLine2.className = 'h-0.5 w-6 sm:w-12 bg-slate-200 transition-colors';
+
+                stepperStep3.className = 'flex items-center gap-2 text-slate-400 transition-colors';
+                stepperBadge3.className = 'w-6 h-6 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center text-[11px] font-extrabold';
+            } else if (step === 3) {
+                stepperStep1.className = 'flex items-center gap-2 text-emerald-600 transition-colors';
+                stepperBadge1.className = 'w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[11px] font-extrabold shadow-sm';
+                stepperBadge1.textContent = '✓';
+                stepperLine1.className = 'h-0.5 w-6 sm:w-12 bg-emerald-300 transition-colors';
+
+                stepperStep2.className = 'flex items-center gap-2 text-emerald-600 transition-colors';
+                stepperBadge2.className = 'w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[11px] font-extrabold shadow-sm';
+                stepperBadge2.textContent = '✓';
+                stepperLine2.className = 'h-0.5 w-6 sm:w-12 bg-emerald-300 transition-colors';
+
+                stepperStep3.className = 'flex items-center gap-2 text-[#168C83] transition-colors';
+                stepperBadge3.className = 'w-6 h-6 rounded-full bg-[#168C83] text-white flex items-center justify-center text-[11px] font-extrabold shadow-sm';
+                stepperBadge3.textContent = '03';
             }
-        }, { passive: true });
+        }
 
-        // Research Modal Toggle
+        function handleBiodataSubmit(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const age = parseInt(document.getElementById('age').value, 10);
+            const className = document.getElementById('class_name').value.trim();
+            const genderEl = document.querySelector('input[name="gender"]:checked');
+            const gender = genderEl ? genderEl.value : '';
+
+            let hasError = false;
+
+            // Reset errors
+            document.getElementById('error-name').classList.add('hidden');
+            document.getElementById('error-age').classList.add('hidden');
+            document.getElementById('error-class_name').classList.add('hidden');
+            document.getElementById('error-gender').classList.add('hidden');
+
+            if (!name || name.length < 2) {
+                document.getElementById('error-name').classList.remove('hidden');
+                hasError = true;
+            }
+            if (isNaN(age) || age < 12 || age > 25) {
+                document.getElementById('error-age').classList.remove('hidden');
+                hasError = true;
+            }
+            if (!className) {
+                document.getElementById('error-class_name').classList.remove('hidden');
+                hasError = true;
+            }
+            if (!gender) {
+                document.getElementById('error-gender').classList.remove('hidden');
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            currentStudent = { name, age, gender, className };
+
+            // Update display values in kuesioner
+            document.getElementById('display-student-name').textContent = name;
+            document.getElementById('display-student-class').textContent = className;
+            document.getElementById('display-student-age').textContent = age;
+            document.getElementById('display-student-gender').textContent = gender;
+            stepperLabel1.textContent = 'Biodata: ' + name;
+
+            // Switch to Stage 2
+            stageBiodata.classList.add('hidden');
+            stageKuesioner.classList.remove('hidden');
+            stageResult.classList.add('hidden');
+            setStepper(2);
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function editBiodata() {
+            stageKuesioner.classList.add('hidden');
+            stageResult.classList.add('hidden');
+            stageBiodata.classList.remove('hidden');
+            setStepper(1);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetToBiodata() {
+            currentAnswers = {};
+            document.querySelectorAll('.option-radio').forEach(r => r.checked = false);
+            updateProgress();
+            editBiodata();
+        }
+
+        function handleOptionChange(qid, letter) {
+            currentAnswers[qid] = letter;
+
+            const card = document.getElementById(`card-question-${qid}`);
+            if (card) {
+                card.classList.remove('border-rose-400', 'ring-2', 'ring-rose-100');
+                card.classList.add('border-[#D9EAE4]');
+
+                card.querySelectorAll('.option-label').forEach(label => {
+                    const radio = label.querySelector('.option-radio');
+                    const badge = label.querySelector('.radio-badge');
+                    if (radio && radio.checked) {
+                        label.classList.add('border-[#168C83]', 'bg-[#E6F7F5]', 'ring-2', 'ring-[#168C83]/20');
+                        label.classList.remove('border-slate-200', 'bg-white');
+                        if (badge) {
+                            badge.classList.add('bg-[#168C83]', 'text-white', 'shadow-sm');
+                            badge.classList.remove('bg-slate-100', 'text-slate-600');
+                        }
+                    } else if (radio) {
+                        label.classList.remove('border-[#168C83]', 'bg-[#E6F7F5]', 'ring-2', 'ring-[#168C83]/20');
+                        label.classList.add('border-slate-200', 'bg-white');
+                        if (badge) {
+                            badge.classList.remove('bg-[#168C83]', 'text-white', 'shadow-sm');
+                            badge.classList.add('bg-slate-100', 'text-slate-600');
+                        }
+                    }
+                });
+            }
+
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const count = Object.keys(currentAnswers).length;
+            const pct = Math.round((count / 20) * 100);
+
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+
+            if (progressBar) progressBar.style.width = pct + '%';
+            if (progressText) {
+                if (count === 20) {
+                    progressText.className = 'text-emerald-600 font-extrabold';
+                    progressText.innerHTML = `✓ Lengkap! ${count} / 20 Soal Terjawab (100%)`;
+                } else {
+                    progressText.className = 'text-[#168C83] font-extrabold';
+                    progressText.textContent = `${count} / 20 Soal Terjawab (${pct}%)`;
+                }
+            }
+        }
+
+        function handleQuestionnaireSubmit(e) {
+            e.preventDefault();
+
+            // Validate all 20 questions are answered
+            let firstUnansweredQid = null;
+            for (let i = 1; i <= 20; i++) {
+                if (!currentAnswers[i]) {
+                    firstUnansweredQid = i;
+                    const card = document.getElementById(`card-question-${i}`);
+                    if (card) {
+                        card.classList.add('border-rose-400', 'ring-2', 'ring-rose-100');
+                    }
+                }
+            }
+
+            if (firstUnansweredQid !== null) {
+                const warn = document.getElementById('incomplete-warning');
+                warn.classList.remove('hidden');
+                const targetCard = document.getElementById(`card-question-${firstUnansweredQid}`);
+                if (targetCard) {
+                    targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                return;
+            }
+
+            // All questions answered -> Evaluate Score deterministically
+            document.getElementById('incomplete-warning').classList.add('hidden');
+
+            let correctCount = 0;
+            const incorrectItems = [];
+
+            QUESTIONS_DATA.forEach(q => {
+                const userAns = currentAnswers[q.id];
+                if (userAns === q.correct) {
+                    correctCount++;
+                } else {
+                    incorrectItems.push({
+                        id: q.id,
+                        topic: q.topic,
+                        category_group: q.category_group,
+                        question: q.question,
+                        userAnswer: userAns,
+                        correctAnswer: q.correct,
+                        explanation: q.explanation
+                    });
+                }
+            });
+
+            const percentage = Math.round((correctCount / 20) * 100);
+            let category = 'Kurang baik';
+            let emoji = '🤨';
+            let badgeClass = 'bg-rose-100 text-rose-800 border-rose-200';
+            let cardRingClass = 'bg-rose-50 border-rose-200 ring-rose-100';
+            let interpretation = 'Tingkat pengetahuan kesehatan gigi dan mulutmu masih memerlukan perhatian lebih. Yuk pelajari edukasi di bawah untuk senyum yang lebih sehat!';
+
+            if (correctCount >= 16) {
+                category = 'Baik';
+                emoji = '😍';
+                badgeClass = 'bg-emerald-100 text-emerald-800 border-emerald-200';
+                cardRingClass = 'bg-emerald-50 border-emerald-200 ring-emerald-100';
+                interpretation = 'Pengetahuan kesehatan gigi dan mulutmu sudah sangat baik! Pertahankan kebiasaan merawat gigi setiap hari.';
+            } else if (correctCount >= 12) {
+                category = 'Cukup';
+                emoji = '😉';
+                badgeClass = 'bg-amber-100 text-amber-800 border-amber-200';
+                cardRingClass = 'bg-amber-50 border-amber-200 ring-amber-100';
+                interpretation = 'Pengetahuan kesehatan gigi dan mulutmu sudah cukup baik, namun masih ada beberapa kebiasaan dan fakta penting yang perlu ditingkatkan.';
+            }
+
+            // Update Result DOM
+            document.getElementById('result-student-name').textContent = currentStudent.name;
+            document.getElementById('result-student-class').textContent = currentStudent.className;
+            document.getElementById('result-student-age').textContent = currentStudent.age;
+            document.getElementById('result-student-gender').textContent = currentStudent.gender;
+
+            document.getElementById('result-emoji').textContent = emoji;
+            const emojiCard = document.getElementById('result-emoji-card');
+            emojiCard.className = `w-32 h-32 sm:w-36 sm:h-36 mx-auto rounded-3xl border-2 flex items-center justify-center shadow-md transform -rotate-2 hover:rotate-0 transition-transform duration-300 ring-4 ${cardRingClass}`;
+
+            const catBadge = document.getElementById('result-category-badge');
+            catBadge.className = `inline-block px-5 py-2 rounded-full text-base sm:text-lg font-extrabold shadow-sm border ${badgeClass}`;
+            catBadge.textContent = `Kategori: ${category}`;
+
+            document.getElementById('result-correct-count').textContent = correctCount;
+            document.getElementById('result-percentage').textContent = percentage;
+            document.getElementById('result-interpretation').textContent = interpretation;
+
+            // Update Education Intro
+            const eduIntro = document.getElementById('edu-intro-text');
+            if (category === 'Baik') {
+                eduIntro.textContent = `Luar biasa, ${currentStudent.name}! Kamu menjawab ${correctCount} dari 20 soal dengan benar (${percentage}%). Kamu telah memiliki fondasi pengetahuan yang kuat tentang kesehatan gigi dan mulut. Pertahankan dan bagikan kebiasaan baik ini ke teman-temanmu!`;
+            } else if (category === 'Cukup') {
+                eduIntro.textContent = `Bagus sekali, ${currentStudent.name}! Kamu berhasil menjawab ${correctCount} dari 20 soal dengan benar (${percentage}%). Masih ada beberapa konsep seputar kesehatan gusi dan karies yang bisa kamu perdalam melalui panduan di bawah ini.`;
+            } else {
+                eduIntro.textContent = `Tetap semangat, ${currentStudent.name}! Kamu berhasil menjawab ${correctCount} dari 20 soal dengan benar (${percentage}%). Ini langkah awal yang sangat berharga untuk mulai lebih peduli pada kesehatan gigi dan gusi sehari-hari. Pelajari materi di bawah untuk memperkaya wawasanmu.`;
+            }
+
+            // Populate Priority Topics
+            const priorityContainer = document.getElementById('edu-priority-topics');
+            priorityContainer.innerHTML = '';
+
+            if (incorrectItems.length > 0) {
+                incorrectItems.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'p-4 rounded-2xl bg-white border border-[#D9EAE4] shadow-sm space-y-1.5';
+                    div.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-[#168C83] uppercase tracking-wider">Topik: ${item.topic}</span>
+                            <span class="text-[11px] font-semibold text-rose-600 bg-rose-50 px-2.5 py-0.5 rounded-full">Perlu Diingat</span>
+                        </div>
+                        <h4 class="text-xs sm:text-sm font-bold text-slate-800 leading-snug">${item.question}</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">${item.explanation}</p>
+                    `;
+                    priorityContainer.appendChild(div);
+                });
+            } else {
+                priorityContainer.innerHTML = `
+                    <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs sm:text-sm text-emerald-800 flex items-center gap-3">
+                        <span class="text-2xl">🌟</span>
+                        <div>
+                            <strong>Sempurna!</strong> Kamu berhasil menjawab seluruh 20 pertanyaan kuesioner dengan tepat tanpa kesalahan. Terus jaga komitmen senyum sehatmu!
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Switch to Stage 3
+            stageBiodata.classList.add('hidden');
+            stageKuesioner.classList.add('hidden');
+            stageResult.classList.remove('hidden');
+            setStepper(3);
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Research Modal Handler
         function openResearchModal() {
             const modal = document.getElementById('researchModal');
             if (modal) {
@@ -355,25 +1410,26 @@
             }
         }
 
-        // Auto open research modal if redirected with #tentang-penelitian hash
-        window.addEventListener('DOMContentLoaded', () => {
-            if (window.location.hash === '#tentang-penelitian') {
-                setTimeout(() => {
-                    openResearchModal();
-                }, 300);
-            }
-        });
+        // Mobile menu toggle
+        const menuToggleBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (menuToggleBtn && mobileMenu) {
+            menuToggleBtn.addEventListener('click', () => {
+                const isExpanded = menuToggleBtn.getAttribute('aria-expanded') === 'true';
+                menuToggleBtn.setAttribute('aria-expanded', !isExpanded);
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
     </script>
 
-    <!-- Animate On Scroll (AOS) Script -->
+    <!-- AOS Script -->
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             AOS.init({
                 once: true,
-                duration: 500,
-                easing: 'ease-out',
-                offset: 30,
+                duration: 400,
+                easing: 'ease-out'
             });
         });
     </script>

@@ -153,4 +153,37 @@ class SmileScoreFeatureTest extends TestCase
         $response->assertRedirect('/smile-score');
         $response->assertSessionHas('info');
     }
+
+    /**
+     * 7. Tombol Mulai Smile Score di beranda mengarah ke route smile-score.start (biodata).
+     */
+    public function test_homepage_cta_buttons_point_to_smile_score_start_route(): void
+    {
+        $response = $this->get('/');
+        $response->assertStatus(200);
+        $response->assertSee(route('smile-score.start'));
+        $response->assertSee('Mulai Smile Score');
+    }
+
+    /**
+     * 8. Artefak Vercel preview menyajikan alur biodata dan bukan lagi placeholder "Coming Soon".
+     */
+    public function test_vercel_preview_artifacts_point_to_biodata_flow_and_not_coming_soon(): void
+    {
+        $previewIndex = base_path('vercel-preview/index.html');
+        $previewSmileScore = base_path('vercel-preview/smile-score.html');
+
+        $this->assertFileExists($previewIndex);
+        $this->assertFileExists($previewSmileScore);
+
+        $indexContent = file_get_contents($previewIndex);
+        $this->assertStringContainsString('smile-score.html', $indexContent);
+        $this->assertStringContainsString('Mulai Smile Score', $indexContent);
+
+        $smileScoreContent = file_get_contents($previewSmileScore);
+        $this->assertStringContainsString('Biodata Siswa', $smileScoreContent);
+        $this->assertStringContainsString('Nama Lengkap', $smileScoreContent);
+        $this->assertStringContainsString('Lanjutkan ke Kuesioner', $smileScoreContent);
+        $this->assertStringNotContainsString('Coming Soon ✨', $smileScoreContent);
+    }
 }

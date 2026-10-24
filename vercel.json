@@ -1,4 +1,15 @@
 {
   "outputDirectory": "vercel-preview",
-  "cleanUrls": true
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/smile-score",
+      "destination": "/smile-score.html"
+    },
+    {
+      "source": "/smile-score/(.*)",
+      "destination": "/smile-score.html"
+    }
+  ]
 }

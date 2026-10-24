@@ -1,6 +1,16 @@
 {
     "cleanUrls": true,
     "trailingSlash": false,
+    "rewrites": [
+        {
+            "source": "/smile-score",
+            "destination": "/smile-score.html"
+        },
+        {
+            "source": "/smile-score/(.*)",
+            "destination": "/smile-score.html"
+        }
+    ],
     "headers": [
         {
             "source": "/(.*)",
