@@ -7,6 +7,9 @@ use App\Models\SmileScoreSubmission;
 use App\Services\SmileScoreExportService;
 use App\Services\SmileScoreService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class SmileScoreAdminController extends Controller
 {
@@ -194,6 +197,76 @@ class SmileScoreAdminController extends Controller
 
         if ($request->filled('date_to')) {
             $query->whereDate('created_at', '<=', $request->input('date_to'));
+        }
+    }
+
+    /**
+     * Hapus satu data responden tertentu beserta seluruh jawabannya.
+     */
+    public function destroy($id)
+    {
+        $submission = SmileScoreSubmission::findOrFail($id);
+        $name = $submission->name;
+        $formattedId = $submission->formatted_id;
+
+        try {
+            DB::transaction(function () use ($submission) {
+                $submission->delete();
+            });
+
+            Log::info("Admin ID " . (Auth::id() ?? '-') . " berhasil menghapus responden: {$formattedId} (ID Database: {$id}).");
+
+            return redirect()->route('admin.responden')
+                ->with('success', "Data responden {$name} ({$formattedId}) berhasil dihapus dari sistem.");
+        } catch (\Throwable $e) {
+            Log::error("Gagal menghapus data responden ID {$id}: " . $e->getMessage());
+
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan sistem saat menghapus data responden. Silakan coba kembali.');
+        }
+    }
+
+    /**
+     * Hapus seluruh data responden untuk memulai siklus pengujian atau penelitian baru.
+     * Memerlukan konfirmasi teks eksplisit 'HAPUS DATA RESPONDEN'.
+     */
+    public function destroyAll(Request $request)
+    {
+        $request->validate([
+            'confirmation_text' => [
+                'required',
+                'string',
+                function ($attribute, $value, $fail) {
+                    if (trim((string) $value) !== 'HAPUS DATA RESPONDEN') {
+                        $fail('Teks konfirmasi tidak sesuai. Harap ketik "HAPUS DATA RESPONDEN" dengan benar.');
+                    }
+                },
+            ],
+        ], [
+            'confirmation_text.required' => 'Teks konfirmasi wajib diisi untuk melakukan pembersihan seluruh data responden.',
+        ]);
+
+        $totalCount = SmileScoreSubmission::count();
+
+        if ($totalCount === 0) {
+            return redirect()->route('admin.responden')
+                ->with('info', 'Tidak ada data responden yang dapat dihapus.');
+        }
+
+        try {
+            DB::transaction(function () {
+                SmileScoreSubmission::query()->delete();
+            });
+
+            Log::info("Admin ID " . (Auth::id() ?? '-') . " membersihkan seluruh data responden ({$totalCount} record terhapus).");
+
+            return redirect()->route('admin.responden')
+                ->with('success', "Seluruh data responden ({$totalCount} data) berhasil dibersihkan dari sistem. Sistem siap untuk pengujian/penelitian baru.");
+        } catch (\Throwable $e) {
+            Log::error("Gagal membersihkan seluruh data responden: " . $e->getMessage());
+
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan sistem saat membersihkan data responden. Silakan coba kembali.');
         }
     }
 }

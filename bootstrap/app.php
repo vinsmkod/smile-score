@@ -14,5 +14,18 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\HttpException $e, $request) {
+            if ($e->getStatusCode() === 419) {
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'message' => 'Sesi Anda telah kedaluwarsa. Silakan muat ulang halaman.',
+                    ], 419);
+                }
+
+                return redirect()
+                    ->back(fallback: route('admin.login'))
+                    ->withInput($request->except('password', 'password_confirmation', '_token'))
+                    ->with('info', 'Sesi Anda telah kedaluwarsa karena tidak ada aktivitas. Halaman telah diperbarui dengan sesi baru, silakan coba lagi.');
+            }
+        });
     })->create();

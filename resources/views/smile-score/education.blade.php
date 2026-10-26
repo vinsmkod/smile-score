@@ -68,7 +68,7 @@
                 </div>
 
             @elseif ($education['source'] === 'ai_failed')
-                {{-- Jujur: AI gagal, skor tetap aman --}}
+                {{-- Status lama ai_failed (tidak lagi diproduksi sistem; hanya ada pada data sebelum pembaruan) --}}
                 <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 shadow-sm" id="ai-failed-banner">
                     <div class="flex items-start gap-3 mb-4">
                         <span class="text-2xl flex-shrink-0">⚠️</span>
@@ -99,6 +99,30 @@
                     </form>
                 </div>
 
+            @elseif ($education['source'] === 'rule_based_fallback')
+                {{-- Fallback otomatis: AI gagal, edukasi berbasis pedoman ditampilkan sebagai pengganti --}}
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 shadow-sm">
+                    <div class="flex items-start gap-3">
+                        <span class="text-xl mt-0.5 flex-shrink-0">📚</span>
+                        <div class="flex-1">
+                            <strong class="font-extrabold text-amber-800 text-sm block">Edukasi Berbasis Pedoman (Mode Cadangan Otomatis):</strong>
+                            <p class="text-xs text-amber-700 mt-0.5 leading-relaxed">
+                                Gemini AI sedang tidak dapat dihubungi saat ini. Materi edukasi di bawah disusun otomatis berdasarkan pedoman literasi gigi kuesioner penelitian sebagai pengganti sementara.
+                                <strong>Skor dan kategori hasilmu tidak terpengaruh.</strong>
+                            </p>
+                        </div>
+                        <form method="POST" action="{{ route('smile-score.education.regenerate') }}" class="flex-shrink-0">
+                            @csrf
+                            <button type="submit"
+                                class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-[#168C83] hover:bg-[#11665F] text-white text-xs font-bold transition-all shadow-sm"
+                                onclick="this.disabled=true; this.innerHTML='⏳ Memproses...'">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                Coba AI Lagi
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
             @else
                 {{-- Rule-based: jujur bukan Gemini AI --}}
                 <div class="bg-[#F1FAF6] border border-[#D9EAE4] rounded-2xl p-4 flex items-center gap-3 text-xs sm:text-sm text-slate-700 shadow-sm">
@@ -116,139 +140,206 @@
         {{-- ============================================================ --}}
         {{-- KONTEN EDUKASI (AI atau Rule-based) --}}
         {{-- ============================================================ --}}
-        @if (in_array($education['source'], ['ai', 'rule_based']))
-        <div class="space-y-6">
+        {{-- ============================================================ --}}
+        {{-- KONTEN EDUKASI (AI atau Rule-based) --}}
+        {{-- ============================================================ --}}
+        @if (in_array($education['source'], ['ai', 'rule_based', 'rule_based_fallback']))
+        <div class="space-y-8">
 
-            {{-- Section 1: Pengantar Personal --}}
-            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-[#D9EAE4] shadow-sm" data-aos="fade-up">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 rounded-xl bg-[#E6F7F5] text-[#168C83] flex items-center justify-center text-lg flex-shrink-0">🎯</div>
+            {{-- ============================================================ --}}
+            {{-- BAGIAN 1: RINGKASAN HASIL & EVALUASI PENGETAHUAN             --}}
+            {{-- ============================================================ --}}
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-[#D9EAE4] shadow-sm relative overflow-hidden" data-aos="fade-up">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-12 h-12 rounded-2xl {{ $result['category'] === 'Baik' ? 'bg-emerald-100 text-emerald-800' : ($result['category'] === 'Cukup' ? 'bg-amber-100 text-amber-800' : 'bg-rose-100 text-rose-800') }} flex items-center justify-center text-2xl flex-shrink-0 shadow-sm">
+                            {{ $result['emoji'] }}
+                        </div>
+                        <div>
+                            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Ringkasan Hasil Evaluasi</span>
+                            <h2 class="text-lg sm:text-xl font-extrabold text-[#183B38]">
+                                Kategori {{ $result['category'] }} &bull; Skor {{ $result['correct_count'] }}/20 ({{ $result['percentage'] }}%)
+                            </h2>
+                        </div>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 self-start sm:self-center px-3.5 py-1.5 rounded-full {{ $result['category'] === 'Baik' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : ($result['category'] === 'Cukup' ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-rose-50 text-rose-700 border border-rose-200') }} text-xs font-bold">
+                        <span>●</span> {{ $result['category'] === 'Baik' ? 'Tingkat Pengetahuan Tinggi' : ($result['category'] === 'Cukup' ? 'Tingkat Pengetahuan Cukup' : 'Perlu Penguatan Konsep') }}
+                    </span>
+                </div>
+
+                <!-- Callout Non-Diagnosis -->
+                <div class="my-4 p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-start gap-2.5 text-xs text-slate-600 leading-relaxed">
+                    <span class="text-base flex-shrink-0">ℹ️</span>
                     <div>
-                        <h2 class="text-lg sm:text-xl font-extrabold text-[#183B38]">
-                            {{ $education['source'] === 'ai' ? 'Pesan Personal untuk Kamu' : 'Arti Hasil Kamu' }}
+                        <strong class="text-slate-800">Evaluasi Literasi Pengetahuan:</strong>
+                        <span> Skor ini mengukur tingkat pemahaman dan wawasan kesehatan gigi dan mulutmu, <em>bukan merupakan diagnosis klinis kondisi fisik gigi atau gusi kamu saat ini</em>.</span>
+                    </div>
+                </div>
+
+                <!-- Pesan Personal & Interpretasi Hasil -->
+                <div class="space-y-3 pt-2 text-sm sm:text-base text-slate-700 leading-relaxed">
+                    <p class="font-medium text-[#11665F]">
+                        {{ $education['introduction'] }}
+                    </p>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed bg-[#F1FAF6] p-4 rounded-2xl border border-[#D9EAE4]">
+                        {{ $education['score_interpretation'] }}
+                    </p>
+                </div>
+            </div>
+
+            {{-- ============================================================ --}}
+            {{-- BAGIAN 2: MATERI PRIORITAS YANG PERLU DIPAHAMI (MAKS 3-5)    --}}
+            {{-- ============================================================ --}}
+            <div class="space-y-5" data-aos="fade-up">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#DDF5EC] text-[#168C83] text-xs font-bold uppercase tracking-wider mb-1">
+                            <span>💡 Pembelajaran Konsep</span>
+                        </div>
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-[#183B38]">
+                            Materi yang Perlu Dipahami
                         </h2>
-                        <span class="text-xs text-slate-400">Berdasarkan hasil kuesionermu</span>
                     </div>
+                    <span class="text-xs font-bold text-slate-500 bg-white px-3 py-1.5 rounded-full border border-slate-200 self-start sm:self-auto">
+                        {{ count($education['priority_topics']) }} Topik Prioritas
+                    </span>
                 </div>
-                <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
-                    {{ $education['introduction'] }}
-                </p>
+
+                <div class="space-y-5">
+                    @foreach ($education['priority_topics'] as $index => $topic)
+                        <div class="bg-white rounded-3xl p-6 sm:p-7 border border-[#D9EAE4] shadow-sm hover:border-[#168C83] transition-all duration-200 space-y-4">
+
+                            {{-- Topic Header --}}
+                            <div class="flex items-start gap-3.5">
+                                <span class="w-8 h-8 rounded-2xl bg-[#168C83] text-white text-xs font-extrabold flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
+                                    {{ $index + 1 }}
+                                </span>
+                                <div class="flex-1">
+                                    <h3 class="text-base sm:text-lg font-extrabold text-[#183B38] leading-snug">
+                                        {{ $topic['title'] ?? 'Topik ' . ($index + 1) }}
+                                    </h3>
+                                </div>
+                            </div>
+
+                            {{-- 1. Konsep Utama yang Perlu Dipahami --}}
+                            <div class="bg-[#E6F7F5] border-l-4 border-[#168C83] rounded-r-2xl p-4">
+                                <div class="text-[11px] font-extrabold text-[#11665F] uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                                    <span>🎯</span> Konsep yang Perlu Dipahami:
+                                </div>
+                                <p class="text-xs sm:text-sm font-bold text-[#183B38] leading-relaxed">
+                                    {{ $topic['core_concept'] ?? $topic['relevance'] ?? 'Pahami prinsip dasar kesehatan gigi ini.' }}
+                                </p>
+                            </div>
+
+                            {{-- 2. Penjelasan Sederhana --}}
+                            <div class="text-xs sm:text-sm text-slate-600 leading-relaxed pl-1 sm:pl-2">
+                                <span class="text-slate-400 font-bold block text-[11px] uppercase tracking-wider mb-1">Penjelasan Singkat:</span>
+                                <p class="leading-relaxed">
+                                    {{ $topic['explanation'] }}
+                                </p>
+                            </div>
+
+                            {{-- 3. Situasi Sehari-hari & Hal yang Perlu Diingat (2 Kolom Sub-Card) --}}
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+                                {{-- Contoh Situasi Sehari-hari --}}
+                                @if(!empty($topic['daily_context']))
+                                    <div class="bg-amber-50/80 rounded-2xl p-4 border border-amber-200/70 space-y-1">
+                                        <div class="text-[11px] font-extrabold text-amber-900 uppercase tracking-wider flex items-center gap-1.5">
+                                            <span>🎒</span> Situasi Sehari-hari Siswa:
+                                        </div>
+                                        <p class="text-xs text-amber-950 leading-relaxed font-medium">
+                                            {{ $topic['daily_context'] }}
+                                        </p>
+                                    </div>
+                                @endif
+
+                                {{-- Hal yang Perlu Diingat --}}
+                                @if(!empty($topic['remember_point']))
+                                    <div class="bg-emerald-50/80 rounded-2xl p-4 border border-emerald-200/70 space-y-1 {{ empty($topic['daily_context']) ? 'md:col-span-2' : '' }}">
+                                        <div class="text-[11px] font-extrabold text-emerald-900 uppercase tracking-wider flex items-center gap-1.5">
+                                            <span>📌</span> Hal yang Perlu Diingat:
+                                        </div>
+                                        <p class="text-xs text-emerald-950 leading-relaxed font-medium">
+                                            {{ $topic['remember_point'] }}
+                                        </p>
+                                    </div>
+                                @endif
+                            </div>
+
+                        </div>
+                    @endforeach
+                </div>
             </div>
 
-            {{-- Section 2: Interpretasi Skor --}}
-            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-[#D9EAE4] shadow-sm" data-aos="fade-up">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg flex-shrink-0">📊</div>
-                    <div>
-                        <h2 class="text-lg sm:text-xl font-extrabold text-[#183B38]">Apa Artinya Hasil Ini?</h2>
-                        <span class="text-xs text-slate-400">Penjelasan konteks skor {{ $result['correct_count'] }}/20</span>
+            {{-- ============================================================ --}}
+            {{-- BAGIAN 3: KEBIASAAN YANG BISA DITERAPKAN (MAKSIMAL 3)        --}}
+            {{-- ============================================================ --}}
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-[#D9EAE4] shadow-sm space-y-5" data-aos="fade-up">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg flex-shrink-0">
+                        ✨
                     </div>
-                </div>
-                <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
-                    {{ $education['score_interpretation'] }}
-                </p>
-            </div>
-
-            {{-- Section 3: Topik Prioritas --}}
-            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-[#D9EAE4] shadow-sm" data-aos="fade-up">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg flex-shrink-0">💡</div>
                     <div>
                         <h2 class="text-lg sm:text-xl font-extrabold text-[#183B38]">
-                            {{ count($result['incorrect_items']) > 0 ? 'Topik yang Perlu Dipelajari' : 'Penguatan Konsep Penting' }}
+                            Kebiasaan Sehat yang Bisa Diterapkan
                         </h2>
                         <p class="text-xs text-slate-400">
-                            {{ count($result['incorrect_items']) > 0
-                                ? 'Fokus penguatan pada ' . count($education['priority_topics']) . ' topik dari soal yang kurang tepat'
-                                : 'Kamu sudah menjawab semua soal dengan benar!' }}
+                            {{ count($education['daily_habits']) }} tindakan praktis untuk dilakukan dalam kehidupan sehari-hari
                         </p>
                     </div>
                 </div>
 
-                <div class="space-y-4">
-                    @foreach ($education['priority_topics'] as $index => $topic)
-                        <div class="bg-[#F1FAF6] rounded-2xl p-5 border border-[#D9EAE4] hover:border-[#168C83] transition-colors">
-                            <div class="flex items-start gap-3 mb-2">
-                                <span class="w-6 h-6 rounded-full bg-[#168C83] text-white text-xs font-extrabold flex items-center justify-center flex-shrink-0 mt-0.5">
-                                    {{ $index + 1 }}
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                    @foreach ($education['daily_habits'] as $index => $habit)
+                        <div class="flex flex-col justify-between p-4 sm:p-5 rounded-2xl bg-[#F1FAF6] border border-[#D9EAE4] hover:border-[#168C83] transition-colors">
+                            <div class="flex items-center justify-between mb-2.5">
+                                <span class="w-7 h-7 rounded-xl bg-[#168C83] text-white text-xs font-extrabold flex items-center justify-center shadow-sm">
+                                    0{{ $index + 1 }}
                                 </span>
-                                <div class="flex-1">
-                                    <h3 class="font-bold text-sm sm:text-base text-[#183B38]">
-                                        {{ $topic['title'] ?? $topic['topic'] ?? 'Topik ' . ($index + 1) }}
-                                    </h3>
-                                    @if (!empty($topic['relevance']))
-                                        <p class="text-[11px] text-[#168C83] font-semibold mt-0.5">
-                                            {{ $topic['relevance'] }}
-                                        </p>
-                                    @endif
-                                </div>
+                                <span class="text-[10px] font-bold text-[#168C83] uppercase tracking-wider bg-white px-2 py-0.5 rounded-md border border-[#D9EAE4]">
+                                    Langkah {{ $index + 1 }}
+                                </span>
                             </div>
-                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed pl-9">
-                                {{ $topic['explanation'] }}
+                            <p class="text-xs sm:text-sm font-medium text-slate-700 leading-relaxed">
+                                {{ $habit }}
                             </p>
                         </div>
                     @endforeach
                 </div>
             </div>
 
-            {{-- Section 4: Poin-Poin Kunci --}}
-            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-[#D9EAE4] shadow-sm" data-aos="fade-up">
-                <div class="flex items-center gap-3 mb-5">
-                    <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-lg flex-shrink-0">📌</div>
-                    <div>
-                        <h2 class="text-lg sm:text-xl font-extrabold text-[#183B38]">Poin Penting yang Perlu Diingat</h2>
-                        <p class="text-xs text-slate-400">Fakta kunci kesehatan gigi & mulut</p>
-                    </div>
-                </div>
-                <ul class="space-y-2.5">
-                    @foreach ($education['key_points'] as $point)
-                        <li class="flex items-start gap-2.5 text-sm text-slate-700">
-                            <span class="w-5 h-5 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center flex-shrink-0 text-xs font-bold mt-0.5">✓</span>
-                            <span class="leading-relaxed">{{ $point }}</span>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-
-            {{-- Section 5: Kebiasaan Sehari-hari --}}
-            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-[#D9EAE4] shadow-sm" data-aos="fade-up">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg flex-shrink-0">✨</div>
-                    <div>
-                        <h2 class="text-lg sm:text-xl font-extrabold text-[#183B38]">Kebiasaan Sehat Sehari-hari</h2>
-                        <p class="text-xs text-slate-400">Langkah nyata yang dapat diterapkan mulai hari ini</p>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 gap-3">
-                    @foreach ($education['daily_habits'] as $index => $habit)
-                        <div class="flex items-start gap-3 p-4 rounded-2xl bg-white border border-slate-100 hover:bg-[#E6F7F5]/50 transition-colors">
-                            <div class="w-6 h-6 rounded-full bg-[#DDF5EC] text-[#168C83] text-xs font-extrabold flex items-center justify-center flex-shrink-0 mt-0.5">
-                                {{ $index + 1 }}
-                            </div>
-                            <p class="text-xs sm:text-sm font-medium text-slate-700 leading-relaxed">{{ $habit }}</p>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-
-            {{-- Section 6: Kapan ke Dokter Gigi + Disclaimer --}}
-            <div class="bg-gradient-to-r from-[#11665F] to-[#168C83] text-white rounded-3xl p-6 sm:p-8 shadow-lg" data-aos="fade-up">
-                <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5">
-                    <div class="w-14 h-14 rounded-2xl bg-white/15 p-2 flex items-center justify-center flex-shrink-0 backdrop-blur-sm border border-white/20">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {{-- ============================================================ --}}
+            {{-- BAGIAN 4: KAPAN PERLU BERKONSULTASI                          --}}
+            {{-- ============================================================ --}}
+            <div class="bg-gradient-to-r from-[#11665F] via-[#168C83] to-[#1a9b91] text-white rounded-3xl p-6 sm:p-8 shadow-md" data-aos="fade-up">
+                <div class="flex flex-col sm:flex-row items-start gap-4 sm:gap-5">
+                    <div class="w-12 h-12 rounded-2xl bg-white/15 p-2 flex items-center justify-center flex-shrink-0 backdrop-blur-sm border border-white/20">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                         </svg>
                     </div>
-                    <div class="space-y-2 text-center sm:text-left flex-grow">
-                        <h3 class="text-base sm:text-lg font-bold text-white">Kapan Harus ke Dokter Gigi?</h3>
+                    <div class="space-y-2 flex-grow">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-teal-200 block">Panduan Pemeriksaan Gigi</span>
+                        <h3 class="text-base sm:text-lg font-bold text-white leading-snug">
+                            Kapan Perlu Berkonsultasi ke Dokter Gigi?
+                        </h3>
                         <p class="text-xs sm:text-sm text-[#DDF5EC] leading-relaxed">
                             {{ $education['when_to_seek_care'] }}
                         </p>
-                        <p class="text-[11px] text-white/70 italic pt-1">
-                            {{ $education['disclaimer'] }}
-                        </p>
                     </div>
                 </div>
+            </div>
+
+            {{-- ============================================================ --}}
+            {{-- BAGIAN 5: PEMBERITAHUAN MEDIS (DISCLAIMER)                   --}}
+            {{-- ============================================================ --}}
+            <div class="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 text-center text-xs text-slate-500 leading-relaxed space-y-1" data-aos="fade-up">
+                <div class="font-bold text-slate-700 flex items-center justify-center gap-1.5 text-xs">
+                    <span>🛡️</span> Pemberitahuan Edukasi Literasi
+                </div>
+                <p class="max-w-2xl mx-auto italic text-[11px] text-slate-500">
+                    {{ $education['disclaimer'] }}
+                </p>
             </div>
 
         </div>

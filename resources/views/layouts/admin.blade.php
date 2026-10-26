@@ -420,7 +420,7 @@
             <div class="sidebar-section-label">Main Menu</div>
 
             <a href="{{ route('admin.dashboard') }}"
-               class="sidebar-nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
+               class="sidebar-nav-item {{ (request()->routeIs('admin.dashboard') && !request()->routeIs('admin.responden')) ? 'active' : '' }}"
                id="nav-dashboard">
                 <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <rect x="3" y="3" width="7" height="7" rx="1.5" stroke-width="2"/>
@@ -431,8 +431,8 @@
                 Dashboard
             </a>
 
-            <a href="{{ route('admin.dashboard') }}"
-               class="sidebar-nav-item {{ request()->routeIs('admin.detail') ? 'active' : '' }}"
+            <a href="{{ route('admin.responden') }}"
+               class="sidebar-nav-item {{ (request()->routeIs('admin.responden') || request()->routeIs('admin.detail')) ? 'active' : '' }}"
                id="nav-responden">
                 <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20H7a5 5 0 010-10h.09A5.002 5.002 0 0117 14v6z"/>
@@ -571,6 +571,23 @@
                 </div>
             @endif
 
+            @if (session('error'))
+                <div style="background:#fee2e2;border-left:4px solid #ef4444;border-radius:8px;padding:12px 16px;font-size:13px;color:#b91c1c;font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:8px;">
+                    <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div style="background:#fff1f2;border-left:4px solid #e11d48;border-radius:8px;padding:12px 16px;font-size:13px;color:#9f1239;font-weight:600;margin-bottom:20px;">
+                    <ul style="margin:0;padding-left:18px;">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             @yield('content')
 
         </main>
@@ -615,6 +632,27 @@
     }
     checkBreakpoint();
     window.addEventListener('resize', checkBreakpoint);
+
+    // Sidebar navigation click handling & mobile auto-close
+    document.querySelectorAll('.admin-sidebar a').forEach(item => {
+        item.addEventListener('click', (e) => {
+            if (window.innerWidth < 1024) {
+                closeSidebar();
+            }
+
+            if (item.id === 'nav-responden') {
+                const target = document.getElementById('daftar-responden');
+                const isDashboard = window.location.pathname.endsWith('/admin') || window.location.pathname.endsWith('/admin/responden');
+                if (target && isDashboard) {
+                    e.preventDefault();
+                    history.pushState(null, '', '{{ route("admin.responden") }}');
+                    document.getElementById('nav-dashboard')?.classList.remove('active');
+                    document.getElementById('nav-responden')?.classList.add('active');
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        });
+    });
 </script>
 
 @stack('scripts')

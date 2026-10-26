@@ -1,9 +1,9 @@
 @extends('layouts.admin')
 
-@section('title', 'Dashboard — Admin Smile Score')
+@section('title', request()->routeIs('admin.responden') ? 'Data Responden — Admin Smile Score' : 'Dashboard — Admin Smile Score')
 @section('meta_description', 'Dashboard administrasi dan data responden penelitian Smile Score.')
-@section('page-title', 'Dashboard')
-@section('breadcrumb', 'Admin › Dashboard')
+@section('page-title', request()->routeIs('admin.responden') ? 'Data Responden' : 'Dashboard')
+@section('breadcrumb', request()->routeIs('admin.responden') ? 'Admin › Data Responden' : 'Admin › Dashboard')
 
 @section('content')
 
@@ -320,7 +320,7 @@
 {{-- ═══════════════════════════════════════════════════════════════════
      DATA TABLE
 ════════════════════════════════════════════════════════════════════ --}}
-<div class="admin-card">
+<div class="admin-card" id="daftar-responden" style="scroll-margin-top: 80px;">
     <div class="admin-card-header">
         <div>
             <div style="font-size:14px;font-weight:800;color:#183B38;">Daftar Responden</div>
@@ -328,6 +328,22 @@
                 Menampilkan {{ $submissions->firstItem() ?? 0 }}–{{ $submissions->lastItem() ?? 0 }} dari {{ $submissions->total() }} data
             </div>
         </div>
+        @if ($totalRespondents > 0)
+            <div>
+                <button type="button"
+                        onclick="openDeleteAllModal()"
+                        style="display:inline-flex;align-items:center;gap:6px;padding:7px 13px;background:#fff;border:1.5px solid #fecdd3;color:#e11d48;font-size:12px;font-weight:700;border-radius:8px;cursor:pointer;transition:all 0.15s;"
+                        onmouseover="this.style.background='#fff1f2';this.style.borderColor='#e11d48'"
+                        onmouseout="this.style.background='#fff';this.style.borderColor='#fecdd3'"
+                        id="btn-open-delete-all"
+                        title="Hapus seluruh data responden untuk memulai penelitian baru">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                    Bersihkan Seluruh Data
+                </button>
+            </div>
+        @endif
     </div>
 
     <div style="overflow-x:auto;">
@@ -423,13 +439,27 @@
                         </td>
 
                         <td style="text-align:center;">
-                            <a href="{{ route('admin.detail', $item->id) }}"
-                               style="display:inline-flex;align-items:center;gap:5px;padding:6px 13px;background:#f1f5f9;color:#374151;font-size:12px;font-weight:700;border-radius:7px;text-decoration:none;transition:background 0.15s,color 0.15s;"
-                               onmouseover="this.style.background='#168C83';this.style.color='#fff'"
-                               onmouseout="this.style.background='#f1f5f9';this.style.color='#374151'">
-                                Detail
-                                <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-                            </a>
+                            <div style="display:inline-flex;align-items:center;justify-content:center;gap:6px;">
+                                <a href="{{ route('admin.detail', $item->id) }}"
+                                   style="display:inline-flex;align-items:center;gap:4px;padding:6px 11px;background:#f1f5f9;color:#374151;font-size:12px;font-weight:700;border-radius:7px;text-decoration:none;transition:all 0.15s;"
+                                   onmouseover="this.style.background='#168C83';this.style.color='#fff'"
+                                   onmouseout="this.style.background='#f1f5f9';this.style.color='#374151'"
+                                   title="Lihat rincian jawaban responden">
+                                    Detail
+                                    <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                                </a>
+                                <button type="button"
+                                        onclick="openDeleteSingleModal('{{ route('admin.responden.destroy', $item->id) }}', '{{ addslashes($item->name) }}', '{{ $item->formatted_id }}', '{{ addslashes($item->class_name) }}')"
+                                        style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:#fff;border:1px solid #fecdd3;color:#e11d48;border-radius:7px;cursor:pointer;transition:all 0.15s;"
+                                        onmouseover="this.style.background='#fff1f2';this.style.borderColor='#e11d48'"
+                                        onmouseout="this.style.background='#fff';this.style.borderColor='#fecdd3'"
+                                        title="Hapus data responden {{ $item->formatted_id }}"
+                                        class="btn-delete-single-trigger">
+                                    <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 @empty
@@ -459,6 +489,133 @@
     @endif
 </div>
 
+{{-- ═══════════════════════════════════════════════════════════════════
+     MODAL: HAPUS SATU RESPONDEN
+════════════════════════════════════════════════════════════════════ --}}
+<div class="custom-modal-overlay" id="modalDeleteSingle" onclick="handleModalBackdropClick(event, 'modalDeleteSingle')">
+    <div class="custom-modal-card" role="dialog" aria-modal="true" aria-labelledby="singleModalTitle">
+        <div style="padding:22px 24px 18px;display:flex;align-items:flex-start;gap:14px;">
+            <div style="width:42px;height:42px;border-radius:10px;background:#fee2e2;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="22" height="22" fill="none" stroke="#dc2626" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+            </div>
+            <div style="flex:1;">
+                <h3 id="singleModalTitle" style="font-size:16px;font-weight:800;color:#183B38;margin:0 0 4px;">Konfirmasi Hapus Responden</h3>
+                <p style="font-size:12.5px;color:#64748b;margin:0;line-height:1.5;">Apakah Anda yakin ingin menghapus data responden penelitian berikut?</p>
+            </div>
+        </div>
+
+        <div style="padding:0 24px 18px;">
+            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px 16px;margin-bottom:14px;">
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:12.5px;">
+                    <span style="color:#64748b;font-weight:600;">ID Responden:</span>
+                    <span style="font-family:monospace;font-weight:700;color:#1e293b;" id="singleModalId">#SS-00000</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:12.5px;">
+                    <span style="color:#64748b;font-weight:600;">Nama Lengkap:</span>
+                    <strong style="color:#183B38;" id="singleModalName">-</strong>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:12.5px;">
+                    <span style="color:#64748b;font-weight:600;">Kelas:</span>
+                    <span style="color:#475569;font-weight:600;" id="singleModalClass">-</span>
+                </div>
+            </div>
+
+            <div style="background:#fff1f2;border:1px solid #fecdd3;border-radius:9px;padding:10px 14px;font-size:12px;color:#9f1239;line-height:1.5;">
+                ⚠️ <strong>Perhatian:</strong> Seluruh 20 jawaban kuesioner, hasil penilaian, dan riwayat edukasi AI siswa ini akan <strong>dihapus permanen</strong>. Tindakan ini tidak dapat dibatalkan.
+            </div>
+        </div>
+
+        <form id="formDeleteSingle" method="POST" style="margin:0;">
+            @csrf
+            @method('DELETE')
+            <div style="padding:14px 24px 18px;background:#f8fafc;border-top:1px solid #f1f5f9;display:flex;justify-content:flex-end;gap:10px;">
+                <button type="button"
+                        onclick="closeDeleteSingleModal()"
+                        style="padding:9px 16px;background:#fff;border:1px solid #dde3eb;color:#475569;font-size:13px;font-weight:700;border-radius:8px;cursor:pointer;">
+                    Batal
+                </button>
+                <button type="submit"
+                        id="btnConfirmDeleteSingle"
+                        style="display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:#e11d48;border:none;color:#fff;font-size:13px;font-weight:700;border-radius:8px;cursor:pointer;transition:background 0.15s;">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    Hapus Responden
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{-- ═══════════════════════════════════════════════════════════════════
+     MODAL: BERSIHKAN SELURUH DATA RESPONDEN
+════════════════════════════════════════════════════════════════════ --}}
+<div class="custom-modal-overlay" id="modalDeleteAll" onclick="handleModalBackdropClick(event, 'modalDeleteAll')">
+    <div class="custom-modal-card" style="max-width:520px;" role="dialog" aria-modal="true" aria-labelledby="allModalTitle">
+        <div style="padding:22px 24px 18px;display:flex;align-items:flex-start;gap:14px;">
+            <div style="width:44px;height:44px;border-radius:10px;background:#fef2f2;border:1px solid #fee2e2;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="24" height="24" fill="none" stroke="#dc2626" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+            </div>
+            <div style="flex:1;">
+                <h3 id="allModalTitle" style="font-size:16px;font-weight:800;color:#991b1b;margin:0 0 4px;">Peringatan: Bersihkan Seluruh Data</h3>
+                <p style="font-size:12.5px;color:#64748b;margin:0;line-height:1.5;">Tindakan ini untuk mereset seluruh responden guna memulai periode pengujian baru.</p>
+            </div>
+        </div>
+
+        <form action="{{ route('admin.responden.destroyAll') }}" method="POST" id="formDeleteAll" style="margin:0;">
+            @csrf
+            @method('DELETE')
+
+            <div style="padding:0 24px 18px;">
+                <div style="background:#fff1f2;border:1px solid #fecdd3;border-radius:10px;padding:14px;font-size:12.5px;color:#9f1239;line-height:1.6;margin-bottom:16px;">
+                    <div style="font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:6px;">
+                        <span>⚠️ Penghapusan Massal Penelitian</span>
+                    </div>
+                    Tindakan ini akan <strong>menghapus permanen SELURUH ({{ $totalRespondents }}) data responden</strong> beserta seluruh riwayat pengerjaan, jawaban 20 soal, skor, dan edukasi AI.<br>
+                    <span style="display:inline-block;margin-top:6px;color:#881337;font-weight:600;">
+                        ✓ Akun admin dan master pertanyaan kuesioner tetap aman dan tidak akan terhapus.
+                    </span>
+                </div>
+
+                <div style="margin-bottom:8px;">
+                    <label for="confirmInputAll" style="display:block;font-size:12.5px;font-weight:700;color:#374151;margin-bottom:6px;">
+                        Ketik teks konfirmasi: <code style="background:#f1f5f9;color:#be123c;padding:2px 7px;border-radius:4px;font-size:12px;font-family:monospace;border:1px solid #e2e8f0;">HAPUS DATA RESPONDEN</code>
+                    </label>
+                    <input type="text"
+                           id="confirmInputAll"
+                           name="confirmation_text"
+                           placeholder="Ketik persis: HAPUS DATA RESPONDEN"
+                           required
+                           autocomplete="off"
+                           class="admin-input"
+                           style="border-color:#fecdd3;padding:10px 14px;font-size:13.5px;"
+                           oninput="validateDeleteAllConfirmation(this.value)">
+                    <p style="font-size:11.5px;color:#94a3b8;margin:5px 0 0;" id="confirmInputHelp">
+                        Tombol hapus akan aktif otomatis setelah teks cocok persis (huruf besar).
+                    </p>
+                </div>
+            </div>
+
+            <div style="padding:14px 24px 18px;background:#f8fafc;border-top:1px solid #f1f5f9;display:flex;justify-content:flex-end;gap:10px;">
+                <button type="button"
+                        onclick="closeDeleteAllModal()"
+                        style="padding:9px 16px;background:#fff;border:1px solid #dde3eb;color:#475569;font-size:13px;font-weight:700;border-radius:8px;cursor:pointer;">
+                    Batal
+                </button>
+                <button type="submit"
+                        id="btnConfirmDeleteAll"
+                        disabled
+                        style="display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:#94a3b8;border:none;color:#fff;font-size:13px;font-weight:700;border-radius:8px;cursor:not-allowed;transition:all 0.15s;">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    Bersihkan Seluruh Responden
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 @endsection
 
 @push('styles')
@@ -476,5 +633,130 @@
         .stat-grid { grid-template-columns: repeat(2,1fr) !important; }
         .filter-grid { grid-template-columns: 1fr !important; }
     }
+
+    /* Modal styles */
+    .custom-modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.65);
+        backdrop-filter: blur(4px);
+        z-index: 100;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+    }
+    .custom-modal-overlay.active {
+        display: flex;
+    }
+    .custom-modal-card {
+        background: #ffffff;
+        border-radius: 16px;
+        max-width: 480px;
+        width: 100%;
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        animation: modalFadeIn 0.15s ease-out;
+    }
+    @keyframes modalFadeIn {
+        from { transform: scale(0.96); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
 </style>
+@endpush
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        if (window.location.pathname.endsWith('/admin/responden') || window.location.hash === '#daftar-responden') {
+            const tableEl = document.getElementById('daftar-responden');
+            if (tableEl) {
+                setTimeout(() => {
+                    tableEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+        }
+    });
+
+    function openDeleteSingleModal(actionUrl, name, formattedId, className) {
+        const form = document.getElementById('formDeleteSingle');
+        if (form) form.action = actionUrl;
+        document.getElementById('singleModalName').textContent = name || '-';
+        document.getElementById('singleModalId').textContent = formattedId || '-';
+        document.getElementById('singleModalClass').textContent = className || '-';
+
+        const modal = document.getElementById('modalDeleteSingle');
+        if (modal) {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeDeleteSingleModal() {
+        const modal = document.getElementById('modalDeleteSingle');
+        if (modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+
+    function openDeleteAllModal() {
+        const input = document.getElementById('confirmInputAll');
+        if (input) input.value = '';
+        validateDeleteAllConfirmation('');
+
+        const modal = document.getElementById('modalDeleteAll');
+        if (modal) {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => input?.focus(), 100);
+        }
+    }
+
+    function closeDeleteAllModal() {
+        const modal = document.getElementById('modalDeleteAll');
+        if (modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+
+    function validateDeleteAllConfirmation(value) {
+        const btn = document.getElementById('btnConfirmDeleteAll');
+        const help = document.getElementById('confirmInputHelp');
+        if (!btn) return;
+
+        if (value.trim() === 'HAPUS DATA RESPONDEN') {
+            btn.disabled = false;
+            btn.style.background = '#dc2626';
+            btn.style.cursor = 'pointer';
+            if (help) {
+                help.textContent = '✓ Teks konfirmasi cocok. Klik tombol untuk menjalankan pembersihan.';
+                help.style.color = '#15803d';
+            }
+        } else {
+            btn.disabled = true;
+            btn.style.background = '#94a3b8';
+            btn.style.cursor = 'not-allowed';
+            if (help) {
+                help.textContent = 'Ketik "HAPUS DATA RESPONDEN" untuk mengaktifkan tombol.';
+                help.style.color = '#94a3b8';
+            }
+        }
+    }
+
+    function handleModalBackdropClick(event, modalId) {
+        if (event.target && event.target.id === modalId) {
+            if (modalId === 'modalDeleteSingle') closeDeleteSingleModal();
+            if (modalId === 'modalDeleteAll') closeDeleteAllModal();
+        }
+    }
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            closeDeleteSingleModal();
+            closeDeleteAllModal();
+        }
+    });
+</script>
 @endpush

@@ -525,104 +525,93 @@
                 <!-- Education Content Section -->
                 <div id="section-edukasi" class="bg-white rounded-4xl p-6 sm:p-10 border border-[#D9EAE4] shadow-xl space-y-8">
 
-                    <div class="border-b border-slate-100 pb-5 flex items-center justify-between">
+                    <!-- Section Header with Mode Badge -->
+                    <div class="border-b border-slate-100 pb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div>
-                            <span class="text-xs font-bold text-[#168C83] uppercase tracking-wider block mb-1">Materi Rekomendasi</span>
+                            <span class="text-xs font-bold text-[#168C83] uppercase tracking-wider block mb-1">Materi Rekomendasi Personal</span>
                             <h2 class="text-xl sm:text-2xl font-extrabold text-[#183B38]">Edukasi Kesehatan Gigi &amp; Mulut</h2>
                         </div>
-                        <span class="text-3xl">🦷</span>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#E6F7F5] text-[#11665F] text-xs font-bold border border-[#D9EAE4]">
+                            <span>📚</span> Mode Pratinjau Literasi
+                        </span>
                     </div>
 
-                    <!-- Category Intro & Interpretation -->
-                    <div class="bg-[#E6F7F5]/70 rounded-2xl p-5 border border-[#D9EAE4] space-y-2">
-                        <h3 class="font-extrabold text-[#11665F] text-sm">Evaluasi Hasil Kuesioner:</h3>
-                        <p id="edu-intro-text" class="text-xs sm:text-sm text-slate-700 leading-relaxed"></p>
+                    <!-- Bagian 1: Ringkasan Hasil & Evaluasi Literasi -->
+                    <div class="bg-[#E6F7F5]/70 rounded-2xl p-5 border border-[#D9EAE4] space-y-3">
+                        <div class="flex items-center gap-2 text-xs font-extrabold text-[#11665F] uppercase tracking-wider">
+                            <span>🎯</span> Ringkasan Capaian &amp; Konteks Literasi:
+                        </div>
+                        <p id="edu-intro-text" class="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium"></p>
+                        <div class="p-3 bg-white/80 rounded-xl border border-teal-100 text-[11px] text-slate-600 leading-relaxed flex items-start gap-2">
+                            <span class="text-sm">ℹ️</span>
+                            <span><strong>Penting:</strong> Evaluasi ini mengukur pemahaman wawasan kesehatan gigi dan mulut, <em>bukan merupakan diagnosis medis kondisi fisik gigi atau gusi kamu</em>.</span>
+                        </div>
                     </div>
 
-                    <!-- Priority Topics (Mistakes Review) -->
+                    <!-- Bagian 2: Materi Prioritas Pembelajaran (Max 3-5 Topik) -->
                     <div class="space-y-4">
-                        <h3 class="font-bold text-slate-800 text-sm sm:text-base flex items-center gap-2">
-                            <span>🔍</span> Topik Pembelajaran Khusus:
-                        </h3>
-                        <div id="edu-priority-topics" class="space-y-3">
-                            <!-- Injected by JS -->
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-[#183B38] text-sm sm:text-base flex items-center gap-2">
+                                <span>💡</span> Materi yang Perlu Dipahami:
+                            </h3>
+                            <span id="edu-topic-count" class="text-xs font-bold text-slate-500 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-200">
+                                Topik Prioritas
+                            </span>
+                        </div>
+                        <div id="edu-priority-topics" class="space-y-4">
+                            <!-- Injected dynamically by JS -->
                         </div>
                     </div>
 
-                    <!-- 5 Key Points -->
-                    <div class="space-y-3">
-                        <h3 class="font-bold text-slate-800 text-sm sm:text-base flex items-center gap-2">
-                            <span>✨</span> 5 Poin Emas Menjaga Gigi Sehat:
+                    <!-- Bagian 3: 3 Kebiasaan Sehat yang Bisa Diterapkan -->
+                    <div class="space-y-3 pt-2">
+                        <h3 class="font-bold text-[#183B38] text-sm sm:text-base flex items-center gap-2">
+                            <span>✨</span> 3 Kebiasaan Sehat yang Bisa Diterapkan:
                         </h3>
-                        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm text-slate-700">
-                            <li class="flex items-start gap-2.5 p-3 rounded-2xl bg-slate-50 border border-slate-200/60">
-                                <span class="text-emerald-600 font-bold">1.</span>
-                                <span>Sikat gigi 2 kali sehari: pagi setelah sarapan dan malam sebelum tidur.</span>
-                            </li>
-                            <li class="flex items-start gap-2.5 p-3 rounded-2xl bg-slate-50 border border-slate-200/60">
-                                <span class="text-emerald-600 font-bold">2.</span>
-                                <span>Gunakan pasta gigi berfluoride untuk memperkuat enamel gigi.</span>
-                            </li>
-                            <li class="flex items-start gap-2.5 p-3 rounded-2xl bg-slate-50 border border-slate-200/60">
-                                <span class="text-emerald-600 font-bold">3.</span>
-                                <span>Gunakan dental floss (benang gigi) untuk membersihkan sela gigi dari plak.</span>
-                            </li>
-                            <li class="flex items-start gap-2.5 p-3 rounded-2xl bg-slate-50 border border-slate-200/60">
-                                <span class="text-emerald-600 font-bold">4.</span>
-                                <span>Batasi konsumsi cemilan manis dan minuman bersoda/asam.</span>
-                            </li>
-                            <li class="flex items-start gap-2.5 p-3 rounded-2xl bg-slate-50 border border-slate-200/60 sm:col-span-2">
-                                <span class="text-emerald-600 font-bold">5.</span>
-                                <span>Kunjungi dokter gigi secara teratur setiap 6 bulan sekali.</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Practical Daily Habits -->
-                    <div class="space-y-3">
-                        <h3 class="font-bold text-slate-800 text-sm sm:text-base flex items-center gap-2">
-                            <span>💡</span> Kebiasaan Praktis untuk Siswa SMK:
-                        </h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm text-slate-600">
-                            <div class="p-3.5 rounded-2xl bg-[#F1FAF6] border border-[#D9EAE4]">
-                                <strong>Gerakan Menyikat:</strong> Sikat gigi selama minimal 2 menit dengan gerakan melingkar lembut tanpa menekan terlalu keras.
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div class="p-4 rounded-2xl bg-[#F1FAF6] border border-[#D9EAE4] space-y-2">
+                                <div class="w-6 h-6 rounded-lg bg-[#168C83] text-white text-xs font-bold flex items-center justify-center">01</div>
+                                <h4 class="text-xs font-bold text-slate-800">Menyikat Gigi Teratur</h4>
+                                <p class="text-xs text-slate-600 leading-relaxed">Sikat gigi 2 kali sehari selama 2 menit (setelah sarapan pagi dan sebelum tidur malam) menggunakan sikat lembut dan pasta berfluoride.</p>
                             </div>
-                            <div class="p-3.5 rounded-2xl bg-[#F1FAF6] border border-[#D9EAE4]">
-                                <strong>Ganti Sikat Gigi:</strong> Ganti sikat gigi setiap 3 bulan sekali atau saat bulu sikat sudah mulai mekar.
+                            <div class="p-4 rounded-2xl bg-[#F1FAF6] border border-[#D9EAE4] space-y-2">
+                                <div class="w-6 h-6 rounded-lg bg-[#168C83] text-white text-xs font-bold flex items-center justify-center">02</div>
+                                <h4 class="text-xs font-bold text-slate-800">Gunakan Benang Gigi</h4>
+                                <p class="text-xs text-slate-600 leading-relaxed">Bersihkan sela-sela gigi dengan dental floss setiap malam sebelum sikat gigi untuk mencegah pembentukan plak kuman di tepi gusi.</p>
                             </div>
-                            <div class="p-3.5 rounded-2xl bg-[#F1FAF6] border border-[#D9EAE4]">
-                                <strong>Minum Air Putih:</strong> Selalu bilas mulut dengan minum air putih setelah mengonsumsi makanan manis saat istirahat sekolah.
-                            </div>
-                            <div class="p-3.5 rounded-2xl bg-[#F1FAF6] border border-[#D9EAE4]">
-                                <strong>Jangan Berbagi Sikat:</strong> Selalu gunakan sikat gigimu sendiri demi mencegah perpindahan kuman penyakit.
+                            <div class="p-4 rounded-2xl bg-[#F1FAF6] border border-[#D9EAE4] space-y-2">
+                                <div class="w-6 h-6 rounded-lg bg-[#168C83] text-white text-xs font-bold flex items-center justify-center">03</div>
+                                <h4 class="text-xs font-bold text-slate-800">Bilas &amp; Kontrol Rutin</h4>
+                                <p class="text-xs text-slate-600 leading-relaxed">Bilas mulut dengan air putih setelah mengonsumsi makanan manis dan jadwalkan kontrol rutin ke dokter gigi setiap 6 bulan sekali.</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- When to Seek Dental Care -->
-                    <div class="bg-amber-50 rounded-2xl p-5 border border-amber-200 text-xs sm:text-sm text-amber-900 leading-relaxed">
-                        <h4 class="font-extrabold text-amber-950 mb-1 flex items-center gap-1.5">
-                            <span>🏥</span> Kapan Harus ke Dokter Gigi?
-                        </h4>
-                        <p>
-                            Segera periksakan diri ke dokter gigi atau puskesmas jika mengalami gusi mudah berdarah, gigi berdenyut nyeri, atau tampak bercak hitam berlubang. Ingat, pemeriksaan rutin 6 bulan sekali mendeteksi masalah jauh sebelum rasa sakit muncul!
-                        </p>
+                    <!-- Bagian 4: Kapan Harus ke Dokter Gigi -->
+                    <div class="bg-gradient-to-r from-[#11665F] to-[#168C83] text-white rounded-3xl p-5 sm:p-6 shadow-md flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-white/15 p-2 flex items-center justify-center flex-shrink-0 backdrop-blur-sm border border-white/20">
+                            <span class="text-xl">🏥</span>
+                        </div>
+                        <div class="space-y-1">
+                            <h4 class="font-bold text-white text-sm sm:text-base">Kapan Harus Berkonsultasi ke Dokter Gigi?</h4>
+                            <p class="text-xs sm:text-sm text-teal-100 leading-relaxed">
+                                Segera kunjungi dokter gigi jika mengalami gusi yang mudah berdarah, gigi berdenyut linu/nyeri, atau tampak lubang hitam. Lakukan juga pemeriksaan rutin setiap 6 bulan sekali meskipun tanpa keluhan untuk mencegah kerusakan sebelum menjadi parah.
+                            </p>
+                        </div>
                     </div>
 
-                    <!-- Architecture / Environment Notice -->
-                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-500 text-xs space-y-1">
+                    <!-- Bagian 5: Catatan Pratinjau & Disclaimer Medis -->
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-500 text-xs space-y-2">
                         <div class="font-bold text-slate-700 flex items-center gap-1.5">
                             <span>ℹ️</span> Catatan Mode Pratinjau (Vercel Preview):
                         </div>
-                        <p>
-                            Halaman ini menyajikan alur interaktif biodata, kuesioner, dan edukasi literasi secara instan melalui peramban. Pada deployment server backend Laravel (seperti di server kampus atau localhost XAMPP), sistem menyimpan pengerjaan ke database relasional SQLite/MySQL, mendukung dashboard administrator peneliti, ekspor CSV/Excel, serta analisis personal lanjutan oleh Gemini AI.
+                        <p class="leading-relaxed">
+                            Materi edukasi di halaman pratinjau ini disusun berdasarkan modul pedoman literasi gigi kuesioner penelitian SMK Putra Nasional Cibodas. Pada versi backend Laravel aktif, sistem terintegrasi penuh dengan <strong>Google Gemini AI</strong> untuk personalisasi mendalam, penyimpanan database MySQL/SQLite, serta panel pemantauan admin.
+                        </p>
+                        <p class="text-[11px] text-slate-400 italic pt-1 border-t border-slate-200">
+                            Materi edukasi ini bertujuan meningkatkan literasi dan pengetahuan remaja, bukan merupakan pengganti diagnosis medis langsung oleh dokter gigi.
                         </p>
                     </div>
-
-                    <!-- Medical Disclaimer -->
-                    <p class="text-[11px] text-slate-400 text-center italic">
-                        Materi edukasi ini disusun sebagai media literasi kesehatan gigi dan mulut bagi remaja, bukan merupakan pengganti diagnosis medis langsung oleh dokter gigi.
-                    </p>
 
                 </div>
 
@@ -1353,34 +1342,122 @@
                 eduIntro.textContent = `Tetap semangat, ${currentStudent.name}! Kamu berhasil menjawab ${correctCount} dari 20 soal dengan benar (${percentage}%). Ini langkah awal yang sangat berharga untuk mulai lebih peduli pada kesehatan gigi dan gusi sehari-hari. Pelajari materi di bawah untuk memperkaya wawasanmu.`;
             }
 
-            // Populate Priority Topics
+            // Populate Priority Topics (Cluster into Max 3-4 Topics)
             const priorityContainer = document.getElementById('edu-priority-topics');
+            const topicCountEl = document.getElementById('edu-topic-count');
             priorityContainer.innerHTML = '';
 
-            if (incorrectItems.length > 0) {
-                incorrectItems.forEach(item => {
-                    const div = document.createElement('div');
-                    div.className = 'p-4 rounded-2xl bg-white border border-[#D9EAE4] shadow-sm space-y-1.5';
-                    div.innerHTML = `
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold text-[#168C83] uppercase tracking-wider">Topik: ${item.topic}</span>
-                            <span class="text-[11px] font-semibold text-rose-600 bg-rose-50 px-2.5 py-0.5 rounded-full">Perlu Diingat</span>
-                        </div>
-                        <h4 class="text-xs sm:text-sm font-bold text-slate-800 leading-snug">${item.question}</h4>
-                        <p class="text-xs text-slate-600 leading-relaxed">${item.explanation}</p>
-                    `;
-                    priorityContainer.appendChild(div);
-                });
+            const CLUSTERS = {
+                karies: {
+                    ids: [1, 2, 3, 4, 7],
+                    title: 'Proses Terjadinya Gigi Berlubang & Peran Asam Bakteri',
+                    coreConcept: 'Gigi berlubang terjadi karena asam hasil olahan bakteri dari sisa makanan manis melarutkan mineral pelindung gigi (enamel), bukan karena ulat.',
+                    explanation: 'Ketika sisa makanan berkarbohidrat menempel di gigi, bakteri rongga mulut mengubahnya menjadi asam yang melarutkan mineral enamel gigi secara bertahap. Jika dibiarkan, lubang akan menembus ke lapisan dalam hingga saraf dan menimbulkan sakit berdenyut.',
+                    dailyContext: 'Sering ngemil makanan manis atau minum boba saat istirahat sekolah tanpa berkumur air putih membuat gigi terus terpapar asam sepanjang hari.',
+                    rememberPoint: 'Sikat gigi dengan pasta berfluoride membantu mengembalikan mineral gigi yang hilang dan menghentikan pembentukan lubang sejak dini.'
+                },
+                tambalGigi: {
+                    ids: [5, 6],
+                    title: 'Perawatan Restorasi: Kapan dan Mengapa Gigi Perlu Ditambal',
+                    coreConcept: 'Tambal gigi adalah pengisian bahan pelindung pada kavitas gigi yang harus dilakukan sedini mungkin sebelum infeksi mencapai saraf.',
+                    explanation: 'Menunda penambalan karena gigi belum terasa sakit adalah kekeliruan umum. Lubang gigi tidak dapat menutup sendiri. Penambalan dini oleh dokter gigi menghentikan penyebaran kuman, jauh lebih nyaman, dan menyelamatkan struktur asli gigi.',
+                    dailyContext: 'Banyak siswa membiarkan titik hitam kecil di gigi geraham karena belum ngilu, hingga akhirnya gigi patah atau abses bengkak menjelang ujian sekolah.',
+                    rememberPoint: 'Jangan menunggu gigi terasa sakit hebat; periksakan dan tambal gigi saat lubang masih kecil dan dangkal.'
+                },
+                gusi: {
+                    ids: [8, 9, 10, 11, 12, 13, 14],
+                    title: 'Kesehatan Gusi: Mengenali Gejala Awal dan Mencegah Gingivitis',
+                    coreConcept: 'Gusi berdarah saat menyikat gigi merupakan tanda utama radang gusi akibat tumpukan plak bakteri di perbatasan gigi, bukan karena sikat terlalu keras.',
+                    explanation: 'Plak adalah lapisan lengket tak kasat mata berisi koloni bakteri. Jika plak di garis gusi tidak dibersihkan dengan sikat gigi lembut dan dental floss, racun kuman memicu peradangan. Bila dibiarkan menahun, radang dapat merusak jaringan penyangga hingga gigi goyang.',
+                    dailyContext: 'Saat melihat busa sikat gigi berdarah di pagi hari, sebagian siswa malah takut menyikat area tersebut, padahal area itulah yang paling membutuhkan pembersihan teliti.',
+                    rememberPoint: 'Gusi sehat berwarna merah muda kencang dan tidak berdarah; bersihkan sela gigi dan garis gusi setiap hari.'
+                },
+                sikatDanFluoride: {
+                    ids: [15, 16, 18, 19, 20],
+                    title: 'Teknik Waktu Menyikat Gigi & Perlindungan Aktif Fluoride',
+                    coreConcept: 'Waktu paling krusial menyikat gigi adalah pagi setelah sarapan dan malam tepat sebelum tidur dengan pasta gigi berfluoride.',
+                    explanation: 'Menyikat gigi sebelum tidur malam sangat penting karena produksi air liur pembersih alami menurun drastis saat tidur. Fluoride berfungsi memperkuat lapisan enamel agar tahan terhadap serangan asam dan mencegah demineralisasi dini.',
+                    dailyContext: 'Banyak remaja mengira menyikat gigi saat mandi sore sudah cukup, padahal setelah mandi masih makan malam dan ngemil hingga larut malam.',
+                    rememberPoint: 'Jadikan menyikat gigi sebelum tidur malam sebagai kebiasaan wajib tanpa kompromi.'
+                },
+                kontrolRutin: {
+                    ids: [17],
+                    title: 'Pemeriksaan Berkala: Manfaat Kunjungan Rutin Setiap 6 Bulan',
+                    coreConcept: 'Kunjungan rutin ke dokter gigi setiap 6 bulan bertujuan mencegah dan mendeteksi masalah sedini mungkin sebelum timbul keluhan sakit.',
+                    explanation: 'Karang gigi dan lubang awal sering kali tidak bergejala. Melalui pemeriksaan berkala, dokter gigi dapat melakukan pembersihan karang gigi profesional (scaling) dan perawatan preventif sebelum kerusakan meluas dan memerlukan biaya besar.',
+                    dailyContext: 'Menganggap klinik gigi hanya untuk saat darurat gigi sakit adalah anggapan keliru yang sering menyebabkan kehilangan gigi di usia muda.',
+                    rememberPoint: 'Periksa ke dokter gigi secara teratur setiap 6 bulan sekali, ada atau tidak ada keluhan rasa sakit.'
+                }
+            };
+
+            const incorrectIds = incorrectItems.map(item => item.id);
+            let selectedKeys = [];
+
+            if (incorrectIds.length === 0) {
+                selectedKeys = ['karies', 'gusi', 'kontrolRutin'];
             } else {
-                priorityContainer.innerHTML = `
-                    <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs sm:text-sm text-emerald-800 flex items-center gap-3">
-                        <span class="text-2xl">🌟</span>
-                        <div>
-                            <strong>Sempurna!</strong> Kamu berhasil menjawab seluruh 20 pertanyaan kuesioner dengan tepat tanpa kesalahan. Terus jaga komitmen senyum sehatmu!
+                for (const [key, cluster] of Object.entries(CLUSTERS)) {
+                    if (cluster.ids.some(id => incorrectIds.includes(id))) {
+                        selectedKeys.push(key);
+                    }
+                }
+                const fallbackKeys = ['karies', 'gusi', 'sikatDanFluoride', 'kontrolRutin', 'tambalGigi'];
+                for (const fb of fallbackKeys) {
+                    if (selectedKeys.length >= 3) break;
+                    if (!selectedKeys.includes(fb)) selectedKeys.push(fb);
+                }
+                selectedKeys = selectedKeys.slice(0, 4);
+            }
+
+            if (topicCountEl) {
+                topicCountEl.textContent = `${selectedKeys.length} Topik Prioritas`;
+            }
+
+            selectedKeys.forEach((key, idx) => {
+                const c = CLUSTERS[key];
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-3xl p-5 sm:p-6 border border-[#D9EAE4] shadow-sm space-y-3.5 hover:border-[#168C83] transition-colors';
+                card.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <span class="w-7 h-7 rounded-xl bg-[#168C83] text-white text-xs font-extrabold flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
+                            ${idx + 1}
+                        </span>
+                        <h4 class="text-sm sm:text-base font-extrabold text-[#183B38] leading-snug">
+                            ${c.title}
+                        </h4>
+                    </div>
+
+                    <div class="bg-[#E6F7F5] border-l-4 border-[#168C83] rounded-r-xl p-3.5">
+                        <div class="text-[10px] font-extrabold text-[#11665F] uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                            <span>🎯</span> Konsep yang Perlu Dipahami:
+                        </div>
+                        <p class="text-xs sm:text-sm font-bold text-[#183B38] leading-relaxed">
+                            ${c.coreConcept}
+                        </p>
+                    </div>
+
+                    <div class="text-xs text-slate-600 leading-relaxed pl-1 sm:pl-2">
+                        <span class="text-slate-400 font-bold block text-[10px] uppercase tracking-wider mb-0.5">Penjelasan Singkat:</span>
+                        <p>${c.explanation}</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                        <div class="bg-amber-50/80 rounded-xl p-3 border border-amber-200/70 space-y-1">
+                            <span class="text-[10px] font-extrabold text-amber-900 uppercase tracking-wider flex items-center gap-1">
+                                <span>🎒</span> Situasi Nyata Siswa:
+                            </span>
+                            <p class="text-xs text-amber-950 leading-relaxed">${c.dailyContext}</p>
+                        </div>
+                        <div class="bg-emerald-50/80 rounded-xl p-3 border border-emerald-200/70 space-y-1">
+                            <span class="text-[10px] font-extrabold text-emerald-900 uppercase tracking-wider flex items-center gap-1">
+                                <span>📌</span> Hal yang Perlu Diingat:
+                            </span>
+                            <p class="text-xs text-emerald-950 leading-relaxed">${c.rememberPoint}</p>
                         </div>
                     </div>
                 `;
-            }
+                priorityContainer.appendChild(card);
+            });
 
             // Switch to Stage 3
             stageBiodata.classList.add('hidden');

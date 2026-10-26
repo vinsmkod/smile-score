@@ -19,9 +19,10 @@ class SmileScoreAdminTest extends TestCase
 
         $this->adminUser = User::factory()->create([
             'email' => 'admin@smilescore.id',
-            'name' => 'Admin Penguji',
+            'name'  => 'Admin Penguji',
         ]);
     }
+
 
     /**
      * 1. Pengguna tanpa hak admin (tamu) diblokir dari dashboard, detail, dan ekspor (harus dialihkan ke login).
@@ -29,6 +30,7 @@ class SmileScoreAdminTest extends TestCase
     public function test_unauthenticated_user_cannot_access_admin_routes(): void
     {
         $this->get('/admin')->assertRedirect('/login');
+        $this->get('/admin/responden')->assertRedirect('/login');
         $this->get('/admin/responden/1')->assertRedirect('/login');
         $this->get('/admin/export?format=xlsx')->assertRedirect('/login');
         $this->get('/admin/export?format=csv')->assertRedirect('/login');
@@ -52,6 +54,10 @@ class SmileScoreAdminTest extends TestCase
         $dashResponse->assertStatus(200);
         $dashResponse->assertSee('Data Responden Penelitian');
         $dashResponse->assertSee('Total Responden');
+
+        $respResponse = $this->get('/admin/responden');
+        $respResponse->assertStatus(200);
+        $respResponse->assertSee('daftar-responden');
     }
 
     /**
@@ -290,5 +296,235 @@ class SmileScoreAdminTest extends TestCase
         $this->actingAs($this->adminUser)->get('/admin/export?format=xlsx');
 
         $this->assertEquals($initialCount, SmileScoreSubmission::count());
+    }
+
+    /**
+     * 10. Request dengan CSRF token kedaluwarsa diredirect dengan pesan ramah pengguna.
+     */
+    public function test_token_mismatch_exception_redirects_back_with_session_notice(): void
+    {
+        $handler = app(\Illuminate\Contracts\Debug\ExceptionHandler::class);
+        $request = \Illuminate\Http\Request::create('/admin/login', 'POST', [
+            'email' => 'admin@smilescore.id',
+            'password' => 'admin12345',
+        ]);
+        $request->headers->set('referer', url('/admin/login'));
+        $request->setLaravelSession(session()->driver());
+
+        $response = $handler->render($request, new \Illuminate\Session\TokenMismatchException());
+
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals(url('/admin/login'), $response->headers->get('Location'));
+        $this->assertTrue(session()->has('info'));
+        $this->assertStringContainsString('Sesi Anda telah kedaluwarsa', session('info'));
+    }
+
+    /**
+     * 11. Admin dapat menghapus satu responden tertentu secara aman.
+     */
+    public function test_admin_can_delete_single_respondent(): void
+    {
+        $sub1 = SmileScoreSubmission::create([
+            'name' => 'Budi Santoso',
+            'age' => 16,
+            'gender' => 'Laki-laki',
+            'class_name' => 'X Mesin 1',
+            'answers' => [1 => 'b', 2 => 'c'],
+            'correct_count' => 18,
+            'percentage' => 90,
+            'category' => 'Baik',
+            'emoji' => '😍',
+            'status' => 'completed',
+            'answered_count' => 20,
+        ]);
+
+        $sub2 = SmileScoreSubmission::create([
+            'name' => 'Siti Rahma',
+            'age' => 15,
+            'gender' => 'Perempuan',
+            'class_name' => 'X TKJ 2',
+            'answers' => [1 => 'a', 2 => 'b'],
+            'correct_count' => 10,
+            'percentage' => 50,
+            'category' => 'Kurang',
+            'emoji' => '😢',
+            'status' => 'completed',
+            'answered_count' => 20,
+        ]);
+
+        $response = $this->actingAs($this->adminUser)->delete("/admin/responden/{$sub1->id}");
+
+        $response->assertStatus(302);
+        $response->assertRedirect('/admin/responden');
+        $response->assertSessionHas('success');
+
+        // Sub1 terhapus dari database, Sub2 tetap ada
+        $this->assertDatabaseMissing('smile_score_submissions', ['id' => $sub1->id]);
+        $this->assertDatabaseHas('smile_score_submissions', ['id' => $sub2->id]);
+
+        // Akun admin tetap utuh
+        $this->assertDatabaseHas('users', ['id' => $this->adminUser->id]);
+    }
+
+    /**
+     * 12. Admin dapat membersihkan seluruh data responden setelah konfirmasi teks eksplisit.
+     */
+    public function test_admin_can_delete_all_respondents_with_confirmation(): void
+    {
+        for ($i = 1; $i <= 3; $i++) {
+            SmileScoreSubmission::create([
+                'name' => "Siswa {$i}",
+                'age' => 16,
+                'gender' => 'Laki-laki',
+                'class_name' => 'X Mesin 1',
+                'answers' => [1 => 'b'],
+                'correct_count' => 15,
+                'percentage' => 75,
+                'category' => 'Cukup',
+                'emoji' => '😊',
+                'status' => 'completed',
+                'answered_count' => 20,
+            ]);
+        }
+
+        $this->assertEquals(3, SmileScoreSubmission::count());
+
+        $response = $this->actingAs($this->adminUser)->delete('/admin/responden/delete-all', [
+            'confirmation_text' => 'HAPUS DATA RESPONDEN',
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('/admin/responden');
+        $response->assertSessionHas('success');
+
+        // Seluruh data responden terhapus
+        $this->assertEquals(0, SmileScoreSubmission::count());
+
+        // Akun admin tetap ada dan tidak terhapus
+        $this->assertDatabaseHas('users', ['id' => $this->adminUser->id]);
+
+        // Dashboard menampilkan 0 responden
+        $dashResponse = $this->actingAs($this->adminUser)->get('/admin');
+        $dashResponse->assertStatus(200);
+        $dashResponse->assertSee('Tidak ada data ditemukan');
+    }
+
+    /**
+     * 13. Permintaan hapus seluruh data ditolak jika konfirmasi tidak valid atau kosong.
+     */
+    public function test_admin_cannot_delete_all_without_exact_confirmation(): void
+    {
+        SmileScoreSubmission::create([
+            'name'          => 'Budi Santoso',
+            'age'           => 16,
+            'gender'        => 'Laki-laki',
+            'class_name'    => 'X Mesin 1',
+            'answers'       => [1 => 'b'],
+            'correct_count' => 15,
+            'percentage'    => 75,
+            'category'      => 'Cukup',
+            'emoji'         => '😊',
+            'status'        => 'completed',
+            'answered_count'=> 20,
+        ]);
+
+        // Kirim tanpa teks konfirmasi yang tepat (set Referer agar back() punya URL tujuan)
+        $response = $this->actingAs($this->adminUser)
+            ->withHeader('Referer', 'http://localhost/admin/responden')
+            ->delete('/admin/responden/delete-all', [
+                'confirmation_text' => 'hapus saja',
+            ]);
+
+        // Validasi gagal → redirect kembali (ke halaman sebelumnya) dengan error session
+        $response->assertStatus(302);
+        // Validasi Laravel mengisi $errors di session flash
+        $response->assertSessionHasErrors('confirmation_text');
+
+        // Data tidak terhapus
+        $this->assertEquals(1, SmileScoreSubmission::count());
+    }
+
+    /**
+     * 14. Pengguna tamu (unauthenticated) tidak dapat mengakses endpoint penghapusan.
+     */
+    public function test_guest_cannot_delete_respondent_or_all(): void
+    {
+        $sub = SmileScoreSubmission::create([
+            'name'          => 'Budi Santoso',
+            'age'           => 16,
+            'gender'        => 'Laki-laki',
+            'class_name'    => 'X Mesin 1',
+            'answers'       => [1 => 'b'],
+            'correct_count' => 15,
+            'percentage'    => 75,
+            'category'      => 'Cukup',
+            'emoji'         => '😊',
+            'status'        => 'completed',
+            'answered_count'=> 20,
+        ]);
+
+        // Guard admin di aplikasi ini meredirect tamu ke route('login') (/login)
+        $this->delete("/admin/responden/{$sub->id}")->assertRedirect('/login');
+
+        $this->delete('/admin/responden/delete-all', [
+            'confirmation_text' => 'HAPUS DATA RESPONDEN',
+        ])->assertRedirect('/login');
+
+        // Data tetap utuh
+        $this->assertDatabaseHas('smile_score_submissions', ['id' => $sub->id]);
+    }
+
+    /**
+     * 15. Sistem tetap dapat menerima responden baru setelah pembersihan seluruh data lama.
+     */
+    public function test_system_can_accept_new_respondent_after_deletion(): void
+    {
+        // 1. Buat data lama dan bersihkan
+        SmileScoreSubmission::create([
+            'name' => 'Data Lama',
+            'age' => 16,
+            'gender' => 'Laki-laki',
+            'class_name' => 'X Mesin 1',
+            'answers' => [1 => 'b'],
+            'correct_count' => 10,
+            'percentage' => 50,
+            'category' => 'Kurang',
+            'emoji' => '😢',
+            'status' => 'completed',
+            'answered_count' => 20,
+        ]);
+
+        $this->actingAs($this->adminUser)->delete('/admin/responden/delete-all', [
+            'confirmation_text' => 'HAPUS DATA RESPONDEN',
+        ]);
+
+        $this->assertEquals(0, SmileScoreSubmission::count());
+
+        // 2. Simulasi siswa baru mengisi kuesioner dari beranda
+        $answers = [];
+        for ($i = 1; $i <= 20; $i++) {
+            $answers[$i] = 'a';
+        }
+
+        $response = $this->withSession([
+            'smile_score_biodata' => [
+                'name' => 'Siswa Riset Baru',
+                'age' => 16,
+                'gender' => 'Perempuan',
+                'class_name' => 'X RPL 1',
+            ],
+        ])->post('/smile-score/submit', [
+            'answers' => $answers,
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('/smile-score/hasil');
+
+        // 3. Responden baru berhasil tersimpan di database
+        $this->assertEquals(1, SmileScoreSubmission::count());
+        $this->assertDatabaseHas('smile_score_submissions', [
+            'name' => 'Siswa Riset Baru',
+            'class_name' => 'X RPL 1',
+        ]);
     }
 }

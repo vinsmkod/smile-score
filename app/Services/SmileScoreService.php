@@ -337,6 +337,9 @@ class SmileScoreService
                     'category_group' => $q['category_group'],
                     'question' => $q['question'],
                     'user_answer' => $answeredOption,
+                    'user_answer_text' => $answeredOption && isset($q['options'][$answeredOption]) ? $q['options'][$answeredOption] : 'Tidak dijawab',
+                    'correct_answer' => $q['correct'],
+                    'correct_answer_text' => $q['options'][$q['correct']] ?? '',
                     'explanation' => $q['explanation'],
                 ];
             }
@@ -387,78 +390,108 @@ class SmileScoreService
 
     /**
      * Menghasilkan konten edukasi yang relevan berdasarkan hasil evaluasi siswa.
-     * Menggunakan Gemini AI jika terkonfigurasi. Jika gagal, catat status kegagalan
-     * secara jujur tanpa menyajikan fallback statis sebagai hasil Gemini.
+     * Menggunakan Gemini AI jika terkonfigurasi.
+     * Jika API key tidak ada, kuota habis, timeout, atau struktur respons tidak valid,
+     * sistem secara otomatis menampilkan edukasi berbasis pedoman medis (rule-based fallback).
+     * Hasil selalu disimpan ke database agar refresh tidak memicu panggilan baru.
      *
-     * @param array $evaluationResult Hasil evaluasi dari evaluateAnswers()
-     * @param int|null $submissionId ID submission untuk menyimpan hasil ke database
-     * @param bool $forceRegenerate Abaikan cache dan paksa panggil Gemini ulang
+     * Perbaikan keamanan dan efisiensi kuota:
+     * - Semua cache (termasuk rule_based_fallback) dikembalikan langsung pada GET tanpa retry.
+     * - Regenerasi hanya lewat POST /edukasi/regenerate (forceRegenerate=true).
+     * - Cache::lock per submissionId mencegah dua request paralel memanggil Gemini ganda.
+     *
+     * @param array    $evaluationResult Hasil dari evaluateAnswers()
+     * @param int|null $submissionId     ID submission untuk cache & persistensi database
+     * @param bool     $forceRegenerate  Abaikan cache; hanya untuk POST regenerate (maks 3x/sesi)
      */
     public function generateEducationContent(array $evaluationResult, ?int $submissionId = null, bool $forceRegenerate = false): array
     {
         // --- Cek cache database terlebih dahulu ---
+        // Semua status tersimpan (ai, rule_based, rule_based_fallback) dikembalikan langsung.
+        // Hanya forceRegenerate=true (dari POST endpoint) yang melewati cache ini.
         if ($submissionId && !$forceRegenerate) {
             try {
                 $saved = \App\Models\SmileScoreSubmission::find($submissionId);
                 if ($saved && !empty($saved->ai_education) && is_array($saved->ai_education)) {
-                    $cached = $saved->ai_education;
-                    // Pastikan ini bukan cache dari kegagalan lama yang perlu dicoba ulang
-                    if (($cached['source'] ?? '') !== 'ai_failed') {
-                        Log::info("[SmileScore] Menggunakan edukasi tersimpan untuk submission #{$submissionId}, sumber: " . ($cached['source'] ?? 'unknown'));
-                        return $cached;
-                    }
+                    $cachedSource = $saved->ai_education['source'] ?? '';
+                    Log::info("[SmileScore] Cache ditemukan untuk submission #{$submissionId}, sumber: {$cachedSource}. Dikembalikan tanpa panggilan Gemini.");
+                    return $saved->ai_education;
                 }
             } catch (\Throwable $e) {
-                Log::warning('Gagal membaca cache edukasi dari database: ' . $e->getMessage());
+                Log::warning('[SmileScore] Gagal membaca cache edukasi dari database: ' . $e->getMessage());
             }
         }
 
         // --- Cek API key ---
-        $apiKey = null;
-        try {
-            $apiKey = function_exists('config') ? config('services.gemini.api_key') : null;
-        } catch (\Throwable $e) {
-            $apiKey = null;
-        }
-        $apiKey = $apiKey ?: env('GEMINI_API_KEY');
+        $apiKey = function_exists('config') ? config('services.gemini.api_key') : env('GEMINI_API_KEY');
         $hasAiConfigured = !empty($apiKey);
 
         $education = null;
-        $source = 'rule_based';
-        $aiError = null;
+        $source    = 'rule_based';
 
         if ($hasAiConfigured) {
-            [$aiResponse, $aiError] = $this->callGeminiApi($evaluationResult, $apiKey);
-            if ($aiResponse !== null) {
-                $education = [
-                    'source'              => 'ai',
-                    'title'               => 'Edukasi Personal Bertenaga Gemini AI',
-                    'introduction'        => $aiResponse['introduction'],
-                    'score_interpretation'=> $aiResponse['score_interpretation'],
-                    'priority_topics'     => $aiResponse['priority_topics'],
-                    'key_points'          => $aiResponse['key_points'],
-                    'daily_habits'        => $aiResponse['daily_habits'],
-                    'when_to_seek_care'   => $aiResponse['when_to_seek_care'],
-                    'disclaimer'          => 'Edukasi ini disusun secara otomatis oleh Gemini AI berdasarkan pola jawaban kuesioner sebagai sarana peningkatan literasi, bukan diagnosis medis. Konsultasikan kondisi fisik gigi ke dokter gigi.',
-                    'generated_at'        => now()->toISOString(),
-                ];
-                $source = 'ai';
-                Log::info('[SmileScore] Gemini AI berhasil menghasilkan edukasi personal.');
-            } else {
-                // AI dipanggil tetapi gagal — simpan status kegagalan secara jujur
-                $education = [
-                    'source'      => 'ai_failed',
-                    'title'       => 'Edukasi AI Belum Tersedia',
-                    'error'       => $aiError ?? 'Gemini API tidak mengembalikan respons yang valid.',
-                    'failed_at'   => now()->toISOString(),
-                ];
-                $source = 'ai_failed';
-                Log::warning('[SmileScore] Gemini AI gagal menghasilkan edukasi. Error: ' . ($aiError ?? 'unknown'));
+            // --- Proteksi request paralel via Cache::lock per submissionId ---
+            // Mencegah dua tab/klik bersamaan menghasilkan dua panggilan Gemini sekaligus.
+            $lockKey = $submissionId ? "gemini_gen_{$submissionId}" : null;
+            $lock    = $lockKey ? \Illuminate\Support\Facades\Cache::lock($lockKey, 30) : null;
+
+            if ($lock && !$lock->get()) {
+                // Lock aktif: request lain sedang dalam proses. Tunggu sebentar lalu baca DB.
+                Log::info("[SmileScore] Lock aktif untuk submission #{$submissionId}; membaca dari DB setelah jeda singkat.");
+                sleep(2);
+                try {
+                    $saved = \App\Models\SmileScoreSubmission::find($submissionId);
+                    if ($saved && !empty($saved->ai_education) && is_array($saved->ai_education)) {
+                        return $saved->ai_education;
+                    }
+                } catch (\Throwable $e) {
+                    Log::warning('[SmileScore] Gagal membaca DB setelah menunggu lock: ' . $e->getMessage());
+                }
+                // Jika tidak ada data, lanjutkan tanpa lock (graceful degradation)
+                $lock = null;
+            }
+
+            try {
+                [$aiResponse, $aiError] = $this->callGeminiApi($evaluationResult, $apiKey);
+
+                if ($aiResponse !== null) {
+                    // --- Gemini berhasil ---
+                    $education = [
+                        'source'               => 'ai',
+                        'title'                => 'Edukasi Personal Bertenaga Gemini AI',
+                        'introduction'         => $aiResponse['introduction'],
+                        'score_interpretation' => $aiResponse['score_interpretation'],
+                        'priority_topics'      => $aiResponse['priority_topics'],
+                        'key_points'           => $aiResponse['key_points'],
+                        'daily_habits'         => $aiResponse['daily_habits'],
+                        'when_to_seek_care'    => $aiResponse['when_to_seek_care'],
+                        'disclaimer'           => 'Edukasi ini disusun secara otomatis oleh Gemini AI berdasarkan pola jawaban kuesioner sebagai sarana peningkatan literasi, bukan diagnosis medis. Konsultasikan kondisi fisik gigi ke dokter gigi.',
+                        'generated_at'         => now()->toISOString(),
+                    ];
+                    $source = 'ai';
+                    Log::info('[SmileScore] Gemini AI berhasil menghasilkan edukasi personal.');
+                } else {
+                    // --- Gemini gagal (timeout / 429 / JSON tidak valid) ---
+                    // Aktifkan fallback rule-based secara otomatis agar siswa tetap mendapat edukasi.
+                    Log::warning('[SmileScore] Gemini AI gagal. Beralih ke fallback rule-based. Error: ' . ($aiError ?? 'unknown'));
+                    $ruleContent = $this->getRuleBasedEducation($evaluationResult);
+                    $education   = array_merge($ruleContent, [
+                        'source'    => 'rule_based_fallback',
+                        'ai_error'  => $aiError ?? 'Gemini API tidak mengembalikan respons yang valid.',
+                        'failed_at' => now()->toISOString(),
+                    ]);
+                    $source = 'rule_based_fallback';
+                }
+            } finally {
+                // Pastikan lock selalu dilepas walau terjadi exception di callGeminiApi
+                if ($lock) {
+                    $lock->release();
+                }
             }
         } else {
             // Tidak ada API key — gunakan rule-based dan tandai dengan jelas
             $education = $this->getRuleBasedEducation($evaluationResult);
-            $source = 'rule_based';
+            $source    = 'rule_based';
             Log::info('[SmileScore] Gemini API key tidak dikonfigurasi, menggunakan rule-based fallback.');
         }
 
@@ -472,7 +505,7 @@ class SmileScoreService
                 ]);
                 Log::info("[SmileScore] Edukasi disimpan ke submission #{$submissionId}, sumber: {$source}");
             } catch (\Throwable $e) {
-                Log::error('Gagal menyimpan hasil edukasi ke submission: ' . $e->getMessage());
+                Log::error('[SmileScore] Gagal menyimpan hasil edukasi ke submission: ' . $e->getMessage());
             }
         }
 
@@ -493,70 +526,104 @@ class SmileScoreService
         } catch (\Throwable $e) {
             $model = null;
         }
-        $model = $model ?: env('GEMINI_MODEL', 'gemini-3.5-flash-lite');
+        $model = $model ?: env('GEMINI_MODEL', 'gemini-1.5-flash');
         $endpoint = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}";
 
-        // Identifikasi topik yang salah dijawab beserta penjelasan singkatnya
         $incorrectItems = $eval['incorrect_items'] ?? [];
-        $topicsSummary = collect($incorrectItems)->pluck('topic')->unique()->implode(', ');
-        $allCorrect = empty($incorrectItems);
-        if ($allCorrect) {
-            $topicsSummary = 'Seluruh soal dijawab dengan benar.';
-        }
-
-        $correctCount  = $eval['correct_count'] ?? 0;
-        $percentage    = $eval['percentage'] ?? 0;
-        $category      = $eval['category'] ?? '-';
-        $emoji         = $eval['emoji'] ?? '🦷';
+        $correctCount   = $eval['correct_count'] ?? 0;
+        $percentage     = $eval['percentage'] ?? 0;
+        $category       = $eval['category'] ?? '-';
+        $emoji          = $eval['emoji'] ?? '🦷';
         $incorrectCount = 20 - $correctCount;
 
-        // Daftar soal salah beserta topik dan penjelasan (max 10 agar prompt tidak terlalu panjang)
-        $incorrectDetails = collect($incorrectItems)->take(10)->map(fn($item) =>
-            "- Topik: {$item['topic']} | Penjelasan kunci: {$item['explanation']}"
-        )->implode("\n");
+        if (empty($incorrectItems)) {
+            $contextIntro = "Siswa menjawab seluruh 20 pertanyaan dengan BENAR (100%, Kategori: Baik {$emoji}).";
+            $mistakesSection = "Seluruh 20 soal dijawab benar. Fokuskan materi pada 3 topik penguatan konsep preventif utama (proses demineralisasi karies & peran fluoride, pencegahan radang gusi & benang gigi, serta urgensi kontrol berkala dokter gigi 6 bulan sekali).";
+        } else {
+            $contextIntro = "Siswa menjawab {$correctCount} benar dari 20 soal ({$percentage}%, Kategori: {$category} {$emoji}) dengan {$incorrectCount} soal dijawab kurang tepat.";
+            // Berikan detail soal yang salah dijawab beserta opsi siswa dan kunci benar (ambil hingga 12 item representatif)
+            $mistakesSection = collect($incorrectItems)->take(12)->map(function ($item) {
+                $id = $item['id'] ?? '?';
+                $topic = $item['topic'] ?? 'Kesehatan Gigi';
+                $catGroup = $item['category_group'] ?? 'Umum';
+                $qText = $item['question'] ?? ($this->questions[$id]['question'] ?? '-');
+                $ansLetter = $item['user_answer'] ?? '-';
+                $ansText = $item['user_answer_text'] ?? ($item['user_answer'] ?? '-');
+                $corText = $item['correct_answer_text'] ?? ($this->questions[$id]['options'][$this->questions[$id]['correct'] ?? ''] ?? '-');
+                $expl = $item['explanation'] ?? ($this->questions[$id]['explanation'] ?? '-');
+
+                return "- Soal #{$id} [Topik: {$topic} | Kategori: {$catGroup}]\n" .
+                       "  Pertanyaan: {$qText}\n" .
+                       "  Jawaban siswa: ({$ansLetter}) {$ansText}\n" .
+                       "  Kunci benar: {$corText}\n" .
+                       "  Konsep kunci: {$expl}";
+            })->implode("\n\n");
+        }
 
         $prompt = <<<PROMPT
-Anda adalah asisten edukasi kesehatan gigi dan mulut yang ramah dan suportif untuk siswa SMK Indonesia.
+Anda adalah asisten edukasi kesehatan gigi dan mulut profesional, ramah, komunikatif, dan mendidik untuk siswa Sekolah Menengah Kejuruan (SMK) di Indonesia.
 
-Siswa baru saja menyelesaikan kuesioner literasi kesehatan gigi dan mulut Smile Score dengan hasil:
-- Jumlah jawaban benar: {$correctCount} dari 20 ({$percentage}%)
-- Kategori hasil: {$category} {$emoji}
-- Jumlah soal yang salah dijawab: {$incorrectCount}
-- Topik yang perlu ditingkatkan: {$topicsSummary}
+DATA EVALUASI SISWA:
+{$contextIntro}
 
-Detail soal yang salah dijawab (gunakan sebagai dasar materi edukasi):
-{$incorrectDetails}
+RINCIAN POLA JAWABAN SISWA:
+{$mistakesSection}
 
-ATURAN WAJIB:
-1. Jangan mengubah skor, persentase, atau kategori hasil.
-2. Jangan memberikan diagnosis medis fisik (misalnya: "gigimu berlubang saat ini").
-3. Jangan mengarang informasi medis atau referensi yang tidak berdasar.
-4. Gunakan bahasa Indonesia yang komunikatif, positif, mendidik, dan ramah untuk siswa SMK.
-5. Personalisasikan konten berdasarkan topik yang salah dijawab — jangan buat materi generik.
-6. Balas HANYA dalam format JSON valid berikut (tanpa markdown blok ```json, tanpa teks apapun di luar JSON):
+TUGAS UTAMA:
+Ubah evaluasi di atas menjadi pembelajaran personal berdasarkan pola jawaban siswa. Hindari membuat artikel ensiklopedia yang panjang dan membosankan, definisi kaku, atau pengulangan materi soal.
 
+PANDUAN PEMILIHAN DAN PENYUSUNAN MATERI:
+1. Analisis Berdasarkan Data Nyata:
+   Gunakan data hasil evaluasi yang tersedia di atas. Jangan mengarang alasan kesalahan yang tidak berdasar atau mengklaim kondisi fisik siswa yang tidak diketahui.
+2. Batasi 3 Hingga Maksimal 5 Topik Prioritas:
+   Meskipun terdapat {$incorrectCount} jawaban salah, JANGAN membuat {$incorrectCount} materi terpisah! Gabungkan topik-topik yang memiliki keterkaitan konsep (misalnya beberapa soal karies digabung menjadi 1 topik konsep pembentukan lubang gigi). Pilih MAKSIMAL 3 HINGGA 5 TOPIK PRIORITAS yang paling mendasar untuk dipahami kembali.
+3. Struktur Setiap Topik Prioritas (WAJIB):
+   - title: Judul konsep materi yang spesifik dan jelas (contoh: "Mekanisme Asam & Kerusakan Enamel Gigi").
+   - core_concept: Satu kalimat tegas yang menyatakan inti konsep yang perlu dipahami siswa.
+   - explanation: Penjelasan sederhana (2-4 kalimat). Istilah medis dijelaskan menggunakan bahasa yang mudah dipahami remaja SMK.
+   - daily_context: Contoh situasi nyata kehidupan sehari-hari siswa SMK (misalnya: kebiasaan jajan manis saat istirahat tanpa bilas air putih, sikat gigi terburu-buru sebelum berangkat sekolah, mengabaikan gusi berdarah).
+   - remember_point: Satu kesimpulan praktis yang mudah diingat dan tidak mengulang penjelasan secara verbatim.
+4. Rekomendasi Kebiasaan Sehat (daily_habits):
+   Buat MAKSIMAL 3 tindakan praktis yang relevan dengan topik prioritas, dapat diterapkan langsung dalam rutinitas harian siswa SMK, tidak mengulang teks penjelasan, dan tidak memberikan diagnosis medis.
+5. Poin Penting (key_points):
+   Buat 3-4 fakta kunci penting yang singkat dan esensial.
+6. Kapan Berkonsultasi (when_to_seek_care):
+   Panduan singkat (2-3 kalimat) mengenai tanda bahaya yang memerlukan penanganan dokter gigi dan pentingnya kontrol rutin 6 bulan sekali.
+7. Interpretasi Skor (score_interpretation):
+   Jelaskan secara ramah bahwa skor kuesioner ini merupakan evaluasi tingkat literasi/pengetahuan kesehatan gigi dan mulut, BUKAN diagnosis klinis atas kondisi fisik gigi siswa.
+
+LARANGAN KERAS:
+- DILARANG menggunakan pembukaan klise seperti "Penting bagi siswa SMK untuk mengetahui...".
+- DILARANG menulis definisi ensiklopedis yang terlalu panjang dan berbelit-belit.
+- DILARANG mengulang pertanyaan kuesioner sebagai paragraf materi.
+- DILARANG mengklaim siswa menderita penyakit tertentu (misal: "Gigi kamu saat ini sedang berlubang").
+- DILARANG mengulang substansi atau kalimat yang sama di beberapa bagian.
+
+FORMAT OUTPUT:
+Balas HANYA berupa JSON valid (tanpa blok markdown ```json, tanpa teks pembuka/penutup):
 {
-  "introduction": "Kalimat pembuka personal yang suportif dan memotivasi siswa berdasarkan hasil mereka (2-3 kalimat).",
-  "score_interpretation": "Penjelasan netral dan tidak menghakimi mengenai arti kategori hasil: {$category} dengan skor {$correctCount}/20. Fokus pada konteks belajar, bukan menilai kemampuan siswa (2-3 kalimat).",
+  "introduction": "Kalimat pembuka personal dan suportif (2-3 kalimat) berdasarkan capaian evaluasi.",
+  "score_interpretation": "Penjelasan bahwa hasil evaluasi ini mengukur pemahaman literasi kesehatan gigi (bukan diagnosis fisik) dan maknanya bagi proses belajar siswa (2-3 kalimat).",
   "priority_topics": [
     {
-      "title": "Nama topik yang perlu dipelajari (dari daftar salah di atas)",
-      "relevance": "Mengapa topik ini penting dan relevan untuk siswa SMK (1 kalimat singkat).",
-      "explanation": "Penjelasan konsep yang benar secara ilmiah, mudah dipahami siswa SMK, dan langsung berkaitan dengan soal yang salah (2-3 kalimat)."
+      "title": "Judul Konsep Topik Prioritas",
+      "core_concept": "Satu kalimat inti konsep pembelajaran.",
+      "explanation": "Penjelasan sederhana 2-4 kalimat dengan istilah medis ramah remaja.",
+      "daily_context": "Contoh situasi nyata sehari-hari siswa SMK.",
+      "remember_point": "Satu kesimpulan praktis yang mudah diingat."
     }
   ],
   "key_points": [
-    "Fakta/poin penting yang perlu diingat 1",
-    "Fakta/poin penting yang perlu diingat 2",
-    "Fakta/poin penting yang perlu diingat 3"
+    "Poin kunci penting 1",
+    "Poin kunci penting 2",
+    "Poin kunci penting 3"
   ],
   "daily_habits": [
-    "Kebiasaan sehari-hari yang praktis dan dapat langsung diterapkan siswa SMK 1",
-    "Kebiasaan sehari-hari yang praktis dan dapat langsung diterapkan siswa SMK 2",
-    "Kebiasaan sehari-hari yang praktis dan dapat langsung diterapkan siswa SMK 3",
-    "Kebiasaan sehari-hari yang praktis dan dapat langsung diterapkan siswa SMK 4"
+    "Tindakan praktis 1 (maksimal 3 kebiasaan)",
+    "Tindakan praktis 2",
+    "Tindakan praktis 3"
   ],
-  "when_to_seek_care": "Panduan singkat kapan siswa SMK perlu mengunjungi dokter gigi, ditulis secara ramah dan tidak menakutkan (2-3 kalimat)."
+  "when_to_seek_care": "Panduan kapan siswa perlu berkonsultasi ke dokter gigi dan pentingnya kontrol 6 bulan sekali (2-3 kalimat)."
 }
 PROMPT;
 
@@ -574,7 +641,7 @@ PROMPT;
                     ],
                     'generationConfig' => [
                         'responseMimeType' => 'application/json',
-                        'temperature'      => 0.45,
+                        'temperature'      => 0.4,
                         'maxOutputTokens'  => 2048,
                     ]
                 ]);
@@ -583,10 +650,18 @@ PROMPT;
                 $data = $response->json();
                 $text = $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
                 if ($text) {
-                    // Bersihkan jika model menyertakan code block markdown
                     $cleanText = preg_replace('/^```(?:json)?\s*/i', '', trim($text));
                     $cleanText = preg_replace('/\s*```$/', '', $cleanText);
                     $decoded   = json_decode(trim($cleanText), true);
+
+                    // Jika decode gagal karena karakter kontrol unescaped dari LLM, sanitasi dan coba lagi
+                    if ($decoded === null) {
+                        $sanitized = preg_replace('/[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]/', '', $cleanText);
+                        $retryDecoded = json_decode($sanitized, true);
+                        if (is_array($retryDecoded)) {
+                            $decoded = $retryDecoded;
+                        }
+                    }
 
                     if (
                         is_array($decoded)
@@ -594,13 +669,57 @@ PROMPT;
                         && !empty($decoded['score_interpretation'])
                         && !empty($decoded['priority_topics'])
                         && is_array($decoded['priority_topics'])
-                        && !empty($decoded['key_points'])
-                        && is_array($decoded['key_points'])
                         && !empty($decoded['daily_habits'])
                         && is_array($decoded['daily_habits'])
                         && !empty($decoded['when_to_seek_care'])
                     ) {
-                        return [$decoded, null];
+                        // Normalisasi dan validasi isi priority_topics
+                        $validTopics = [];
+                        foreach ($decoded['priority_topics'] as $topic) {
+                            if (!is_array($topic) || empty($topic['title'])) {
+                                continue;
+                            }
+                            $explanation   = $topic['explanation'] ?? '';
+                            $coreConcept   = $topic['core_concept'] ?? $topic['relevance'] ?? '';
+                            $dailyContext  = $topic['daily_context'] ?? $topic['example'] ?? '';
+                            $rememberPoint = $topic['remember_point'] ?? $topic['takeaway'] ?? '';
+
+                            if (empty($explanation) && empty($coreConcept)) {
+                                continue;
+                            }
+
+                            $validTopics[] = [
+                                'title'          => trim($topic['title']),
+                                'core_concept'   => trim($coreConcept ?: $explanation),
+                                'explanation'    => trim($explanation ?: $coreConcept),
+                                'daily_context'  => trim($dailyContext),
+                                'remember_point' => trim($rememberPoint),
+                                'relevance'      => trim($coreConcept ?: $explanation), // Kompatibilitas mundur
+                            ];
+                        }
+
+                        if (!empty($validTopics)) {
+                            // Batasi maksimal 3-5 topik prioritas
+                            $decoded['priority_topics'] = array_slice($validTopics, 0, 5);
+
+                            // Batasi maksimal 3 kebiasaan sehat sehari-hari
+                            $filteredHabits = array_values(array_filter($decoded['daily_habits'], fn($h) => is_string($h) && trim($h) !== ''));
+                            $decoded['daily_habits'] = array_slice($filteredHabits, 0, 3);
+
+                            // Pastikan key_points terisi dan tidak berlebihan
+                            if (empty($decoded['key_points']) || !is_array($decoded['key_points'])) {
+                                $decoded['key_points'] = [
+                                    'Sikat gigi 2 kali sehari dengan pasta berfluoride: pagi setelah sarapan dan malam sebelum tidur.',
+                                    'Bersihkan sela-sela gigi dengan dental floss untuk mencegah plak merusak tepi gusi.',
+                                    'Pemeriksaan rutin ke dokter gigi setiap 6 bulan mendeteksi masalah sebelum timbul rasa sakit.',
+                                ];
+                            } else {
+                                $filteredKeys = array_values(array_filter($decoded['key_points'], fn($k) => is_string($k) && trim($k) !== ''));
+                                $decoded['key_points'] = array_slice($filteredKeys, 0, 4);
+                            }
+
+                            return [$decoded, null];
+                        }
                     }
 
                     $jsonError = json_last_error_msg();
@@ -615,7 +734,6 @@ PROMPT;
                 return [null, "Gemini API mengembalikan HTTP {$status}"];
             }
         } catch (\Throwable $e) {
-            // Hindari mencatat URL lengkap yang mengandung API key
             $msg = get_class($e) . ': ' . $e->getMessage();
             Log::error('[SmileScore] Gemini API call exception: ' . $msg);
             return [null, 'Koneksi ke Gemini API gagal: ' . get_class($e)];
@@ -655,60 +773,138 @@ PROMPT;
     /**
      * Konten edukasi berbasis aturan (Rule-Based Fallback) yang diverifikasi medis.
      * Digunakan hanya ketika API key Gemini tidak dikonfigurasi.
-     * Sesuai struktur baru dengan field introduction, score_interpretation, priority_topics,
-     * key_points, daily_habits, dan when_to_seek_care.
+     * Menghasilkan struktur personal pembelajaran terstruktur (3-5 topik prioritas,
+     * konsep inti, contoh situasi sehari-hari, hal yang perlu diingat, dan 3 kebiasaan sehat).
      */
     protected function getRuleBasedEducation(array $eval): array
     {
         $category   = $eval['category'] ?? 'Kurang baik';
         $percentage = $eval['percentage'] ?? 0;
         $correct    = $eval['correct_count'] ?? 0;
+        $incorrectItems = $eval['incorrect_items'] ?? [];
+        $incorrectIds = collect($incorrectItems)->pluck('id')->all();
 
         $introduction = match ($category) {
-            'Baik'  => 'Luar biasa! Kamu sudah memiliki pemahaman yang sangat baik mengenai kesehatan gigi dan mulut. Pertahankan semangat belajarmu dan terus terapkan kebiasaan sehat ini setiap hari.',
-            'Cukup' => 'Kerja bagus! Kamu sudah memahami dasar-dasar kesehatan gigi dan mulut. Masih ada beberapa topik yang bisa kamu perkuat agar pemahamanmu semakin lengkap.',
-            default => 'Jangan berkecil hati! Kamu sudah mengambil langkah berani dengan mengikuti kuesioner ini. Setiap informasi yang kamu pelajari hari ini adalah investasi untuk senyummu yang lebih sehat.',
+            'Baik'  => 'Luar biasa! Kamu sudah memiliki dasar pemahaman kesehatan gigi dan mulut yang sangat baik. Mari kita perdalam konsep kunci untuk mempertahankan kesehatan senyummu setiap hari.',
+            'Cukup' => 'Hasil yang baik! Kamu sudah memahami banyak hal penting tentang kesehatan gigi. Ada beberapa konsep kunci yang perlu diperkuat agar pemahaman dan kebiasaanmu semakin maksimal.',
+            default => 'Langkah awal yang sangat baik! Mengikuti evaluasi ini membantumu mengenali hal-hal penting seputar kesehatan gigi. Pelajari materi ringkas di bawah untuk meningkatkan kesehatan senyummu.',
         };
 
-        $scoreInterpretation = "Kamu berhasil menjawab {$correct} dari 20 soal dengan benar ({$percentage}%), masuk dalam kategori {$category}. " . match ($category) {
-            'Baik'  => 'Ini menunjukkan kamu telah memiliki fondasi pengetahuan yang kuat tentang perawatan gigi dan mulut.',
-            'Cukup' => 'Ini artinya ada beberapa konsep yang sudah kamu pahami dengan baik, namun beberapa topik masih perlu penguatan.',
-            default => 'Ini adalah titik awal yang baik — dengan mempelajari materi di bawah, kamu bisa meningkatkan pengetahuanmu secara signifikan.',
+        $scoreInterpretation = "Kamu berhasil menjawab {$correct} dari 20 soal dengan benar ({$percentage}%), termasuk dalam kategori {$category}. Skor ini merupakan evaluasi tingkat pemahaman literasi kesehatan gigi dan mulutmu saat ini, bukan diagnosis klinis atas kondisi fisik gigimu. " . match ($category) {
+            'Baik'  => 'Hasil ini menunjukkan pemahaman teoritis yang kokoh dalam menjaga kebersihan rongga mulut.',
+            'Cukup' => 'Hasil ini menandakan sebagian besar konsep sudah kamu pahami, namun ada beberapa prinsip pencegahan yang perlu ditingkatkan.',
+            default => 'Hasil ini menjadi panduan belajar yang tepat untuk mengenali kebiasaan dan fakta kesehatan gigi yang sering disalahpahami.',
         };
 
-        // Buat materi per topik yang salah, atau penguatan umum jika semua benar
+        // Master materi terstruktur berdasarkan rumpun konsep soal
+        $clusterDefinitions = [
+            'karies' => [
+                'ids' => [1, 2, 3, 4, 7],
+                'topic' => [
+                    'title'          => 'Proses Terjadinya Gigi Berlubang & Peran Asam Bakteri',
+                    'core_concept'   => 'Gigi berlubang terjadi karena asam hasil olahan bakteri dari sisa makanan manis melarutkan mineral pelindung gigi (enamel), bukan karena ulat.',
+                    'explanation'    => 'Ketika sisa makanan berkarbohidrat menempel di gigi, bakteri rongga mulut mengubahnya menjadi asam yang melarutkan mineral enamel gigi secara bertahap. Jika dibiarkan, lubang akan menembus ke lapisan dalam hingga saraf dan menimbulkan sakit berdenyut.',
+                    'daily_context'  => 'Sering ngemil makanan manis atau minum boba saat istirahat sekolah tanpa berkumur air putih membuat gigi terus terpapar asam sepanjang hari.',
+                    'remember_point' => 'Sikat gigi dengan pasta berfluoride membantu mengembalikan mineral gigi yang hilang dan menghentikan pembentukan lubang sejak dini.',
+                ],
+            ],
+            'tambal_gigi' => [
+                'ids' => [5, 6],
+                'topic' => [
+                    'title'          => 'Perawatan Restorasi: Kapan dan Mengapa Gigi Perlu Ditambal',
+                    'core_concept'   => 'Tambal gigi adalah pengisian bahan pelindung pada kavitas gigi yang harus dilakukan sedini mungkin sebelum infeksi mencapai saraf.',
+                    'explanation'    => 'Menunda penambalan karena gigi belum terasa sakit adalah kekeliruan umum. Lubang gigi tidak dapat menutup sendiri. Penambalan dini oleh dokter gigi menghentikan penyebaran kuman, jauh lebih nyaman, dan menyelamatkan struktur asli gigi.',
+                    'daily_context'  => 'Banyak siswa membiarkan titik hitam kecil di gigi geraham karena belum ngilu, hingga akhirnya gigi patah atau abses bengkak menjelang ujian sekolah.',
+                    'remember_point' => 'Jangan menunggu gigi terasa sakit hebat; periksakan dan tambal gigi saat lubang masih kecil dan dangkal.',
+                ],
+            ],
+            'gusi' => [
+                'ids' => [8, 9, 10, 11, 12, 13, 14],
+                'topic' => [
+                    'title'          => 'Kesehatan Gusi: Mengenali Gejala Awal dan Mencegah Gingivitis',
+                    'core_concept'   => 'Gusi berdarah saat menyikat gigi merupakan tanda utama radang gusi akibat tumpukan plak bakteri di perbatasan gigi, bukan karena sikat terlalu keras.',
+                    'explanation'    => 'Plak adalah lapisan lengket tak kasat mata berisi koloni bakteri. Jika plak di garis gusi tidak dibersihkan dengan sikat gigi lembut dan dental floss, racun kuman memicu peradangan. Bila dibiarkan menahun, radang dapat merusak jaringan penyangga hingga gigi goyang.',
+                    'daily_context'  => 'Saat melihat busa sikat gigi berdarah di pagi hari, sebagian siswa malah takut menyikat area tersebut, padahal area itulah yang paling membutuhkan pembersihan teliti.',
+                    'remember_point' => 'Gusi sehat berwarna merah muda kencang dan tidak berdarah; bersihkan sela gigi dan garis gusi setiap hari.',
+                ],
+            ],
+            'sikat_dan_fluoride' => [
+                'ids' => [15, 16, 18, 19, 20],
+                'topic' => [
+                    'title'          => 'Teknik Waktu Menyikat Gigi & Perlindungan Aktif Fluoride',
+                    'core_concept'   => 'Waktu paling krusial menyikat gigi adalah pagi setelah sarapan dan malam tepat sebelum tidur dengan pasta gigi berfluoride.',
+                    'explanation'    => 'Menyikat gigi sebelum tidur malam sangat penting karena produksi air liur pembersih alami menurun drastis saat tidur. Fluoride berfungsi memperkuat lapisan enamel agar tahan terhadap serangan asam dan mencegah demineralisasi dini.',
+                    'daily_context'  => 'Banyak remaja mengira menyikat gigi saat mandi sore sudah cukup, padahal setelah mandi masih makan malam dan ngemil hingga larut malam.',
+                    'remember_point' => 'Jadikan menyikat gigi sebelum tidur malam sebagai kebiasaan wajib tanpa kompromi.',
+                ],
+            ],
+            'kontrol_rutin' => [
+                'ids' => [17],
+                'topic' => [
+                    'title'          => 'Pemeriksaan Berkala: Manfaat Kunjungan Rutin Setiap 6 Bulan',
+                    'core_concept'   => 'Kunjungan rutin ke dokter gigi setiap 6 bulan bertujuan mencegah dan mendeteksi masalah sedini mungkin sebelum timbul keluhan sakit.',
+                    'explanation'    => 'Karang gigi dan lubang awal sering kali tidak bergejala. Melalui pemeriksaan berkala, dokter gigi dapat melakukan pembersihan karang gigi profesional (scaling) dan perawatan preventif sebelum kerusakan meluas dan memerlukan biaya besar.',
+                    'daily_context'  => 'Menganggap klinik gigi hanya untuk saat darurat gigi sakit adalah anggapan keliru yang sering menyebabkan kehilangan gigi di usia muda.',
+                    'remember_point' => 'Periksa ke dokter gigi secara teratur setiap 6 bulan sekali, ada atau tidak ada keluhan rasa sakit.',
+                ],
+            ],
+        ];
+
+        // Tentukan topik prioritas berdasarkan kesalahan siswa (maksimal 3-5 topik)
         $priorityTopics = [];
-        if (!empty($eval['incorrect_items'])) {
-            $groupedByTopic = collect($eval['incorrect_items'])->groupBy('topic');
-            foreach ($groupedByTopic as $topicName => $items) {
-                $first = $items->first();
-                $priorityTopics[] = [
-                    'title'      => $topicName,
-                    'relevance'  => 'Topik ini dijawab kurang tepat dalam kuesionermu dan merupakan bagian penting dari perawatan gigi sehari-hari.',
-                    'explanation'=> $first['explanation'],
-                ];
-            }
+
+        if (empty($incorrectIds)) {
+            // Sempurna: Berikan 3 topik penguatan konsep utama
+            $selectedKeys = ['karies', 'gusi', 'kontrol_rutin'];
         } else {
-            $priorityTopics = [
-                ['title' => 'Pencegahan Karies (Gigi Berlubang)', 'relevance' => 'Karies adalah masalah gigi paling umum yang dapat dicegah dengan kebiasaan sederhana.', 'explanation' => 'Gigi berlubang terjadi ketika bakteri mengubah sisa makanan berkarbohidrat menjadi asam yang melarutkan mineral enamel. Pencegahan terbaik adalah menyikat gigi 2x sehari dengan pasta berfluoride.'],
-                ['title' => 'Kesehatan Gusi (Pencegahan Gingivitis)', 'relevance' => 'Radang gusi yang tidak ditangani dapat berkembang menjadi periodontitis dan kehilangan gigi.', 'explanation' => 'Plak yang menumpuk di pinggir gusi memicu peradangan. Rutinitas menyikat gigi dan menggunakan benang gigi setiap hari adalah cara paling efektif mencegahnya.'],
-                ['title' => 'Pemeriksaan Rutin ke Dokter Gigi', 'relevance' => 'Pemeriksaan berkala mendeteksi masalah sebelum menjadi parah dan mahal ditangani.', 'explanation' => 'Kunjungan ke dokter gigi setiap 6 bulan memungkinkan pembersihan karang gigi profesional dan deteksi dini karies atau masalah gusi.'],
+            // Pilih cluster yang memiliki jawaban salah
+            $selectedKeys = [];
+            foreach ($clusterDefinitions as $key => $def) {
+                $hasMistake = !empty(array_intersect($def['ids'], $incorrectIds));
+                if ($hasMistake) {
+                    $selectedKeys[] = $key;
+                }
+            }
+
+            // Jika kurang dari 3 cluster, tambahkan cluster mendasar lainnya
+            $fallbackKeys = ['karies', 'gusi', 'sikat_dan_fluoride', 'kontrol_rutin', 'tambal_gigi'];
+            foreach ($fallbackKeys as $fbKey) {
+                if (count($selectedKeys) >= 3) {
+                    break;
+                }
+                if (!in_array($fbKey, $selectedKeys)) {
+                    $selectedKeys[] = $fbKey;
+                }
+            }
+
+            // Batasi maksimal 4-5 topik
+            $selectedKeys = array_slice($selectedKeys, 0, 4);
+        }
+
+        foreach ($selectedKeys as $key) {
+            $t = $clusterDefinitions[$key]['topic'];
+            $priorityTopics[] = [
+                'title'          => $t['title'],
+                'core_concept'   => $t['core_concept'],
+                'explanation'    => $t['explanation'],
+                'daily_context'  => $t['daily_context'],
+                'remember_point' => $t['remember_point'],
+                'relevance'      => $t['core_concept'], // Kompatibilitas mundur
             ];
         }
 
         $keyPoints = [
-            'Sikat gigi 2 kali sehari: pagi setelah sarapan dan malam sebelum tidur.',
-            'Gunakan pasta gigi mengandung fluoride untuk memperkuat enamel.',
+            'Sikat gigi 2 kali sehari secara teratur: pagi setelah sarapan dan malam sebelum tidur.',
+            'Gunakan pasta gigi berfluoride untuk memperkuat lapisan enamel gigi melawan asam.',
             'Gunakan benang gigi (dental floss) untuk membersihkan sela gigi yang tidak terjangkau sikat.',
-            'Batasi makanan dan minuman manis/asam yang memicu produksi asam bakteri.',
-            'Periksa ke dokter gigi setiap 6 bulan meskipun tidak ada keluhan.',
+            'Lakukan pemeriksaan gigi rutin setiap 6 bulan sekali meskipun tidak ada rasa sakit.',
         ];
 
+        // Maksimal 3 kebiasaan praktis sesuai panduan revisi
         $dailyHabits = [
-            'Sikat gigi selama minimal 2 menit dengan gerakan melingkar lembut.',
-            'Ganti sikat gigi setiap 3 bulan sekali atau saat bulu sikat sudah mekar.',
-            'Gunakan benang gigi sebelum menyikat gigi malam untuk membersihkan sela gigi.',
-            'Minum air putih yang cukup, terutama setelah mengonsumsi makanan manis.',
+            'Sikat gigi selama minimal 2 menit dengan sikat berbulu lembut dan gerakan melingkar perlahan.',
+            'Bersihkan sela gigi dengan dental floss setiap malam sebelum menyikat gigi untuk membuang plak.',
+            'Bilas mulut dengan air putih setelah mengonsumsi makanan manis dan jadwalkan kontrol 6 bulan sekali.',
         ];
 
         return [
@@ -719,8 +915,8 @@ PROMPT;
             'priority_topics'      => $priorityTopics,
             'key_points'           => $keyPoints,
             'daily_habits'         => $dailyHabits,
-            'when_to_seek_care'    => 'Segera kunjungi dokter gigi jika kamu mengalami nyeri gigi, gusi sering berdarah, atau sudah lebih dari 6 bulan tidak memeriksakan gigi. Periksa rutin setiap 6 bulan bahkan tanpa keluhan untuk menjaga kesehatan gigi jangka panjang.',
-            'disclaimer'           => 'Materi edukasi ini disusun berdasarkan pedoman literasi kesehatan gigi dan mulut untuk meningkatkan pengetahuan, bukan merupakan diagnosis medis. Konsultasikan kondisi fisik gigimu ke dokter gigi terdekat.',
+            'when_to_seek_care'    => 'Segera periksakan diri ke dokter gigi jika kamu mengalami gusi yang mudah berdarah, gigi berdenyut nyeri, atau tampak bercak hitam berlubang. Tetap jadwalkan kunjungan rutin setiap 6 bulan sekali meskipun tanpa keluhan untuk menjaga senyum sehat jangka panjang.',
+            'disclaimer'           => 'Materi edukasi ini disusun sebagai sarana peningkatan literasi kesehatan gigi dan mulut remaja, bukan merupakan diagnosis medis atau rencana terapi klinis langsung oleh dokter gigi.',
         ];
     }
 

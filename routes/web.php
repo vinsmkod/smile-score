@@ -48,6 +48,9 @@ Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admi
 // Panel Administrasi & Ekspor Data Penelitian (Terproteksi Autentikasi)
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [SmileScoreAdminController::class, 'index'])->name('dashboard');
+    Route::get('/responden', [SmileScoreAdminController::class, 'index'])->name('responden');
+    Route::delete('/responden/delete-all', [SmileScoreAdminController::class, 'destroyAll'])->name('responden.destroyAll');
+    Route::delete('/responden/{id}', [SmileScoreAdminController::class, 'destroy'])->name('responden.destroy');
     Route::get('/responden/{id}', [SmileScoreAdminController::class, 'detail'])->name('detail');
     Route::get('/export', [SmileScoreAdminController::class, 'export'])->name('export');
 });
